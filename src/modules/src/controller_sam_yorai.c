@@ -3,7 +3,6 @@
 //
 
 #include <math.h>
-#include <stdlib.h>
 #include "param.h"
 #include "log.h"
 #include "math3d.h"
