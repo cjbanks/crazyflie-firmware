@@ -25,7 +25,8 @@ static ControllerFcns controllerFunctions[] = {
   {.init = controllerPidInit, .test = controllerPidTest, .update = controllerPid, .name = "PID"},
   {.init = controllerMellingerInit, .test = controllerMellingerTest, .update = controllerMellinger, .name = "Mellinger"},
   {.init = controllerINDIInit, .test = controllerINDITest, .update = controllerINDI, .name = "INDI"},
-  {.init = controllerSamYoraiInit, .test = controllerSamYoraiTest, .update = controllerSamYorai, .name="SamYorai"},
+  {.init = controllerSamYoraiInit, .test = controllerSamYoraiTest, .update = controllerSamYorai, .name="SamYoari"},
+>>>>>>> added test function and added controler to list
 };
 
 
