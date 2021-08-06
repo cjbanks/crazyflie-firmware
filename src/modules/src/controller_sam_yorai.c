@@ -412,7 +412,6 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     float u_new[4] = {0, 0, 0, 0};
     for (int i = 0; i < 4; i++) {
         u_new[i] = init_input[i] + u_d[i]*dt;
-
     }
 
     //return input
