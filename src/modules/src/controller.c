@@ -38,13 +38,15 @@ void controllerInit(ControllerType controller) {
     currentController = DEFAULT_CONTROLLER;
   }
 
-  ControllerType forcedController = CONTROLLER_NAME;
+  ControllerType forcedController = ControllerTypeSamYorai;
   if (forcedController != ControllerTypeAny) {
     DEBUG_PRINT("Controller type forced\n");
     currentController = forcedController;
   }
 
   initController();
+
+
 
   DEBUG_PRINT("Using %s (%d) controller\n", controllerGetName(), currentController);
 }
