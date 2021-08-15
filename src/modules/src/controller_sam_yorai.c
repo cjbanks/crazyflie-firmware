@@ -9,8 +9,11 @@
 #include "controller_sam_yorai.h"
 #include "debug.h"
 
+#define ROWS 4
+#define COLUMNS 4
 
-static float horizon = (float)(0.7);
+
+static float horizon = (float)(0.1);   //was 0.7
 static float alpha[4][4] = {
                         {20, 0,  0, 0},
                         {0, 50, 0, 0},
@@ -78,8 +81,8 @@ static struct mat33 matinv_3d(struct mat33 mat) {
     return m_inv;
 }
 
-void matinv_4d(float matrix_in[4][4], float* mat_inv[4][4]){
-    //static float mat_inv[4][4];
+float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
+    static float mat_inv[4][4];
 
     float a = matrix_in[0][0];
     float b = matrix_in[0][1];
@@ -137,11 +140,11 @@ void matinv_4d(float matrix_in[4][4], float* mat_inv[4][4]){
 
     for (int jj = 0; jj < 4; jj++) {
         for (int kk = 0; kk < 4; kk++) {
-            *mat_inv[jj][kk] = (1 / A_det) * Adj[jj][kk];
+            mat_inv[jj][kk] = (1 / A_det) * Adj[jj][kk];
         }
     }
 
-     //return *mat_inv;
+     return (float **) mat_inv;
 }
 
 float* f(float * state, float * u){
@@ -318,7 +321,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //intialize variable
     float eps = 1e-5;
     float dt = (1.0f/ATTITUDE_RATE);
-    float Jac[4][4];
+    float Jac[ROWS][COLUMNS];
 
     //controller runs at 500 Hz
     if (!RATE_DO_EXECUTE(ATTITUDE_RATE, tick)){
@@ -349,7 +352,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     float center_g[4] = {0, 0, 0, 0};
     float * s_pointer;
 
-    DEBUG_PRINT("START CALCULATING JACOBIAN \n");
+    //DEBUG_PRINT("START CALCULATING JACOBIAN \n");
     
     s_pointer = sam_simulation(state, init_input, dt);
 
@@ -366,10 +369,10 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         center_g[i] = *(yorai_row_pointer + i);
     }
 
-    DEBUG_PRINT("center G 1: %f \n", (double) center_g[0]);
-    DEBUG_PRINT("center G 2: %f \n", (double) center_g[1]);
-    DEBUG_PRINT("center G 3: %f \n", (double) center_g[2]);
-    DEBUG_PRINT("center G 4: %f \n", (double) center_g[3]);
+    //DEBUG_PRINT("center G 1: %f \n", (double) center_g[0]);
+    //DEBUG_PRINT("center G 2: %f \n", (double) center_g[1]);
+    //DEBUG_PRINT("center G 3: %f \n", (double) center_g[2]);
+    //DEBUG_PRINT("center G 4: %f \n", (double) center_g[3]);
 
     //input calculate
     static float input_jac[4];
@@ -379,10 +382,10 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     }
 
 
-    DEBUG_PRINT("input 1: %f\n", (double) input_jac[0]);
-    DEBUG_PRINT("input 2: %f\n", (double) input_jac[1]);
-    DEBUG_PRINT("input 3: %f \n", (double) input_jac[2]);
-    DEBUG_PRINT("input 4: %f \n", (double) input_jac[3]);
+    //DEBUG_PRINT("input 1: %f\n", (double) input_jac[0]);
+    //DEBUG_PRINT("input 2: %f\n", (double) input_jac[1]);
+    //DEBUG_PRINT("input 3: %f \n", (double) input_jac[2]);
+    //DEBUG_PRINT("input 4: %f \n", (double) input_jac[3]);
 
     //calculate first row of Jacobian
     float yorai_row[4];
@@ -395,7 +398,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     yorai_row_pointer = yorai_h(sam_mod_state);
     for (int i=0; i < 4; i++){
         yorai_row[i] = *(yorai_row_pointer + i);
-        DEBUG_PRINT("row 1 yorai val: %f", (double) yorai_row[i]);
+        //DEBUG_PRINT("row 1 yorai val: %f \n", (double) yorai_row[i]);
     }
 
 
@@ -421,7 +424,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     yorai_row_pointer = yorai_h(sam_mod_state);
     for (int i=0; i < 4; i++){
         yorai_row_2[i] = *(yorai_row_pointer + i);
-        DEBUG_PRINT("row 2 yorai val: %f", (double) yorai_row_2[i]);
+        //DEBUG_PRINT("row 2 yorai val: %f \n", (double) yorai_row_2[i]);
     }
 
     for (int i=0; i < 4; i++){
@@ -445,7 +448,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     float yorai_row_3[4];
     for (int i=0; i < 4; i++){
         yorai_row_3[i] = *(yorai_row_pointer + i);
-        DEBUG_PRINT("row 3 yorai val: %f", (double) yorai_row_3[i]);
+        //DEBUG_PRINT("row 3 yorai val: %f \n", (double) yorai_row_3[i]);
     }
 
     for (int i=0; i < 4; i++){
@@ -468,7 +471,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     float yorai_row_4[4];
     for (int i=0; i < 4; i++){
         yorai_row_4[i] = *(yorai_row_pointer + i);
-        DEBUG_PRINT("row 3 yorai val: %f", (double) yorai_row_4[i]);
+        //DEBUG_PRINT("row 4 yorai val: %f \n", (double) yorai_row_4[i]);
     }
 
     for (int i=0; i < 4; i++){
@@ -476,12 +479,11 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     }
 
 
-
     //get reference point from setpoint
-    DEBUG_PRINT("GET REFERENCE FROM SETPOINT \n");
+    //DEBUG_PRINT("GET REFERENCE FROM SETPOINT \n");
     float ref_point[4];
     float * ref_ptr;
-    ref_ptr = ref_traj(tick);
+    ref_ptr = ref_traj((double) (tick + horizon));
 
     for (int i =0; i < 4; i++){
         ref_point[i] = *(ref_ptr + i);
@@ -491,7 +493,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     float prediction[4];
 
     //input array
-    DEBUG_PRINT("PREDICT STATE BASED ON HORIZON AND INPUT \n");
+    //DEBUG_PRINT("PREDICT STATE BASED ON HORIZON AND INPUT \n");
     static float state_pred[12];
     s_pointer = sam_simulation(state, init_input,dt);
     for (int i = 0; i < 12; i++){
@@ -503,10 +505,10 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         prediction[i] = *(yorai_row_pointer + i);
     }
 
-    DEBUG_PRINT("predicted point (x): %f \n", (double)prediction[0]);
-    DEBUG_PRINT("predicted point (y): %f \n", (double)prediction[1]);
-    DEBUG_PRINT("predicted point (z): %f \n", (double)prediction[2]);
-    DEBUG_PRINT("predicted point (t): %f \n", (double)prediction[3]);
+    //DEBUG_PRINT("predicted point (x): %f \n", (double)prediction[0]);
+    //DEBUG_PRINT("predicted point (y): %f \n", (double)prediction[1]);
+    //DEBUG_PRINT("predicted point (z): %f \n", (double)prediction[2]);
+    //DEBUG_PRINT("predicted point (t): %f \n", (double)prediction[3]);
 
 
     //calculate input derivative
@@ -517,9 +519,21 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
     //calulcate inverse of 4x4 matrix
     static float Jac_inv[4][4];
-    DEBUG_PRINT("INVERT MATRIX \n");
-    //matinv_4d(Jac,(float *(*)[4])&Jac_inv[4][4]);
+    float ** jac_inv_ptr;
+    //DEBUG_PRINT("INVERT MATRIX \n");
+    jac_inv_ptr = matinv_4d(Jac);
 
+    for (int i = 0; i < ROWS; i++){
+        for (int j =0; j < COLUMNS; j++){
+            Jac_inv[i][j]  = jac_inv_ptr[i][j];
+        }
+    }
+
+    DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv[0][0]);
+    DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv[0][1]);
+    DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv[0][2]);
+    DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv[0][3]);
+    //
     float u_d[4] = {0, 0, 0, 0};
 
     //matrix multiplication
@@ -540,15 +554,15 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
     //return input
 
-    //control->thrust = u_new[0];
-    //control->roll = (int16_t)(u_new[1]);
-    //control->pitch =(int16_t)(u_new[2]);
-    //control->yaw = (int16_t)(u_new[3]);
+    control->thrust = u_new[0];
+    control->roll = (int16_t)(u_new[1]);
+    control->pitch =(int16_t)(u_new[2]);
+    control->yaw = (int16_t)(u_new[3]);
 
-    DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
-    DEBUG_PRINT("UPDATED ROLL: %f\n", (double) u_new[1]);
-    DEBUG_PRINT("UPDATED PITCH: %f \n", (double) u_new[2]);
-    DEBUG_PRINT("UPDATED YAW: %f \n", (double) u_new[3]);
+    //DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
+    //DEBUG_PRINT("UPDATED ROLL: %f\n", (double) u_new[1]);
+    //DEBUG_PRINT("UPDATED PITCH: %f \n", (double) u_new[2]);
+    //DEBUG_PRINT("UPDATED YAW: %f \n", (double) u_new[3]);
 
 
 }
