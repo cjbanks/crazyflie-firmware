@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+<<<<<<< HEAD
+      <config projectName="crazyflie-firmware" targetName="check_submodules" />
+      <config projectName="crazyflie-firmware" targetName="cload" />
+      <config projectName="crazyflie-firmware" targetName="gdb" />
+      <config projectName="crazyflie-firmware" targetName="erase" />
+      <config projectName="crazyflie-firmware" targetName="clean_o" />
+      <config projectName="crazyflie-firmware" targetName="cf2.elf" />
+      <config projectName="crazyflie-firmware" targetName="prep" />
+      <config projectName="crazyflie-firmware" targetName="all" />
+      <config projectName="crazyflie-firmware" targetName="Makefile" />
+      <config projectName="crazyflie-firmware" targetName="print_version" />
+      <config projectName="crazyflie-firmware" targetName="trace" />
+      <config projectName="crazyflie-firmware" targetName="libarm_math.a" />
+      <config projectName="crazyflie-firmware" targetName="size" />
+      <config projectName="crazyflie-firmware" targetName="compile" />
+      <config projectName="crazyflie-firmware" targetName="unit" />
+      <config projectName="crazyflie-firmware" targetName="clean_version" />
+      <config projectName="crazyflie-firmware" targetName="flash_verify" />
+      <config projectName="crazyflie-firmware" targetName="build" />
+      <config projectName="crazyflie-firmware" targetName="halt" />
+      <config projectName="crazyflie-firmware" targetName="flash_dfu" />
+      <config projectName="crazyflie-firmware" targetName="mrproper" />
+      <config projectName="crazyflie-firmware" targetName="cf2.bin" />
+      <config projectName="crazyflie-firmware" targetName="reset" />
+      <config projectName="crazyflie-firmware" targetName="flash" />
+      <config projectName="crazyflie-firmware" targetName="openocd" />
+=======
+      <config projectName="crazyflie-firmware-custom" targetName="print_version" />
+      <config projectName="crazyflie-firmware-custom" targetName="prep" />
+      <config projectName="crazyflie-firmware-custom" targetName="mrproper" />
+      <config projectName="crazyflie-firmware-custom" targetName="clean_o" />
+      <config projectName="crazyflie-firmware-custom" targetName="cf2.elf" />
+      <config projectName="crazyflie-firmware-custom" targetName="cload" />
+      <config projectName="crazyflie-firmware-custom" targetName="flash_verify" />
+      <config projectName="crazyflie-firmware-custom" targetName="flash_dfu" />
+      <config projectName="crazyflie-firmware-custom" targetName="size" />
+      <config projectName="crazyflie-firmware-custom" targetName="unit" />
+      <config projectName="crazyflie-firmware-custom" targetName="clean_version" />
+      <config projectName="crazyflie-firmware-custom" targetName="flash" />
+      <config projectName="crazyflie-firmware-custom" targetName="openocd" />
+      <config projectName="crazyflie-firmware-custom" targetName="build" />
+      <config projectName="crazyflie-firmware-custom" targetName="halt" />
+      <config projectName="crazyflie-firmware-custom" targetName="cf2.bin" />
+      <config projectName="crazyflie-firmware-custom" targetName="reset" />
+      <config projectName="crazyflie-firmware-custom" targetName="erase" />
+      <config projectName="crazyflie-firmware-custom" targetName="gdb" />
+      <config projectName="crazyflie-firmware-custom" targetName="all" />
+      <config projectName="crazyflie-firmware-custom" targetName="check_submodules" />
+      <config projectName="crazyflie-firmware-custom" targetName="compile" />
+      <config projectName="crazyflie-firmware-custom" targetName="Makefile" />
+      <config projectName="crazyflie-firmware-custom" targetName="libarm_math.a" />
+      <config projectName="crazyflie-firmware-custom" targetName="trace" />
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="fb4d471f-7704-4f92-a0da-9127499b03a6" name="Changes" comment="">
+<<<<<<< HEAD
+      <change afterPath="$PROJECT_DIR$/src/modules/src/sam_yorai_task.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/src/sam_yorai_task.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config/config.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/config.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modules/src/system.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/src/system.c" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/crazyflie-firmware.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blobs/lighthouse.bin" beforeDir="false" afterPath="$PROJECT_DIR$/blobs/lighthouse.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/images/ctrp_log.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/ctrp_log.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/images/ctrp_mem.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/ctrp_mem.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/images/deckhelloconsole.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/deckhelloconsole.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/images/linux_serial.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/linux_serial.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/images/mac_serial.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/mac_serial.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/images/mac_serial_about.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/mac_serial_about.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/images/pid.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/pid.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/images/sensor.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/sensor.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/images/stm_openocd_debugger.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/stm_openocd_debugger.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/images/stm_openocd_main.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/stm_openocd_main.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/images/stm_openocd_startup.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/stm_openocd_startup.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/images/windows_serial.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/images/windows_serial.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modules/src/controller.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/src/controller.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modules/src/controller_sam_yorai.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/src/controller_sam_yorai.c" afterDir="false" />
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+<<<<<<< HEAD
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/modules/src/controller_sam_yorai.c" root0="FORCE_HIGHLIGHTING" />
+  </component>
+=======
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+  <component name="MakefileLocalSettings">
+    <option name="availableProjects">
+      <map>
+        <entry>
+          <key>
+            <ExternalProjectPojo>
+<<<<<<< HEAD
+              <option name="name" value="crazyflie-firmware" />
+=======
+              <option name="name" value="crazyflie-firmware-custom" />
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+              <option name="path" value="$PROJECT_DIR$" />
+            </ExternalProjectPojo>
+          </key>
+          <value>
+            <list>
+              <ExternalProjectPojo>
+<<<<<<< HEAD
+                <option name="name" value="crazyflie-firmware" />
+=======
+                <option name="name" value="crazyflie-firmware-custom" />
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+                <option name="path" value="$PROJECT_DIR$" />
+              </ExternalProjectPojo>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="projectSyncType">
+      <map>
+        <entry key="$PROJECT_DIR$" value="RE_IMPORT" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectId" id="1wduCN81TKJv35f8h7RUuAZWIiG" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
+<<<<<<< HEAD
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+=======
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="cf.first.check.clang-format" value="false" />
+    <property name="cidr.known.project.marker" value="true" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+<<<<<<< HEAD
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+  </component>
+  <component name="RunManager" selected="Makefile Application.all">
+    <configuration name="Makefile" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="Makefile" CONFIG_NAME="Makefile" version="1">
+=======
+  </component>
+  <component name="RunManager" selected="Makefile Application.all">
+    <configuration name="Makefile" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="Makefile" CONFIG_NAME="Makefile" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="all" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="all" CONFIG_NAME="all" version="1" RUN_PATH="$PROJECT_DIR$/cf2.bin">
+=======
+    <configuration name="all" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="all" CONFIG_NAME="all" version="1" RUN_PATH="$PROJECT_DIR$/cf2.bin">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="build" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="build" CONFIG_NAME="build" version="1">
+=======
+    <configuration name="build" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="build" CONFIG_NAME="build" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="cf2.bin" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="cf2.bin" CONFIG_NAME="cf2.bin" version="1">
+=======
+    <configuration name="cf2.bin" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="cf2.bin" CONFIG_NAME="cf2.bin" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="cf2.elf" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="cf2.elf" CONFIG_NAME="cf2.elf" version="1">
+=======
+    <configuration name="cf2.elf" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="cf2.elf" CONFIG_NAME="cf2.elf" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="check_submodules" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="check_submodules" CONFIG_NAME="check_submodules" version="1">
+=======
+    <configuration name="check_submodules" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="check_submodules" CONFIG_NAME="check_submodules" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="clean_o" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="clean_o" CONFIG_NAME="clean_o" version="1" RUN_PATH="$PROJECT_DIR$/cf2.bin">
+=======
+    <configuration name="clean_o" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="clean_o" CONFIG_NAME="clean_o" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="clean_version" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="clean_version" CONFIG_NAME="clean_version" version="1">
+=======
+    <configuration name="clean_version" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="clean_version" CONFIG_NAME="clean_version" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="cload" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="cload" CONFIG_NAME="cload" version="1">
+=======
+    <configuration name="cload" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="cload" CONFIG_NAME="cload" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="compile" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="compile" CONFIG_NAME="compile" version="1">
+=======
+    <configuration name="compile" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="compile" CONFIG_NAME="compile" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="erase" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="erase" CONFIG_NAME="erase" version="1">
+=======
+    <configuration name="erase" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="erase" CONFIG_NAME="erase" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="flash" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="flash" CONFIG_NAME="flash" version="1">
+=======
+    <configuration name="flash" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="flash" CONFIG_NAME="flash" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="flash_dfu" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="flash_dfu" CONFIG_NAME="flash_dfu" version="1">
+=======
+    <configuration name="flash_dfu" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="flash_dfu" CONFIG_NAME="flash_dfu" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="flash_verify" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="flash_verify" CONFIG_NAME="flash_verify" version="1">
+=======
+    <configuration name="flash_verify" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="flash_verify" CONFIG_NAME="flash_verify" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="gdb" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="gdb" CONFIG_NAME="gdb" version="1">
+=======
+    <configuration name="gdb" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="gdb" CONFIG_NAME="gdb" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="halt" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="halt" CONFIG_NAME="halt" version="1">
+=======
+    <configuration name="halt" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="halt" CONFIG_NAME="halt" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="libarm_math.a" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="libarm_math.a" CONFIG_NAME="libarm_math.a" version="1">
+=======
+    <configuration name="libarm_math.a" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="libarm_math.a" CONFIG_NAME="libarm_math.a" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="mrproper" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="mrproper" CONFIG_NAME="mrproper" version="1">
+=======
+    <configuration name="mrproper" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="mrproper" CONFIG_NAME="mrproper" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="openocd" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="openocd" CONFIG_NAME="openocd" version="1">
+=======
+    <configuration name="openocd" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="openocd" CONFIG_NAME="openocd" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="prep" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="prep" CONFIG_NAME="prep" version="1">
+=======
+    <configuration name="prep" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="prep" CONFIG_NAME="prep" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="print_version" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="print_version" CONFIG_NAME="print_version" version="1">
+=======
+    <configuration name="print_version" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="print_version" CONFIG_NAME="print_version" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="reset" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="reset" CONFIG_NAME="reset" version="1">
+=======
+    <configuration name="reset" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="reset" CONFIG_NAME="reset" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="size" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="size" CONFIG_NAME="size" version="1">
+=======
+    <configuration name="size" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="size" CONFIG_NAME="size" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="trace" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="trace" CONFIG_NAME="trace" version="1">
+=======
+    <configuration name="trace" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="trace" CONFIG_NAME="trace" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="unit" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="unit" CONFIG_NAME="unit" version="1">
+=======
+    <configuration name="unit" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="unit" CONFIG_NAME="unit" version="1">
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+=======
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Makefile Application.all" />
+      <item itemvalue="Makefile Application.build" />
+      <item itemvalue="Makefile Application.cf2.bin" />
+      <item itemvalue="Makefile Application.cf2.elf" />
+      <item itemvalue="Makefile Application.check_submodules" />
+      <item itemvalue="Makefile Application.clean_o" />
+      <item itemvalue="Makefile Application.clean_version" />
+      <item itemvalue="Makefile Application.cload" />
+      <item itemvalue="Makefile Application.compile" />
+      <item itemvalue="Makefile Application.erase" />
+      <item itemvalue="Makefile Application.flash" />
+      <item itemvalue="Makefile Application.flash_dfu" />
+      <item itemvalue="Makefile Application.flash_verify" />
+      <item itemvalue="Makefile Application.gdb" />
+      <item itemvalue="Makefile Application.halt" />
+      <item itemvalue="Makefile Application.libarm_math.a" />
+      <item itemvalue="Makefile Application.Makefile" />
+      <item itemvalue="Makefile Application.mrproper" />
+      <item itemvalue="Makefile Application.openocd" />
+      <item itemvalue="Makefile Application.prep" />
+      <item itemvalue="Makefile Application.print_version" />
+      <item itemvalue="Makefile Application.reset" />
+      <item itemvalue="Makefile Application.size" />
+      <item itemvalue="Makefile Application.trace" />
+      <item itemvalue="Makefile Application.unit" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fb4d471f-7704-4f92-a0da-9127499b03a6" name="Changes" comment="" />
+      <created>1628800658794</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1628800658794</updated>
+      <workItem from="1628800660815" duration="1422000" />
+      <workItem from="1628802855445" duration="14515000" />
+<<<<<<< HEAD
+      <workItem from="1629223807034" duration="630000" />
+      <workItem from="1629301533599" duration="3052000" />
+      <workItem from="1629728053100" duration="3770000" />
+      <workItem from="1629827660973" duration="3938000" />
+      <workItem from="1629981585660" duration="599000" />
+      <workItem from="1629989956787" duration="5342000" />
+      <workItem from="1630092630397" duration="2774000" />
+      <workItem from="1630686214441" duration="6599000" />
+      <workItem from="1631040912860" duration="1198000" />
+      <workItem from="1631282313208" duration="4572000" />
+=======
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+<<<<<<< HEAD
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
+=======
+</project>
+>>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
