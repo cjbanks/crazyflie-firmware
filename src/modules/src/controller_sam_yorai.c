@@ -3,6 +3,7 @@
 //
 
 #include <math.h>
+#include <stdlib.h>
 #include "param.h"
 #include "log.h"
 #include "math3d.h"
@@ -82,7 +83,13 @@ static struct mat33 matinv_3d(struct mat33 mat) {
 }
 
 float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
-    static float mat_inv[4][4];
+
+    //create mat_inv array of pointers
+    float ** mat_inv;
+    mat_inv = malloc(sizeof(float*) * ROWS);
+    for (int i = 0; i < ROWS; i++){
+        mat_inv[i] = malloc(sizeof(float*) * COLUMNS);
+    }
 
     float a = matrix_in[0][0];
     float b = matrix_in[0][1];
@@ -106,35 +113,141 @@ float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
 
     //cofactors
-    float A = f*(k*p-l*o) + gg*(j * p - l * n) + h * (o * j - n * k);
-    float B = -1*(e*(k*p - l*o) + gg*(i * p - mm*l) + h*(i*o - mm*k));
-    float C = e*(o*j - l*n) + f*(i*o - mm*l) + h*(i*n - j*mm);
-    float D = -1*(e*(j*o - n*k) + f*(i*o - mm*k) + gg*(i*n - j*mm));
 
-    float E = -1*(b*(k*p - l*o) + c*(j*p - n*l) + d*(j*o - n*k));
-    float F = a*(k*p - l*o) + c*(i*p - mm*l) + d*(i*o - mm*k);
-    float G = -1*(a*(j*p - l*n) + b*(i*p - mm*l) + d*(i*n - mm*j));
-    float H = a*(o*j - n*k) + b*(i*o - mm*k) + c*(i*n - mm*j);
+    //2x2 cofactors A
+    float A1 = (float)pow(-1,1+1)*(k*p-l*o);
+    float A2 = (float)pow(-1, 1+2)*(j*p - l*n);
+    float A3 = (float)pow(-1, 1+3)*(o*j - n*k);
 
-    float I = b*(gg*p - o*h) + c*(f*p - n*h) + d*(f*o - n*gg);
-    float J = -1*(a*(gg*p - o*h) + c*(e*p - mm*h) + d*(e*o - mm*gg));
-    float K = a*(f*p - n*h) + b*(e*p - mm*h) + d*(e*n - mm*f);
-    float L = -1*(a*(f*o - n*gg) + b*(e*o - mm*gg) + c*(e*n - mm*f));
+    float A =(float)pow(-1, 1+1) * (f*(A1) + gg*(A2) + h * (A3));
 
-    float M = -1*(b*(gg*l - k*h) + c*(f*l - j*k) + d*(f*k - j*gg));
-    float N = a*(gg*l - k*h) + c*(e*l - i*h) + d*(e*k -i*gg);
-    float O = -1*(a*(f*l - j*h) + b*(e*l - i*h) + d*(e*j - i*f));
-    float P = a*(f*k - j*gg) + b*(e*k - i*gg) + c*(e*j - i*f);
+    //2x2 cofactors B
+    float B1 = (float)pow(-1, 1+1) * (k*p - l*o);
+    float B2 = (float)pow(-1, 1+2) * (i*p - mm*l);
+    float B3 = (float)pow(-1, 1+3) * (i*o - mm*k);
+
+    float B = (float)pow(-1, 1+2) * (e*(B1) + gg*(B2) + h*(B3));
+
+    //2x2 cofactors C
+    float C1 = (float)pow(-1, 1+1) * (o*j - l*n);
+    float C2 = (float)pow(-1, 1+2) * (i*o - mm*l);
+    float C3 = (float)pow(-1, 1+3) * (i*n - j*mm);
+
+    float C = (float)pow(-1, 1+3) * (e*(C1) + f*(C2) + h*(C3));
+
+    //2x2 cofactors D
+    float D1 = (float)pow(-1, 1+1) * (j*o - n*k);
+    float D2 = (float)pow(-1, 1+2) * (i*o - mm*k);
+    float D3 = (float)pow(-1, 1+3) * (i*n - j*mm);
+
+    float D = (float)pow(-1, 1+4) * (e*(D1) + f*(D2) + gg*(D3));
+
+
+    //2x2 cofactors E
+    float E1 = (float)pow(-1, 1+1) * (k*p - l*o);
+    float E2 = (float)pow(-1, 1+2) * (j*p - n*l);
+    float E3 = (float)pow(-1, 1+3) * (j*o - n*k);
+
+    float E = (float)pow(-1, 2+1) * (b*(E1) + c*(E2) + d*(E3));
+
+    //2x2 cofactors F
+    float F1 = (float)pow(-1, 1+1) * (k*p - l*o);
+    float F2 = (float)pow(-1, 1+2) * (i*p - mm*l);
+    float F3 = (float)pow(-1, 1+3) * (i*o - mm*k);
+
+    float F =  (float)pow(-1, 2+2) * (a*(F1) + c*(F2) + d*(F3));
+
+    //2x2 cofactors G
+    float G1 = (float)pow(-1, 1+1) * (j*p - l*n);
+    float G2 = (float)pow(-1, 1+2) * (i*p - mm*l);
+    float G3 = (float)pow(-1, 1+3) * (i*n - mm*j);
+
+    float G =  (float)pow(-1, 2+3) * (a*(G1) + b*(G2) + d*(G3));
+
+    //2x2 cofactors H
+    float H1 = (float)pow(-1, 1+1) * (o*j - n*k);
+    float H2 = (float)pow(-1, 1+2) * (i*o - mm*k);
+    float H3 = (float)pow(-1, 1+3) * (i*n - mm*j);
+
+    float H =  (float)pow(-1, 2+4) * (a*(H1) + b*(H2) + c*(H3));
+
+    //2x2 cofactors I
+    float I1 = (float)pow(-1, 1+1) * (gg*p - o*h);
+    float I2 = (float)pow(-1, 1+2) * (f*p - n*h);
+    float I3 = (float)pow(-1, 1+3) * (f*o - n*gg);
+
+    float I =  (float)pow(-1, 3+1) * (b*(I1) + c*(I2) + d*(I3));
+
+    //2x2 cofactors J
+    float J1 = (float)pow(-1, 1+1) * (gg*p - o*h);
+    float J2 = (float)pow(-1, 1+2) * (e*p - mm*h);
+    float J3 = (float)pow(-1, 1+3) * (e*o - mm*gg);
+
+    float J =  (float)pow(-1, 3+2) * (a*(J1) + c*(J2) + d*(J3));
+
+    //2x2 cofactors K
+    float K1 = (float)pow(-1, 1+1) * (f*p - n*h);
+    float K2 = (float)pow(-1, 1+2) * (e*p - mm*h);
+    float K3 = (float)pow(-1, 1+3) * (e*n - mm*f);
+
+    float K =  (float)pow(-1, 3+3) * (a*(K1) + b*(K2) + d*(K3));
+
+    //2x2 cofactors L
+    float L1 = (float)pow(-1, 1+1) * (f*o - n*gg);
+    float L2 = (float)pow(-1, 1+2) * (e*o - mm*gg);
+    float L3 = (float)pow(-1, 1+3) * (e*n - mm*f);
+
+    float L =  (float)pow(-1, 3+4) * (a*(L1) + b*(L2) + c*(L3));
+
+
+    //2x2 cofactors M
+    float M1 = (float)pow(-1, 1+1) * (gg*l - k*h);
+    float M2 = (float)pow(-1, 1+2) * (f*l - j*h);
+    float M3 = (float)pow(-1, 1+3) * (f*k - j*gg);
+
+    float M = (float)pow(-1, 4+1) * (b*(M1) + c*(M2) + d*(M3));
+
+    //2x2 cofactors N
+    float N1 = (float)pow(-1, 1+1) * (gg*l - k*h);
+    float N2 = (float)pow(-1, 1+2) * (e*l - i*h);
+    float N3 = (float)pow(-1, 1+3) * (e*k -i*gg);
+
+    float N =  (float)pow(-1, 4+2) * (a*(N1) + c*(N2) + d*(N3));
+
+    //2x2 cofactors O
+    float O1 = (float)pow(-1, 1+1) * (f*l - j*h);
+    float O2 = (float)pow(-1, 1+2) * (e*l - i*h);
+    float O3 = (float)pow(-1, 1+3) * (e*j - i*f);
+
+    float O =  (float)pow(-1, 4+3) * (a*(O1) + b*(O2) + d*(O3));
+
+    //2x2 cofactors P
+    float P1 = (float)pow(-1, 1+1) * (f*k - gg*j);
+    float P2 = (float)pow(-1, 1+2) * (e*k - i*gg);
+    float P3 = (float)pow(-1, 1+3) * (e*j - i*f);
+
+    float P = (float)pow(-1, 4+4) * (a*(P1) + b*(P2) + c*(P3));
 
 
     //determinant
     float A_det = a*A + b*B + c*C + d*D;
+    //printf("determinant: %f\n", A_det);
 
+    if (A_det <= 0)  {
+        DEBUG_PRINT("UNDEFINED INVERSE, RETURNING IDENTITY \n");
+        //printf("UNDEFINED INVERSE, RETURNING IDENTITY \n");
+        static float ident[4][4] = {{1, 0, 0, 0},
+                                    {0, 1, 0, 0},
+                                    {0, 0, 1, 0},
+                                    {0, 0, 0, 1}};
+
+        return (float **)ident;
+    }
     //adjugate matrix
-    float Adj[4][4] = { {A, E, I, M},
-                        {B, F, J, N},
-                        {C, G, K, O},
-                        {D, H, L, P}};
+    float Adj[4][4] = {{A, E, I, M},
+                       {B, F, J, N},
+                       {C, G, K, O},
+                       {D, H, L, P}};
 
 
 
@@ -144,7 +257,7 @@ float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
         }
     }
 
-     return (float **) mat_inv;
+    return mat_inv;
 }
 
 float* f(float * state, float * u){
@@ -518,21 +631,15 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     }
 
     //calulcate inverse of 4x4 matrix
-    static float Jac_inv[4][4];
-    float ** jac_inv_ptr;
-    //DEBUG_PRINT("INVERT MATRIX \n");
-    jac_inv_ptr = matinv_4d(Jac);
-
-    for (int i = 0; i < ROWS; i++){
-        for (int j =0; j < COLUMNS; j++){
-            Jac_inv[i][j]  = jac_inv_ptr[i][j];
-        }
-    }
+    float ** Jac_inv;
+    //float ** jac_inv_ptr;
+    DEBUG_PRINT("INVERT MATRIX \n");
+     Jac_inv = matinv_4d(Jac);
 
     DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv[0][0]);
-    DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv[0][1]);
-    DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv[0][2]);
-    DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv[0][3]);
+    DEBUG_PRINT("SEC ROW OF JAC INV: %f \n", (double)Jac_inv[1][1]);
+    DEBUG_PRINT("THIRD ROW OF JAC INV: %f \n", (double)Jac_inv[2][2]);
+    DEBUG_PRINT("FOURTH ROW OF JAC INV: %f \n", (double)Jac_inv[3][3]);
     //
     float u_d[4] = {0, 0, 0, 0};
 
@@ -554,15 +661,15 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
     //return input
 
-    control->thrust = u_new[0];
-    control->roll = (int16_t)(u_new[1]);
-    control->pitch =(int16_t)(u_new[2]);
-    control->yaw = (int16_t)(u_new[3]);
+    //control->thrust = u_new[0];
+    //control->roll = (int16_t)(u_new[1]);
+    //control->pitch =(int16_t)(u_new[2]);
+    //control->yaw = (int16_t)(u_new[3]);
 
-    //DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
-    //DEBUG_PRINT("UPDATED ROLL: %f\n", (double) u_new[1]);
-    //DEBUG_PRINT("UPDATED PITCH: %f \n", (double) u_new[2]);
-    //DEBUG_PRINT("UPDATED YAW: %f \n", (double) u_new[3]);
+    DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
+    DEBUG_PRINT("UPDATED ROLL: %f\n", (double) u_new[1]);
+    DEBUG_PRINT("UPDATED PITCH: %f \n", (double) u_new[2]);
+    DEBUG_PRINT("UPDATED YAW: %f \n", (double) u_new[3]);
 
 
 }
