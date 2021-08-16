@@ -22,8 +22,12 @@
 static double_t horizon = 0.15;   //was 0.7
 =======
 
+<<<<<<< HEAD
 static float horizon = (float)(0.1);   //was 0.7
 >>>>>>> update pointer definition for jacobian inverse
+=======
+static float horizon = (float)(0.05);   //was 0.7
+>>>>>>> reduced horizon to 0.05, calculation of inverse causes timeout
 static float alpha[4][4] = {
                         {20, 0,  0, 0},
                         {0, 50, 0, 0},
@@ -338,6 +342,7 @@ float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (int jj = 0; jj < ROWS; jj++) {
         for (int kk = 0; kk < COLUMNS; kk++) {
             mat_inv.m[jj][kk] = (1.0 / (double) A_det) * (double) Adj[jj][kk];
@@ -349,6 +354,10 @@ float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
 =======
     for (int jj = 0; jj < 4; jj++) {
         for (int kk = 0; kk < 4; kk++) {
+=======
+    for (int jj = 0; jj < ROWS; jj++) {
+        for (int kk = 0; kk < COLUMNS; kk++) {
+>>>>>>> reduced horizon to 0.05, calculation of inverse causes timeout
             mat_inv[jj][kk] = (1 / A_det) * Adj[jj][kk];
         }
     }
@@ -557,14 +566,11 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
                         const sensorData_t* sensors, const state_t* state_cf,
                         const uint32_t tick){
 
-<<<<<<< HEAD
-=======
     //intialize variable
     float eps = 1e-5;
     float dt = (1.0f/ATTITUDE_RATE);
     float Jac[ROWS][COLUMNS];
 
->>>>>>> update pointer definition for jacobian inverse
     //controller runs at 500 Hz
     if (RATE_DO_EXECUTE(ATTITUDE_RATE, tick)){
         //returns actual control inputs (thrust, m_x, m_y, m_z)
@@ -644,15 +650,11 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
         //calculate Jacobian
 
-<<<<<<< HEAD
         //calculate center_g
         double_t center_g[4] = {0, 0, 0, 0};
         double_t * s_pointer;
 
         //DEBUG_PRINT("START CALCULATING JACOBIAN \n");
-=======
-    //DEBUG_PRINT("START CALCULATING JACOBIAN \n");
->>>>>>> update pointer definition for jacobian inverse
     
         s_pointer = sam_simulation(state, init_input, dt);
 
@@ -669,17 +671,10 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
             center_g[i] = *(yorai_row_pointer + i);
         }
 
-<<<<<<< HEAD
-        //DEBUG_PRINT("center G 1: %f \n", (double) center_g[0]);
-        //DEBUG_PRINT("center G 2: %f \n", (double) center_g[1]);
-        //DEBUG_PRINT("center G 3: %f \n", (double) center_g[2]);
-        //DEBUG_PRINT("center G 4: %f \n", (double) center_g[3]);
-=======
     //DEBUG_PRINT("center G 1: %f \n", (double) center_g[0]);
     //DEBUG_PRINT("center G 2: %f \n", (double) center_g[1]);
     //DEBUG_PRINT("center G 3: %f \n", (double) center_g[2]);
     //DEBUG_PRINT("center G 4: %f \n", (double) center_g[3]);
->>>>>>> update pointer definition for jacobian inverse
 
         //input calculate
         static double_t input_jac[4];
@@ -689,17 +684,10 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         }
 
 
-<<<<<<< HEAD
-        //DEBUG_PRINT("input 1: %f\n", (double) input_jac[0]);
-        //DEBUG_PRINT("input 2: %f\n", (double) input_jac[1]);
-        //DEBUG_PRINT("input 3: %f \n", (double) input_jac[2]);
-        //DEBUG_PRINT("input 4: %f \n", (double) input_jac[3]);
-=======
     //DEBUG_PRINT("input 1: %f\n", (double) input_jac[0]);
     //DEBUG_PRINT("input 2: %f\n", (double) input_jac[1]);
     //DEBUG_PRINT("input 3: %f \n", (double) input_jac[2]);
     //DEBUG_PRINT("input 4: %f \n", (double) input_jac[3]);
->>>>>>> update pointer definition for jacobian inverse
 
         //calculate first row of Jacobian
         double_t yorai_row[4];
@@ -709,19 +697,11 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         }
 
 
-<<<<<<< HEAD
-        yorai_row_pointer = yorai_h(sam_mod_state);
-        for (int i=0; i < 4; i++){
-            yorai_row[i] = *(yorai_row_pointer + i);
-            //DEBUG_PRINT("row 1 yorai val: %f \n", (double) yorai_row[i]);
-        }
-=======
     yorai_row_pointer = yorai_h(sam_mod_state);
     for (int i=0; i < 4; i++){
         yorai_row[i] = *(yorai_row_pointer + i);
         //DEBUG_PRINT("row 1 yorai val: %f \n", (double) yorai_row[i]);
     }
->>>>>>> update pointer definition for jacobian inverse
 
 
 
@@ -743,19 +723,11 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         }
 
 
-<<<<<<< HEAD
-        yorai_row_pointer = yorai_h(sam_mod_state);
-        for (int i=0; i < 4; i++){
-            yorai_row_2[i] = *(yorai_row_pointer + i);
-            //DEBUG_PRINT("row 2 yorai val: %f \n", (double) yorai_row_2[i]);
-        }
-=======
     yorai_row_pointer = yorai_h(sam_mod_state);
     for (int i=0; i < 4; i++){
         yorai_row_2[i] = *(yorai_row_pointer + i);
         //DEBUG_PRINT("row 2 yorai val: %f \n", (double) yorai_row_2[i]);
     }
->>>>>>> update pointer definition for jacobian inverse
 
         for (int i=0; i < 4; i++){
             Jac[i][1] = (float)(((double)(yorai_row_2[i] - center_g[i]))*(1.0/(double)(eps)));
@@ -774,21 +746,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
             sam_mod_state[i] = *(s_pointer + i);
         }
 
-<<<<<<< HEAD
         yorai_row_pointer = yorai_h(sam_mod_state);
         double_t yorai_row_3[4];
         for (int i=0; i < 4; i++){
             yorai_row_3[i] = *(yorai_row_pointer + i);
             //DEBUG_PRINT("row 3 yorai val: %f \n", (double) yorai_row_3[i]);
         }
-=======
-    yorai_row_pointer = yorai_h(sam_mod_state);
-    float yorai_row_3[4];
-    for (int i=0; i < 4; i++){
-        yorai_row_3[i] = *(yorai_row_pointer + i);
-        //DEBUG_PRINT("row 3 yorai val: %f \n", (double) yorai_row_3[i]);
-    }
->>>>>>> update pointer definition for jacobian inverse
 
         for (int i=0; i < 4; i++){
             Jac[i][2] = (float)(((double)(yorai_row_3[i] - center_g[i]))*(1.0/(double)(eps)));
@@ -806,7 +769,6 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
             sam_mod_state[i] = *(s_pointer + i);
         }
 
-<<<<<<< HEAD
         yorai_row_pointer = yorai_h(sam_mod_state);
         double_t yorai_row_4[4];
         for (int i=0; i < 4; i++){
@@ -817,14 +779,6 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         for (int i=0; i < 4; i++){
             Jac[i][3] = (float)(((double)(yorai_row_4[i] - center_g[i]))*(1.0/(double)(eps)));
         }
-=======
-    yorai_row_pointer = yorai_h(sam_mod_state);
-    float yorai_row_4[4];
-    for (int i=0; i < 4; i++){
-        yorai_row_4[i] = *(yorai_row_pointer + i);
-        //DEBUG_PRINT("row 4 yorai val: %f \n", (double) yorai_row_4[i]);
-    }
->>>>>>> update pointer definition for jacobian inverse
 
 
         //get reference point from setpoint
@@ -833,20 +787,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         float * ref_ptr;
         ref_ptr = ref_traj((double) (time + horizon));
 
-<<<<<<< HEAD
         for (int i =0; i < 4; i++){
             ref_point[i] = *(ref_ptr + i);
         }
 
         //predict state based on horizon and input
         double_t prediction[4];
-=======
-    //get reference point from setpoint
-    //DEBUG_PRINT("GET REFERENCE FROM SETPOINT \n");
-    float ref_point[4];
-    float * ref_ptr;
-    ref_ptr = ref_traj((double) (tick + horizon));
->>>>>>> update pointer definition for jacobian inverse
 
         //input array
         //DEBUG_PRINT("PREDICT STATE BASED ON HORIZON AND INPUT \n");
@@ -861,7 +807,6 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
             prediction[i] = *(yorai_row_pointer + i);
         }
 
-<<<<<<< HEAD
         DEBUG_PRINT("predicted point (x): %f \n", (double)prediction[0]);
         DEBUG_PRINT("predicted point (y): %f \n", (double)prediction[1]);
         DEBUG_PRINT("predicted point (z): %f \n", (double)prediction[2]);
@@ -871,26 +816,10 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         DEBUG_PRINT("ref point y: %f: \n", (double) ref_point[1]);
         DEBUG_PRINT("ref point z: %f: \n", (double) ref_point[2]);
         DEBUG_PRINT("ref point t: %f: \n", (double) ref_point[3]);
-=======
-    //input array
-    //DEBUG_PRINT("PREDICT STATE BASED ON HORIZON AND INPUT \n");
-    static float state_pred[12];
-    s_pointer = sam_simulation(state, init_input,dt);
-    for (int i = 0; i < 12; i++){
-        state_pred[i] = *(s_pointer +i);
-    }
->>>>>>> update pointer definition for jacobian inverse
 
         //DEBUG_PRINT("alpha: %f \n ", (double ) alpha[1][2]);
         //DEBUG_PRINT("FIRST ROW OF JAC: %f \n", (double)Jac[0][0]);
 
-<<<<<<< HEAD
-=======
-    //DEBUG_PRINT("predicted point (x): %f \n", (double)prediction[0]);
-    //DEBUG_PRINT("predicted point (y): %f \n", (double)prediction[1]);
-    //DEBUG_PRINT("predicted point (z): %f \n", (double)prediction[2]);
-    //DEBUG_PRINT("predicted point (t): %f \n", (double)prediction[3]);
->>>>>>> update pointer definition for jacobian inverse
 
         //calculate input derivative
         double_t diff_ref_pred[4];
@@ -901,7 +830,6 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         //calulcate inverse of 4x4 matrix
         m_4d Jac_inv;
 
-<<<<<<< HEAD
         //DEBUG_PRINT("INVERT MATRIX \n");
         //DEBUG_PRINT("INVERT MATRIX \n");
         Jac_inv = matinv_4d(Jac);
@@ -910,20 +838,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         //DEBUG_PRINT("SEC ROW OF JAC INV: %f \n", (double)Jac_inv.m[1][1]);
         //DEBUG_PRINT("THIRD ROW OF JAC INV: %f \n", (double)Jac_inv.m[2][2]);
         //DEBUG_PRINT("FOURTH ROW OF JAC INV: %f \n", (double)Jac_inv.m[3][3]);
-=======
-    //calulcate inverse of 4x4 matrix
-    float ** Jac_inv;
-    //float ** jac_inv_ptr;
-    DEBUG_PRINT("INVERT MATRIX \n");
-     Jac_inv = matinv_4d(Jac);
 
-    DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv[0][0]);
-    DEBUG_PRINT("SEC ROW OF JAC INV: %f \n", (double)Jac_inv[1][1]);
-    DEBUG_PRINT("THIRD ROW OF JAC INV: %f \n", (double)Jac_inv[2][2]);
-    DEBUG_PRINT("FOURTH ROW OF JAC INV: %f \n", (double)Jac_inv[3][3]);
-    //
-    float u_d[4] = {0, 0, 0, 0};
->>>>>>> update pointer definition for jacobian inverse
 
         double u_d[4] = {0, 0, 0, 0};
 
@@ -954,46 +869,25 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         desired_wb.attitudeRate.yaw = (float)(u_new[3]);
 
 
-<<<<<<< HEAD
 
-<<<<<<< HEAD
     }
 
-=======
-    control->thrust = u_new[0];
-    control->roll = (int16_t)(u_new[1]);
-    control->pitch =(int16_t)(u_new[2]);
-    control->yaw = (int16_t)(u_new[3]);
-
-    //DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
-    //DEBUG_PRINT("UPDATED ROLL: %f\n", (double) u_new[1]);
-    //DEBUG_PRINT("UPDATED PITCH: %f \n", (double) u_new[2]);
-    //DEBUG_PRINT("UPDATED YAW: %f \n", (double) u_new[3]);
->>>>>>> update pointer definition for jacobian inverse
-
-    //DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
-    //DEBUG_PRINT("UPDATED ROLL: %f\n", (double) u_new[1]);
-    //DEBUG_PRINT("UPDATED PITCH: %f \n", (double) u_new[2]);
-    //DEBUG_PRINT("UPDATED YAW: %f \n", (double) u_new[3]);
-=======
-    //control->thrust = u_new[0];
     //control->roll = (int16_t)(u_new[1]);
     //control->pitch =(int16_t)(u_new[2]);
     //control->yaw = (int16_t)(u_new[3]);
 
     //free matrix inv
-    for (int i =0; i <3; i++){
-        free(Jac_inv[i]);
-    }
-    free(Jac_inv);
-    free(yorai_row_pointer);
+    //for (int i =0; i <3; i++){
+    //    free(Jac_inv[i]);
+    //}
+    //free(Jac_inv);
+    //free(yorai_row_pointer);
 
 
     DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
     DEBUG_PRINT("UPDATED ROLL: %f\n", (double) u_new[1]);
     DEBUG_PRINT("UPDATED PITCH: %f \n", (double) u_new[2]);
     DEBUG_PRINT("UPDATED YAW: %f \n", (double) u_new[3]);
->>>>>>> update 4x4 matrix inversion with correct values
 
 
 }
