@@ -3,6 +3,7 @@
 //
 
 #include <math.h>
+#include <stdlib.h>
 #include "param.h"
 #include "log.h"
 #include "math3d.h"
@@ -113,8 +114,18 @@ m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
     m_4d mat_inv;
 =======
 float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
+<<<<<<< HEAD
     static float mat_inv[4][4];
 >>>>>>> update pointer definition for jacobian inverse
+=======
+
+    //create mat_inv array of pointers
+    float ** mat_inv;
+    mat_inv = malloc(sizeof(float*) * ROWS);
+    for (int i = 0; i < ROWS; i++){
+        mat_inv[i] = malloc(sizeof(float*) * COLUMNS);
+    }
+>>>>>>> update 4x4 matrix inversion with correct values
 
     float a = matrix_in[0][0];
     float b = matrix_in[0][1];
@@ -200,6 +211,7 @@ float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
     float I1 = (float)pow(-1, 1+1) * (gg*p - o*h);
     float I2 = (float)pow(-1, 1+2) * (f*p - n*h);
     float I3 = (float)pow(-1, 1+3) * (f*o - n*gg);
+<<<<<<< HEAD
 
     float I =  (float)pow(-1, 3+1) * (b*(I1) + c*(I2) + d*(I3));
 
@@ -225,6 +237,33 @@ float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
     float L =  (float)pow(-1, 3+4) * (a*(L1) + b*(L2) + c*(L3));
 
 
+=======
+
+    float I =  (float)pow(-1, 3+1) * (b*(I1) + c*(I2) + d*(I3));
+
+    //2x2 cofactors J
+    float J1 = (float)pow(-1, 1+1) * (gg*p - o*h);
+    float J2 = (float)pow(-1, 1+2) * (e*p - mm*h);
+    float J3 = (float)pow(-1, 1+3) * (e*o - mm*gg);
+
+    float J =  (float)pow(-1, 3+2) * (a*(J1) + c*(J2) + d*(J3));
+
+    //2x2 cofactors K
+    float K1 = (float)pow(-1, 1+1) * (f*p - n*h);
+    float K2 = (float)pow(-1, 1+2) * (e*p - mm*h);
+    float K3 = (float)pow(-1, 1+3) * (e*n - mm*f);
+
+    float K =  (float)pow(-1, 3+3) * (a*(K1) + b*(K2) + d*(K3));
+
+    //2x2 cofactors L
+    float L1 = (float)pow(-1, 1+1) * (f*o - n*gg);
+    float L2 = (float)pow(-1, 1+2) * (e*o - mm*gg);
+    float L3 = (float)pow(-1, 1+3) * (e*n - mm*f);
+
+    float L =  (float)pow(-1, 3+4) * (a*(L1) + b*(L2) + c*(L3));
+
+
+>>>>>>> update 4x4 matrix inversion with correct values
     //2x2 cofactors M
     float M1 = (float)pow(-1, 1+1) * (gg*l - k*h);
     float M2 = (float)pow(-1, 1+2) * (f*l - j*h);
@@ -256,6 +295,7 @@ float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
     //determinant
     float A_det = a*A + b*B + c*C + d*D;
+<<<<<<< HEAD
     //DEBUG_PRINT("determinant: %f\n", (double) A_det);
 
     if (A_det == 0)  {
@@ -274,6 +314,19 @@ float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
             }
         }
         return last_mat;
+=======
+    //printf("determinant: %f\n", A_det);
+
+    if (A_det <= 0)  {
+        DEBUG_PRINT("UNDEFINED INVERSE, RETURNING IDENTITY \n");
+        //printf("UNDEFINED INVERSE, RETURNING IDENTITY \n");
+        static float ident[4][4] = {{1, 0, 0, 0},
+                                    {0, 1, 0, 0},
+                                    {0, 0, 1, 0},
+                                    {0, 0, 0, 1}};
+
+        return (float **)ident;
+>>>>>>> update 4x4 matrix inversion with correct values
     }
     //adjugate matrix
     float Adj[4][4] = {{A, E, I, M},
@@ -299,8 +352,12 @@ float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
         }
     }
 
+<<<<<<< HEAD
      return (float **) mat_inv;
 >>>>>>> update pointer definition for jacobian inverse
+=======
+    return mat_inv;
+>>>>>>> update 4x4 matrix inversion with correct values
 }
 
 double_t * f(double_t * state, double_t * u){
@@ -854,21 +911,15 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         //DEBUG_PRINT("FOURTH ROW OF JAC INV: %f \n", (double)Jac_inv.m[3][3]);
 =======
     //calulcate inverse of 4x4 matrix
-    static float Jac_inv[4][4];
-    float ** jac_inv_ptr;
-    //DEBUG_PRINT("INVERT MATRIX \n");
-    jac_inv_ptr = matinv_4d(Jac);
-
-    for (int i = 0; i < ROWS; i++){
-        for (int j =0; j < COLUMNS; j++){
-            Jac_inv[i][j]  = jac_inv_ptr[i][j];
-        }
-    }
+    float ** Jac_inv;
+    //float ** jac_inv_ptr;
+    DEBUG_PRINT("INVERT MATRIX \n");
+     Jac_inv = matinv_4d(Jac);
 
     DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv[0][0]);
-    DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv[0][1]);
-    DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv[0][2]);
-    DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv[0][3]);
+    DEBUG_PRINT("SEC ROW OF JAC INV: %f \n", (double)Jac_inv[1][1]);
+    DEBUG_PRINT("THIRD ROW OF JAC INV: %f \n", (double)Jac_inv[2][2]);
+    DEBUG_PRINT("FOURTH ROW OF JAC INV: %f \n", (double)Jac_inv[3][3]);
     //
     float u_d[4] = {0, 0, 0, 0};
 >>>>>>> update pointer definition for jacobian inverse
@@ -904,6 +955,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
 <<<<<<< HEAD
 
+<<<<<<< HEAD
     }
 
 =======
@@ -922,6 +974,17 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //DEBUG_PRINT("UPDATED ROLL: %f\n", (double) u_new[1]);
     //DEBUG_PRINT("UPDATED PITCH: %f \n", (double) u_new[2]);
     //DEBUG_PRINT("UPDATED YAW: %f \n", (double) u_new[3]);
+=======
+    //control->thrust = u_new[0];
+    //control->roll = (int16_t)(u_new[1]);
+    //control->pitch =(int16_t)(u_new[2]);
+    //control->yaw = (int16_t)(u_new[3]);
+
+    DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
+    DEBUG_PRINT("UPDATED ROLL: %f\n", (double) u_new[1]);
+    DEBUG_PRINT("UPDATED PITCH: %f \n", (double) u_new[2]);
+    DEBUG_PRINT("UPDATED YAW: %f \n", (double) u_new[3]);
+>>>>>>> update 4x4 matrix inversion with correct values
 
 
 }
