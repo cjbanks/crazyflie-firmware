@@ -14,7 +14,7 @@
 #define COLUMNS 4
 
 
-static float horizon = (float)(0.1);   //was 0.7
+static float horizon = (float)(0.05);   //was 0.7
 static float alpha[4][4] = {
                         {20, 0,  0, 0},
                         {0, 50, 0, 0},
@@ -252,8 +252,8 @@ float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
 
 
-    for (int jj = 0; jj < 4; jj++) {
-        for (int kk = 0; kk < 4; kk++) {
+    for (int jj = 0; jj < ROWS; jj++) {
+        for (int kk = 0; kk < COLUMNS; kk++) {
             mat_inv[jj][kk] = (1 / A_det) * Adj[jj][kk];
         }
     }
@@ -623,6 +623,10 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //DEBUG_PRINT("predicted point (y): %f \n", (double)prediction[1]);
     //DEBUG_PRINT("predicted point (z): %f \n", (double)prediction[2]);
     //DEBUG_PRINT("predicted point (t): %f \n", (double)prediction[3]);
+    //
+    DEBUG_PRINT("ref point: %f: \n", (double) ref_point[1]);
+    DEBUG_PRINT("alpha: %f \n ", (double ) alpha[1][2]);
+    DEBUG_PRINT("FIRST ROW OF JAC: %f \n", (double)Jac[0][0]);
 
 
     //calculate input derivative
@@ -633,21 +637,21 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
     //calulcate inverse of 4x4 matrix
     float ** Jac_inv;
-    //float ** jac_inv_ptr;
+
     DEBUG_PRINT("INVERT MATRIX \n");
-     Jac_inv = matinv_4d(Jac);
+    Jac_inv = matinv_4d(Jac);
 
     DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv[0][0]);
-    DEBUG_PRINT("SEC ROW OF JAC INV: %f \n", (double)Jac_inv[1][1]);
-    DEBUG_PRINT("THIRD ROW OF JAC INV: %f \n", (double)Jac_inv[2][2]);
-    DEBUG_PRINT("FOURTH ROW OF JAC INV: %f \n", (double)Jac_inv[3][3]);
+    //DEBUG_PRINT("SEC ROW OF JAC INV: %f \n", (double)Jac_inv[1][1]);
+    //DEBUG_PRINT("THIRD ROW OF JAC INV: %f \n", (double)Jac_inv[2][2]);
+    //DEBUG_PRINT("FOURTH ROW OF JAC INV: %f \n", (double)Jac_inv[3][3]);
     //
     float u_d[4] = {0, 0, 0, 0};
 
     //matrix multiplication
     for (int i= 0; i < 4; i++){
         for(int j=0; j< 4;j++){
-            u_d[i] += alpha[i][j] * Jac_inv[j][i];
+            //u_d[i] += alpha[i][j] * Jac_inv[j][i];
 
         }
         u_d[i] *= diff_ref_pred[i];
@@ -668,11 +672,11 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //control->yaw = (int16_t)(u_new[3]);
 
     //free matrix inv
-    for (int i =0; i <3; i++){
-        free(Jac_inv[i]);
-    }
-    free(Jac_inv);
-    free(yorai_row_pointer);
+    //for (int i =0; i <3; i++){
+    //    free(Jac_inv[i]);
+    //}
+    //free(Jac_inv);
+    //free(yorai_row_pointer);
 
 
     DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
