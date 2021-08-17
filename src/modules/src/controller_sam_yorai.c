@@ -125,10 +125,11 @@ float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
     //create mat_inv array of pointers
     float ** mat_inv;
-    mat_inv = malloc(sizeof(float*) * ROWS);
+    mat_inv = alloca(sizeof(float*) * ROWS);
 
     for (int i = 0; i < ROWS; i++){
-        mat_inv[i] = malloc(sizeof(float*) * COLUMNS);
+        //float * mat_col[4];
+       mat_inv[i] = alloca(sizeof(float*) * COLUMNS);
     }
 >>>>>>> update 4x4 matrix inversion with correct values
 
@@ -880,8 +881,6 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //for (int i =0; i <3; i++){
     //    free(Jac_inv[i]);
     //}
-    //free(Jac_inv);
-    //free(yorai_row_pointer);
 
 
     DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
