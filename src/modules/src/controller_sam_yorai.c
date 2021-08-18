@@ -8,6 +8,7 @@
 #include "log.h"
 #include "math3d.h"
 #include "controller_sam_yorai.h"
+#include "controller_mellinger.h"
 #include "debug.h"
 #include "attitude_controller.h"
 
@@ -24,6 +25,7 @@ static float alpha[4][4] = {
 static double_t init_input[4] = {0, 0, 0, 0};
 static double g = 9.81;
 static double m = 35.89 / 1000;
+static bool REACHED_SETPOINT = false;
 
 static float massThrust = 132000;
 
