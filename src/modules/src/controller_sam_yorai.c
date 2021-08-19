@@ -14,7 +14,7 @@
 #define COLUMNS 4
 
 
-static float horizon = (float)(0.05);   //was 0.7
+static float horizon = (float)(0.2);   //was 0.7
 static float alpha[4][4] = {
                         {20, 0,  0, 0},
                         {0, 50, 0, 0},
@@ -23,6 +23,10 @@ static float alpha[4][4] = {
 static float init_input[4] = {0, 0, 0, 0};
 static double g = 9.81;
 static double m = 35.89 / 1000;
+
+typedef struct {
+    float m[4][4];
+} m_4d;
 
 
 void controllerSamYoraiReset(void){
@@ -82,16 +86,10 @@ static struct mat33 matinv_3d(struct mat33 mat) {
     return m_inv;
 }
 
-float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
+m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
     //create mat_inv array of pointers
-    float ** mat_inv;
-    mat_inv = alloca(sizeof(float*) * ROWS);
-
-    for (int i = 0; i < ROWS; i++){
-        //float * mat_col[4];
-       mat_inv[i] = alloca(sizeof(float*) * COLUMNS);
-    }
+    m_4d mat_inv;
 
     float a = matrix_in[0][0];
     float b = matrix_in[0][1];
@@ -235,15 +233,22 @@ float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
     float A_det = a*A + b*B + c*C + d*D;
     //printf("determinant: %f\n", A_det);
 
-    if (A_det <= 0)  {
+    if (A_det == 0)  {
         DEBUG_PRINT("UNDEFINED INVERSE, RETURNING IDENTITY \n");
-        //printf("UNDEFINED INVERSE, RETURNING IDENTITY \n");
-        static float ident[4][4] = {{1, 0, 0, 0},
-                                    {0, 1, 0, 0},
-                                    {0, 0, 1, 0},
-                                    {0, 0, 0, 1}};
+        m_4d ident;
 
-        return (float **)ident;
+        for (int jj = 0; jj < ROWS; jj++) {
+            for (int kk = 0; kk < COLUMNS; kk++) {
+
+                if (jj==kk){
+                    ident.m[jj][kk] = 1;
+                }
+                else{
+                    ident.m[jj][kk] = 0;
+                }
+            }
+        }
+        return ident;
     }
     //adjugate matrix
     float Adj[4][4] = {{A, E, I, M},
@@ -255,7 +260,7 @@ float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
     for (int jj = 0; jj < ROWS; jj++) {
         for (int kk = 0; kk < COLUMNS; kk++) {
-            mat_inv[jj][kk] = (1 / A_det) * Adj[jj][kk];
+            mat_inv.m[jj][kk] = (1 / A_det) * Adj[jj][kk];
         }
     }
 
@@ -625,9 +630,9 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //DEBUG_PRINT("predicted point (z): %f \n", (double)prediction[2]);
     //DEBUG_PRINT("predicted point (t): %f \n", (double)prediction[3]);
     //
-    DEBUG_PRINT("ref point: %f: \n", (double) ref_point[1]);
-    DEBUG_PRINT("alpha: %f \n ", (double ) alpha[1][2]);
-    DEBUG_PRINT("FIRST ROW OF JAC: %f \n", (double)Jac[0][0]);
+    //DEBUG_PRINT("ref point: %f: \n", (double) ref_point[1]);
+    //DEBUG_PRINT("alpha: %f \n ", (double ) alpha[1][2]);
+    //DEBUG_PRINT("FIRST ROW OF JAC: %f \n", (double)Jac[0][0]);
 
 
     //calculate input derivative
@@ -637,12 +642,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     }
 
     //calulcate inverse of 4x4 matrix
-    float ** Jac_inv;
+    m_4d Jac_inv;
 
     DEBUG_PRINT("INVERT MATRIX \n");
     Jac_inv = matinv_4d(Jac);
 
-    DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv[0][0]);
+    //DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv.m[0][0]);
     //DEBUG_PRINT("SEC ROW OF JAC INV: %f \n", (double)Jac_inv[1][1]);
     //DEBUG_PRINT("THIRD ROW OF JAC INV: %f \n", (double)Jac_inv[2][2]);
     //DEBUG_PRINT("FOURTH ROW OF JAC INV: %f \n", (double)Jac_inv[3][3]);
@@ -652,7 +657,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //matrix multiplication
     for (int i= 0; i < 4; i++){
         for(int j=0; j< 4;j++){
-            //u_d[i] += alpha[i][j] * Jac_inv[j][i];
+            u_d[i] += alpha[i][j] * Jac_inv.m[j][i];
 
         }
         u_d[i] *= diff_ref_pred[i];
@@ -667,10 +672,10 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
     //return input
 
-    //control->thrust = u_new[0];
-    //control->roll = (int16_t)(u_new[1]);
-    //control->pitch =(int16_t)(u_new[2]);
-    //control->yaw = (int16_t)(u_new[3]);
+    control->thrust = u_new[0];
+    control->roll = (int16_t)(u_new[1]);
+    control->pitch =(int16_t)(u_new[2]);
+    control->yaw = (int16_t)(u_new[3]);
 
     //free matrix inv
     //for (int i =0; i <3; i++){
