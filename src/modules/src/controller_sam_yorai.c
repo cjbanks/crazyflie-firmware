@@ -14,20 +14,8 @@
 #define ROWS 4
 #define COLUMNS 4
 
-<<<<<<< HEAD
-#define ROWS 4
-#define COLUMNS 4
 
-
-static double_t horizon = 0.15;   //was 0.7
-=======
-
-<<<<<<< HEAD
-static float horizon = (float)(0.1);   //was 0.7
->>>>>>> update pointer definition for jacobian inverse
-=======
-static float horizon = (float)(0.05);   //was 0.7
->>>>>>> reduced horizon to 0.05, calculation of inverse causes timeout
+static float horizon = (float)(0.2);   //was 0.7
 static float alpha[4][4] = {
                         {20, 0,  0, 0},
                         {0, 50, 0, 0},
@@ -110,28 +98,10 @@ static struct mat33 matinv_3d(struct mat33 mat) {
     return m_inv;
 }
 
-<<<<<<< HEAD
-
 m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
     //create mat_inv array of pointers
     m_4d mat_inv;
-=======
-float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
-<<<<<<< HEAD
-    static float mat_inv[4][4];
->>>>>>> update pointer definition for jacobian inverse
-=======
-
-    //create mat_inv array of pointers
-    float ** mat_inv;
-    mat_inv = alloca(sizeof(float*) * ROWS);
-
-    for (int i = 0; i < ROWS; i++){
-        //float * mat_col[4];
-       mat_inv[i] = alloca(sizeof(float*) * COLUMNS);
-    }
->>>>>>> update 4x4 matrix inversion with correct values
 
     float a = matrix_in[0][0];
     float b = matrix_in[0][1];
@@ -217,7 +187,6 @@ float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
     float I1 = (float)pow(-1, 1+1) * (gg*p - o*h);
     float I2 = (float)pow(-1, 1+2) * (f*p - n*h);
     float I3 = (float)pow(-1, 1+3) * (f*o - n*gg);
-<<<<<<< HEAD
 
     float I =  (float)pow(-1, 3+1) * (b*(I1) + c*(I2) + d*(I3));
 
@@ -243,33 +212,6 @@ float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
     float L =  (float)pow(-1, 3+4) * (a*(L1) + b*(L2) + c*(L3));
 
 
-=======
-
-    float I =  (float)pow(-1, 3+1) * (b*(I1) + c*(I2) + d*(I3));
-
-    //2x2 cofactors J
-    float J1 = (float)pow(-1, 1+1) * (gg*p - o*h);
-    float J2 = (float)pow(-1, 1+2) * (e*p - mm*h);
-    float J3 = (float)pow(-1, 1+3) * (e*o - mm*gg);
-
-    float J =  (float)pow(-1, 3+2) * (a*(J1) + c*(J2) + d*(J3));
-
-    //2x2 cofactors K
-    float K1 = (float)pow(-1, 1+1) * (f*p - n*h);
-    float K2 = (float)pow(-1, 1+2) * (e*p - mm*h);
-    float K3 = (float)pow(-1, 1+3) * (e*n - mm*f);
-
-    float K =  (float)pow(-1, 3+3) * (a*(K1) + b*(K2) + d*(K3));
-
-    //2x2 cofactors L
-    float L1 = (float)pow(-1, 1+1) * (f*o - n*gg);
-    float L2 = (float)pow(-1, 1+2) * (e*o - mm*gg);
-    float L3 = (float)pow(-1, 1+3) * (e*n - mm*f);
-
-    float L =  (float)pow(-1, 3+4) * (a*(L1) + b*(L2) + c*(L3));
-
-
->>>>>>> update 4x4 matrix inversion with correct values
     //2x2 cofactors M
     float M1 = (float)pow(-1, 1+1) * (gg*l - k*h);
     float M2 = (float)pow(-1, 1+2) * (f*l - j*h);
@@ -301,38 +243,24 @@ float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
     //determinant
     float A_det = a*A + b*B + c*C + d*D;
-<<<<<<< HEAD
-    //DEBUG_PRINT("determinant: %f\n", (double) A_det);
+    //printf("determinant: %f\n", A_det);
 
     if (A_det == 0)  {
-        DEBUG_PRINT("UNDEFINED INVERSE, RETURNING last matrix \n");
-        m_4d last_mat;
+        DEBUG_PRINT("UNDEFINED INVERSE, RETURNING IDENTITY \n");
+        m_4d ident;
 
         for (int jj = 0; jj < ROWS; jj++) {
             for (int kk = 0; kk < COLUMNS; kk++) {
 
-                //if (jj==kk){
-                //    zeros.m[jj][kk] = 1;
-                //}
-                //else{
-                    last_mat.m[jj][kk] = past_mat.m[jj][kk];
-                //}
+                if (jj==kk){
+                    ident.m[jj][kk] = 1;
+                }
+                else{
+                    ident.m[jj][kk] = 0;
+                }
             }
         }
-        return last_mat;
-=======
-    //printf("determinant: %f\n", A_det);
-
-    if (A_det <= 0)  {
-        DEBUG_PRINT("UNDEFINED INVERSE, RETURNING IDENTITY \n");
-        //printf("UNDEFINED INVERSE, RETURNING IDENTITY \n");
-        static float ident[4][4] = {{1, 0, 0, 0},
-                                    {0, 1, 0, 0},
-                                    {0, 0, 1, 0},
-                                    {0, 0, 0, 1}};
-
-        return (float **)ident;
->>>>>>> update 4x4 matrix inversion with correct values
+        return ident;
     }
     //adjugate matrix
     float Adj[4][4] = {{A, E, I, M},
@@ -342,33 +270,13 @@ float ** matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     for (int jj = 0; jj < ROWS; jj++) {
         for (int kk = 0; kk < COLUMNS; kk++) {
-            mat_inv.m[jj][kk] = (1.0 / (double) A_det) * (double) Adj[jj][kk];
-            past_mat.m[jj][kk] = mat_inv.m[jj][kk];
+            mat_inv.m[jj][kk] = (1 / A_det) * Adj[jj][kk];
         }
     }
 
     return mat_inv;
-=======
-    for (int jj = 0; jj < 4; jj++) {
-        for (int kk = 0; kk < 4; kk++) {
-=======
-    for (int jj = 0; jj < ROWS; jj++) {
-        for (int kk = 0; kk < COLUMNS; kk++) {
->>>>>>> reduced horizon to 0.05, calculation of inverse causes timeout
-            mat_inv[jj][kk] = (1 / A_det) * Adj[jj][kk];
-        }
-    }
-
-<<<<<<< HEAD
-     return (float **) mat_inv;
->>>>>>> update pointer definition for jacobian inverse
-=======
-    return mat_inv;
->>>>>>> update 4x4 matrix inversion with correct values
 }
 
 double_t * f(double_t * state, double_t * u){
