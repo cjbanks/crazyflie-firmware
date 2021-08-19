@@ -8,6 +8,7 @@
 #include "log.h"
 #include "math3d.h"
 #include "controller_sam_yorai.h"
+#include "controller_mellinger.h"
 #include "debug.h"
 
 #define ROWS 4
@@ -23,6 +24,7 @@ static float alpha[4][4] = {
 static float init_input[4] = {0, 0, 0, 0};
 static double g = 9.81;
 static double m = 35.89 / 1000;
+static bool REACHED_SETPOINT = false;
 
 typedef struct {
     float m[4][4];
@@ -30,6 +32,7 @@ typedef struct {
 
 
 void controllerSamYoraiReset(void){
+    static bool REACHED_SETPOINT = false;
 }
 
 void controllerSamYoraiInit(void){
@@ -448,12 +451,32 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         return;
     }
 
+
+
+    //while the hover setpoint has not been reached, use mellinger controller
+    if (REACHED_SETPOINT == false){
+        controllerMellinger(control, setpoint, sensors, state_cf, tick);
+
+        //check distance to setpoint
+        double distance = sqrt(pow((double) (setpoint->position.x - state_cf->position.x), 2) + pow((double) (setpoint->position.y - state_cf->position.y), 2) +
+                                       pow((double) (setpoint->position.z - state_cf->position.z), 2));
+
+
+        DEBUG_PRINT("RUN MELLINGER -- CHECK DISTANCE: %f \n", distance);
+        //return true
+        if (distance < 0.05)
+            REACHED_SETPOINT = true;
+        return;
+    }
+
+
     //gather current state
     float state[12] = {state_cf->position.x, state_cf->position.y, state_cf->position.z,
                        state_cf->attitude.roll, state_cf->attitude.pitch, state_cf->attitude.yaw,
                        state_cf->velocity.x, state_cf->velocity.y, state_cf->velocity.z,
                        sensors->gyro.x, sensors->gyro.y, sensors->gyro.z};
-                                                                                                 //gather current input
+
+    //gather current input
     init_input[0] = control->thrust;
     init_input[1] = control->roll;
     init_input[2] = control->pitch;
