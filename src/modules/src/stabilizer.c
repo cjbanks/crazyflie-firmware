@@ -50,6 +50,8 @@
 #include "usddeck.h"
 #include "quatcompress.h"
 
+#include "check_distance_to_setpoint.h"
+
 static bool isInit;
 static bool emergencyStop = false;
 static int emergencyStopTimeout = EMERGENCY_STOP_TIMEOUT_DISABLED;
@@ -262,6 +264,11 @@ static void stabilizerTask(void* param)
         estimatorType = getStateEstimator();
       }
       // allow to update controller dynamically
+      if (check_distance_to_setpoint(&state, &setpoint) == true && controllerType == ControllerTypeMellinger && tick >= 50000){
+          DEBUG_PRINT("Switch to Sam-Yorai Controller.\n");
+          controllerType = ControllerTypeSamYorai;
+      }
+
       if (getControllerType() != controllerType) {
         controllerInit(controllerType);
         controllerType = getControllerType();
