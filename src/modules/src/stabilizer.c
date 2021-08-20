@@ -57,6 +57,8 @@
 
 #include "check_distance_to_setpoint.h"
 
+#include "check_distance_to_setpoint.h"
+
 static bool isInit;
 static bool emergencyStop = false;
 static int emergencyStopTimeout = EMERGENCY_STOP_TIMEOUT_DISABLED;
