@@ -8,7 +8,6 @@
 #include "log.h"
 #include "math3d.h"
 #include "controller_sam_yorai.h"
-#include "controller_mellinger.h"
 #include "debug.h"
 #include "attitude_controller.h"
 
@@ -25,7 +24,6 @@ static float alpha[4][4] = {
 static double_t init_input[4] = {0, 0, 0, 0};
 static double g = 9.81;
 static double m = 35.89 / 1000;
-static bool REACHED_SETPOINT = false;
 
 static float massThrust = 132000;
 
@@ -248,21 +246,21 @@ m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
     //printf("determinant: %f\n", A_det);
 
     if (A_det == 0)  {
-        DEBUG_PRINT("UNDEFINED INVERSE, RETURNING IDENTITY \n");
-        m_4d ident;
+        DEBUG_PRINT("UNDEFINED INVERSE, RETURNING zeros \n");
+        m_4d zeros;
 
         for (int jj = 0; jj < ROWS; jj++) {
             for (int kk = 0; kk < COLUMNS; kk++) {
 
-                if (jj==kk){
-                    ident.m[jj][kk] = 1;
-                }
-                else{
-                    ident.m[jj][kk] = 0;
-                }
+                //if (jj==kk){
+                //    zeros.m[jj][kk] = 1;
+                //}
+                //else{
+                    zeros.m[jj][kk] = 0;
+                //}
             }
         }
-        return ident;
+        return zeros;
     }
     //adjugate matrix
     float Adj[4][4] = {{A, E, I, M},
@@ -477,11 +475,6 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
                         const sensorData_t* sensors, const state_t* state_cf,
                         const uint32_t tick){
 
-    //intialize variable
-    float eps = 1e-5;
-    float dt = (1.0f/ATTITUDE_RATE);
-    float Jac[ROWS][COLUMNS];
-
     //controller runs at 500 Hz
     if (RATE_DO_EXECUTE(ATTITUDE_RATE, tick)){
         //returns actual control inputs (thrust, m_x, m_y, m_z)
@@ -496,6 +489,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
 
 
+<<<<<<< HEAD
         control->thrust = massThrust * desired_wb.thrust;
 
         attitudeControllerGetActuatorOutput(&control->roll, &control->pitch, &control->yaw);
@@ -515,6 +509,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
           }
     }
 
+=======
+    //intialize variable
+    float eps = 1e-5;
+    float dt = (1.0f/ATTITUDE_RATE);
+    float Jac[ROWS][COLUMNS];
+>>>>>>> updated controller
 
     //code runs at 100 Hz
     if (RATE_DO_EXECUTE(POSITION_RATE, tick)){
@@ -741,6 +741,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         //calulcate inverse of 4x4 matrix
         m_4d Jac_inv;
 
+<<<<<<< HEAD
         //DEBUG_PRINT("INVERT MATRIX \n");
         //DEBUG_PRINT("INVERT MATRIX \n");
         Jac_inv = matinv_4d(Jac);
@@ -749,6 +750,11 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         //DEBUG_PRINT("SEC ROW OF JAC INV: %f \n", (double)Jac_inv.m[1][1]);
         //DEBUG_PRINT("THIRD ROW OF JAC INV: %f \n", (double)Jac_inv.m[2][2]);
         //DEBUG_PRINT("FOURTH ROW OF JAC INV: %f \n", (double)Jac_inv.m[3][3]);
+=======
+    //DEBUG_PRINT("INVERT MATRIX \n");
+    //DEBUG_PRINT("INVERT MATRIX \n");
+    Jac_inv = matinv_4d(Jac);
+>>>>>>> updated controller
 
 
         double u_d[4] = {0, 0, 0, 0};
@@ -786,11 +792,6 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //control->roll = (int16_t)(u_new[1]);
     //control->pitch =(int16_t)(u_new[2]);
     //control->yaw = (int16_t)(u_new[3]);
-
-    //free matrix inv
-    //for (int i =0; i <3; i++){
-    //    free(Jac_inv[i]);
-    //}
 
 
     DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
