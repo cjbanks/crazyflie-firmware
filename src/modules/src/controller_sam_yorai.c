@@ -8,7 +8,6 @@
 #include "log.h"
 #include "math3d.h"
 #include "controller_sam_yorai.h"
-#include "controller_mellinger.h"
 #include "debug.h"
 
 #define ROWS 4
@@ -24,7 +23,6 @@ static float alpha[4][4] = {
 static float init_input[4] = {0, 0, 0, 0};
 static double g = 9.81;
 static double m = 35.89 / 1000;
-static bool REACHED_SETPOINT = false;
 
 typedef struct {
     float m[4][4];
@@ -32,7 +30,7 @@ typedef struct {
 
 
 void controllerSamYoraiReset(void){
-    static bool REACHED_SETPOINT = false;
+    //static bool REACHED_SETPOINT = false;
 }
 
 void controllerSamYoraiInit(void){
@@ -237,21 +235,21 @@ m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
     //printf("determinant: %f\n", A_det);
 
     if (A_det == 0)  {
-        DEBUG_PRINT("UNDEFINED INVERSE, RETURNING IDENTITY \n");
-        m_4d ident;
+        DEBUG_PRINT("UNDEFINED INVERSE, RETURNING zeros \n");
+        m_4d zeros;
 
         for (int jj = 0; jj < ROWS; jj++) {
             for (int kk = 0; kk < COLUMNS; kk++) {
 
-                if (jj==kk){
-                    ident.m[jj][kk] = 1;
-                }
-                else{
-                    ident.m[jj][kk] = 0;
-                }
+                //if (jj==kk){
+                //    zeros.m[jj][kk] = 1;
+                //}
+                //else{
+                    zeros.m[jj][kk] = 0;
+                //}
             }
         }
-        return ident;
+        return zeros;
     }
     //adjugate matrix
     float Adj[4][4] = {{A, E, I, M},
@@ -441,34 +439,15 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
                         const sensorData_t* sensors, const state_t* state_cf,
                         const uint32_t tick){
 
-    //intialize variable
-    float eps = 1e-5;
-    float dt = (1.0f/ATTITUDE_RATE);
-    float Jac[ROWS][COLUMNS];
-
     //controller runs at 500 Hz
     if (!RATE_DO_EXECUTE(ATTITUDE_RATE, tick)){
         return;
     }
 
-
-
-    //while the hover setpoint has not been reached, use mellinger controller
-    if (REACHED_SETPOINT == false){
-        controllerMellinger(control, setpoint, sensors, state_cf, tick);
-
-        //check distance to setpoint
-        double distance = sqrt(pow((double) (setpoint->position.x - state_cf->position.x), 2) + pow((double) (setpoint->position.y - state_cf->position.y), 2) +
-                                       pow((double) (setpoint->position.z - state_cf->position.z), 2));
-
-
-        DEBUG_PRINT("RUN MELLINGER -- CHECK DISTANCE: %f \n", distance);
-        //return true
-        if (distance < 0.05)
-            REACHED_SETPOINT = true;
-        return;
-    }
-
+    //intialize variable
+    float eps = 1e-5;
+    float dt = (1.0f/ATTITUDE_RATE);
+    float Jac[ROWS][COLUMNS];
 
     //gather current state
     float state[12] = {state_cf->position.x, state_cf->position.y, state_cf->position.z,
@@ -667,7 +646,8 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //calulcate inverse of 4x4 matrix
     m_4d Jac_inv;
 
-    DEBUG_PRINT("INVERT MATRIX \n");
+    //DEBUG_PRINT("INVERT MATRIX \n");
+    //DEBUG_PRINT("INVERT MATRIX \n");
     Jac_inv = matinv_4d(Jac);
 
     //DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv.m[0][0]);
@@ -699,11 +679,6 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     control->roll = (int16_t)(u_new[1]);
     control->pitch =(int16_t)(u_new[2]);
     control->yaw = (int16_t)(u_new[3]);
-
-    //free matrix inv
-    //for (int i =0; i <3; i++){
-    //    free(Jac_inv[i]);
-    //}
 
 
     DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
