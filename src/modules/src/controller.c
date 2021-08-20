@@ -7,7 +7,7 @@
 #include "controller_mellinger.h"
 #include "controller_sam_yorai.h"
 
-#define DEFAULT_CONTROLLER ControllerTypePID
+#define DEFAULT_CONTROLLER ControllerTypeMellinger
 static ControllerType currentController = ControllerTypeAny;
 
 static void initController();
@@ -38,7 +38,7 @@ void controllerInit(ControllerType controller) {
     currentController = DEFAULT_CONTROLLER;
   }
 
-  ControllerType forcedController = ControllerTypeSamYorai;
+  ControllerType forcedController = ControllerTypeAny;
   if (forcedController != ControllerTypeAny) {
     DEBUG_PRINT("Controller type forced\n");
     currentController = forcedController;
@@ -56,7 +56,7 @@ ControllerType getControllerType(void) {
 }
 
 static void initController() {
-  controllerFunctions[currentController].init();
+    controllerFunctions[currentController].init();
 }
 
 bool controllerTest(void) {
