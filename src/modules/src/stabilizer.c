@@ -278,7 +278,7 @@ static void stabilizerTask(void* param)
         estimatorType = getStateEstimator();
       }
       // allow to update controller dynamically
-      if (check_distance_to_setpoint(&state, &setpoint) == true && controllerType == ControllerTypeMellinger && tick >= 50000){
+      if (check_distance_to_setpoint(&state, &setpoint) == true && controllerType == ControllerTypeMellinger && tick >= 25000){
           DEBUG_PRINT("Switch to Sam-Yorai Controller.\n");
           controllerType = ControllerTypeSamYorai;
       }
