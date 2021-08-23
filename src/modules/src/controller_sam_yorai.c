@@ -25,7 +25,7 @@ static double g = 9.81;
 static double m = 35.89 / 1000;
 
 typedef struct {
-    float m[4][4];
+    double m[4][4];
 } m_4d;
 
 
@@ -232,7 +232,7 @@ m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
     //determinant
     float A_det = a*A + b*B + c*C + d*D;
-    //printf("determinant: %f\n", A_det);
+    DEBUG_PRINT("determinant: %f\n", (double) A_det);
 
     if (A_det == 0)  {
         DEBUG_PRINT("UNDEFINED INVERSE, RETURNING zeros \n");
@@ -261,7 +261,7 @@ m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
     for (int jj = 0; jj < ROWS; jj++) {
         for (int kk = 0; kk < COLUMNS; kk++) {
-            mat_inv.m[jj][kk] = (1 / A_det) * Adj[jj][kk];
+            mat_inv.m[jj][kk] = (1.0 / (double) A_det) * (double) Adj[jj][kk];
         }
     }
 
@@ -309,7 +309,7 @@ float* f(float * state, float * u){
     Rwb.m[1][1] = sin((double)eul_angles[0]) * sin((double)eul_angles[1]) * sin((double)eul_angles[2]) + cos((double)eul_angles[0]) * cos((double)eul_angles[2]);
     Rwb.m[1][2] = sin((double)eul_angles[1]) * sin((double)eul_angles[2]) * cos((double)eul_angles[0]) - sin((double)eul_angles[0]) * cos((double)eul_angles[2]);
 
-    Rwb.m[2][0] = (float)(-sin((double)(eul_angles[1])));
+    Rwb.m[2][0] = (float)(-1.0*sin((double)(eul_angles[1])));
     Rwb.m[2][1] = sin((double)eul_angles[0]) * cos((double)eul_angles[1]);
     Rwb.m[2][2] = cos((double)eul_angles[0]) * cos((double)eul_angles[1]);
 
@@ -323,7 +323,7 @@ float* f(float * state, float * u){
 
     Twb.m[1][0] = 0;
     Twb.m[1][1] = cos((double)phi);
-    Twb.m[1][2] = -sin((double)phi);
+    Twb.m[1][2] = -1.0*sin((double)phi);
 
     Twb.m[2][0] = 0;
     Twb.m[2][1] = sin((double)phi) / cos((double)theta);
@@ -345,7 +345,7 @@ float* f(float * state, float * u){
     struct vec z_w;
     z_w.x = 0;
     z_w.y = 0;
-    z_w.z = 0;
+    z_w.z = 1;
 
     struct vec z_b;
     z_b.x = Rwb.m[0][2];
@@ -463,10 +463,10 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
     //DEBUG_PRINT("Gathered CURRENT INPUT (YORAI-SAM) \n");
 
-    //DEBUG_PRINT("THRUST: %f\n", (double) init_input[0]);
-    //DEBUG_PRINT("ROLL: %f\n", (double) init_input[1]);
-    //DEBUG_PRINT("PITCH: %f \n", (double) init_input[2]);
-    //DEBUG_PRINT("YAW: %f \n", (double) init_input[3]);
+    DEBUG_PRINT("THRUST: %f\n", (double) init_input[0]);
+    DEBUG_PRINT("ROLL: %f\n", (double) init_input[1]);
+    DEBUG_PRINT("PITCH: %f \n", (double) init_input[2]);
+    DEBUG_PRINT("YAW: %f \n", (double) init_input[3]);
 
     //calculate Jacobian
 
@@ -650,32 +650,32 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //DEBUG_PRINT("INVERT MATRIX \n");
     Jac_inv = matinv_4d(Jac);
 
-    //DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv.m[0][0]);
-    //DEBUG_PRINT("SEC ROW OF JAC INV: %f \n", (double)Jac_inv[1][1]);
-    //DEBUG_PRINT("THIRD ROW OF JAC INV: %f \n", (double)Jac_inv[2][2]);
-    //DEBUG_PRINT("FOURTH ROW OF JAC INV: %f \n", (double)Jac_inv[3][3]);
-    //
-    float u_d[4] = {0, 0, 0, 0};
+    DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv.m[0][0]);
+    DEBUG_PRINT("SEC ROW OF JAC INV: %f \n", (double)Jac_inv.m[1][1]);
+    DEBUG_PRINT("THIRD ROW OF JAC INV: %f \n", (double)Jac_inv.m[2][2]);
+    DEBUG_PRINT("FOURTH ROW OF JAC INV: %f \n", (double)Jac_inv.m[3][3]);
+
+    double u_d[4] = {0, 0, 0, 0};
 
     //matrix multiplication
     for (int i= 0; i < 4; i++){
         for(int j=0; j< 4;j++){
-            u_d[i] += alpha[i][j] * Jac_inv.m[j][i];
+            u_d[i] += (double) alpha[i][j] * Jac_inv.m[j][i];
 
         }
-        u_d[i] *= diff_ref_pred[i];
+        u_d[i] *= (double) diff_ref_pred[i];
     }
 
 
     //set inputs
-    float u_new[4] = {0, 0, 0, 0};
+    double u_new[4] = {0, 0, 0, 0};
     for (int i = 0; i < 4; i++) {
-        u_new[i] = init_input[i] + u_d[i]*dt;
+        u_new[i] = (double) init_input[i] + u_d[i] * (double) dt;
     }
 
     //return input
 
-    control->thrust = u_new[0];
+    control->thrust = (float)u_new[0];
     control->roll = (int16_t)(u_new[1]);
     control->pitch =(int16_t)(u_new[2]);
     control->yaw = (int16_t)(u_new[3]);
