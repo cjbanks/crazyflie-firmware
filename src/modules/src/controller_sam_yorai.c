@@ -243,7 +243,7 @@ m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
     //determinant
     float A_det = a*A + b*B + c*C + d*D;
-    //printf("determinant: %f\n", A_det);
+    DEBUG_PRINT("determinant: %f\n", (double) A_det);
 
     if (A_det == 0)  {
         DEBUG_PRINT("UNDEFINED INVERSE, RETURNING zeros \n");
@@ -272,7 +272,7 @@ m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
     for (int jj = 0; jj < ROWS; jj++) {
         for (int kk = 0; kk < COLUMNS; kk++) {
-            mat_inv.m[jj][kk] = (1 / A_det) * Adj[jj][kk];
+            mat_inv.m[jj][kk] = (1.0 / (double) A_det) * (double) Adj[jj][kk];
         }
     }
 
@@ -489,7 +489,6 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
 
 
-<<<<<<< HEAD
         control->thrust = massThrust * desired_wb.thrust;
 
         attitudeControllerGetActuatorOutput(&control->roll, &control->pitch, &control->yaw);
@@ -509,12 +508,6 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
           }
     }
 
-=======
-    //intialize variable
-    float eps = 1e-5;
-    float dt = (1.0f/ATTITUDE_RATE);
-    float Jac[ROWS][COLUMNS];
->>>>>>> updated controller
 
     //code runs at 100 Hz
     if (RATE_DO_EXECUTE(POSITION_RATE, tick)){
@@ -741,20 +734,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         //calulcate inverse of 4x4 matrix
         m_4d Jac_inv;
 
-<<<<<<< HEAD
-        //DEBUG_PRINT("INVERT MATRIX \n");
-        //DEBUG_PRINT("INVERT MATRIX \n");
-        Jac_inv = matinv_4d(Jac);
+    //calulcate inverse of 4x4 matrix
+    m_4d Jac_inv;
 
-        //DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv.m[0][0]);
-        //DEBUG_PRINT("SEC ROW OF JAC INV: %f \n", (double)Jac_inv.m[1][1]);
-        //DEBUG_PRINT("THIRD ROW OF JAC INV: %f \n", (double)Jac_inv.m[2][2]);
-        //DEBUG_PRINT("FOURTH ROW OF JAC INV: %f \n", (double)Jac_inv.m[3][3]);
-=======
     //DEBUG_PRINT("INVERT MATRIX \n");
     //DEBUG_PRINT("INVERT MATRIX \n");
     Jac_inv = matinv_4d(Jac);
->>>>>>> updated controller
 
 
         double u_d[4] = {0, 0, 0, 0};
@@ -774,17 +759,8 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         for (int i = 0; i < 4; i++) {
             u_new[i] = (double) init_input[i] + u_d[i] * (double) dt;
         }
-
-        //increase time
-        time = time + dt;
-        DEBUG_PRINT("Time: %f \n", (double)time);
-
-        //return input
-        desired_wb.thrust = (float)u_new[0];
-        desired_wb.attitudeRate.roll = (float)(u_new[1]);
-        desired_wb.attitudeRate.pitch = (float)(u_new[2]);
-        desired_wb.attitudeRate.yaw = (float)(u_new[3]);
-
+        u_d[i] *= (double) diff_ref_pred[i];
+    }
 
 
     }
