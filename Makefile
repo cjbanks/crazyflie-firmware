@@ -173,9 +173,13 @@ PROJ_OBJ += eventtrigger.o supervisor.o
 
 # Stabilizer modules
 PROJ_OBJ += commander.o crtp_commander.o crtp_commander_rpyt.o
+<<<<<<< HEAD
 
 PROJ_OBJ += crtp_commander_generic.o crtp_localization_service.o peer_localization.o
 PROJ_OBJ += position_estimator_altitude.o position_controller_pid.o position_controller_indi.o
+=======
+PROJ_OBJ += crtp_commander_generic.o crtp_localization_service.o
+>>>>>>> updated time step updates to start when controller starts
 PROJ_OBJ += attitude_pid_controller.o sensfusion6.o stabilizer.o check_distance_to_setpoint.o
 PROJ_OBJ += position_estimator_altitude.o position_controller_pid.o
 PROJ_OBJ += estimator.o estimator_complementary.o

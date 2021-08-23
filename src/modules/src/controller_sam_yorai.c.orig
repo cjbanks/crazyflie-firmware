@@ -25,12 +25,16 @@ static double_t init_input[4] = {0, 0, 0, 0};
 static double g = 9.81;
 static double m = 35.89 / 1000;
 
+<<<<<<< HEAD
 static float massThrust = 132000;
 
 
 static double_t time = 0;
 
 setpoint_t desired_wb;
+=======
+static float time = 0;
+>>>>>>> updated time step updates to start when controller starts
 
 typedef struct {
     double m[4][4];
@@ -759,6 +763,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
             prediction[i] = *(yorai_row_pointer + i);
         }
 
+<<<<<<< HEAD
         DEBUG_PRINT("predicted point (x): %f \n", (double)prediction[0]);
         DEBUG_PRINT("predicted point (y): %f \n", (double)prediction[1]);
         DEBUG_PRINT("predicted point (z): %f \n", (double)prediction[2]);
@@ -768,6 +773,20 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         DEBUG_PRINT("ref point y: %f: \n", (double) ref_point[1]);
         DEBUG_PRINT("ref point z: %f: \n", (double) ref_point[2]);
         DEBUG_PRINT("ref point t: %f: \n", (double) ref_point[3]);
+=======
+    DEBUG_PRINT("predicted point (x): %f \n", (double)prediction[0]);
+    DEBUG_PRINT("predicted point (y): %f \n", (double)prediction[1]);
+    DEBUG_PRINT("predicted point (z): %f \n", (double)prediction[2]);
+    DEBUG_PRINT("predicted point (t): %f \n", (double)prediction[3]);
+    //
+    DEBUG_PRINT("ref point x: %f: \n", (double) ref_point[0]);
+    DEBUG_PRINT("ref point y: %f: \n", (double) ref_point[1]);
+    DEBUG_PRINT("ref point z: %f: \n", (double) ref_point[2]);
+    DEBUG_PRINT("ref point t: %f: \n", (double) ref_point[3]);
+
+    //DEBUG_PRINT("alpha: %f \n ", (double ) alpha[1][2]);
+    //DEBUG_PRINT("FIRST ROW OF JAC: %f \n", (double)Jac[0][0]);
+>>>>>>> updated time step updates to start when controller starts
 
         //DEBUG_PRINT("alpha: %f \n ", (double ) alpha[1][2]);
         //DEBUG_PRINT("FIRST ROW OF JAC: %f \n", (double)Jac[0][0]);
@@ -789,6 +808,13 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //DEBUG_PRINT("INVERT MATRIX \n");
     Jac_inv = matinv_4d(Jac);
 
+<<<<<<< HEAD
+=======
+    //DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv.m[0][0]);
+    //DEBUG_PRINT("SEC ROW OF JAC INV: %f \n", (double)Jac_inv.m[1][1]);
+    //DEBUG_PRINT("THIRD ROW OF JAC INV: %f \n", (double)Jac_inv.m[2][2]);
+    //DEBUG_PRINT("FOURTH ROW OF JAC INV: %f \n", (double)Jac_inv.m[3][3]);
+>>>>>>> updated time step updates to start when controller starts
 
         double u_d[4] = {0, 0, 0, 0};
 
@@ -813,9 +839,22 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
     }
 
+<<<<<<< HEAD
     //control->roll = (int16_t)(u_new[1]);
     //control->pitch =(int16_t)(u_new[2]);
     //control->yaw = (int16_t)(u_new[3]);
+=======
+    //increase time
+    time = time + dt;
+    DEBUG_PRINT("Time: %f \n", (double)time);
+
+    //return input
+
+    control->thrust = (float)u_new[0];
+    control->roll = (int16_t)(u_new[1]);
+    control->pitch =(int16_t)(u_new[2]);
+    control->yaw = (int16_t)(u_new[3]);
+>>>>>>> updated time step updates to start when controller starts
 
 
     //DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
