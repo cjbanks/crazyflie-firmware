@@ -14,17 +14,20 @@
 #define COLUMNS 4
 
 
-static float horizon = (float)(0.15);   //was 0.7
+static double_t horizon = 0.15;   //was 0.7
 static float alpha[4][4] = {
                         {20, 0,  0, 0},
                         {0, 50, 0, 0},
                         {0, 0, 50, 0},
                         {0, 0, 0, 50} };
-static float init_input[4] = {0, 0, 0, 0};
+static double_t init_input[4] = {0, 0, 0, 0};
 static double g = 9.81;
 static double m = 35.89 / 1000;
 
-static float time = 0;
+static float massThrust = 132000;
+
+
+static double_t time = 0;
 
 typedef struct {
     double m[4][4];
@@ -90,6 +93,7 @@ static struct mat33 matinv_3d(struct mat33 mat) {
 
     return m_inv;
 }
+
 
 m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
@@ -273,78 +277,98 @@ m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
     return mat_inv;
 }
 
-float* f(float * state, float * u){
+double_t * f(double_t * state, double_t * u){
     //construct temporary state in dynamics
-    static float state_temp[12];
+    static double_t state_temp[12];
     for (int i=0; i < 12; i++){
         state_temp[i] = *(state + i);
     }
-
     //construct temp input for dynamics
-    static float input_temp[4];
+    static double_t input_temp[4];
     for (int i=0;i < 4;i++){
         input_temp[i] = *(u + i);
     }
 
 
-    static float state_d[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    float eul_angles[3] = {state_temp[3], state_temp[4], state_temp[5]}; //phi, theta, psi
-    struct mat33 I_moment = mscl((float)(10e-5), mdiag((float)(2.3951), (float)(2.3951), (float)(3.2346)));
+    static double_t state_d[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    double_t eul_angles[3] = {state_temp[3], state_temp[4], state_temp[5]}; //phi, theta, psi
+    struct mat33 I_moment = mscl((float)(pow(10,-5)), mdiag((float)(2.3951), (float)(2.3951), (float)(3.2346)));
+
     struct mat33 I_moment_inv = matinv_3d(I_moment);
+    //for (int i = 0; i < 3; i++){
+    //    for (int j=0; j< 3; j++){
+    //        printf("Moment (%d, %d): %f \n", i, j, I_moment.m[i][j]);
+    //    }
+    //}
+    //
+    //for (int i = 0; i < 3; i++){
+    //    for (int j=0; j< 3; j++){
+    //        printf("Moment inv (%d, %d): %f \n", i, j, I_moment_inv.m[i][j]);
+    //    }
+    //}
     struct vec vel;
     struct vec omega_b;
 
-    vel.x = state_temp[6];
-    vel.y = state_temp[7];
-    vel.z = state_temp[8];
 
-    omega_b.x = state_temp[9];
-    omega_b.y = state_temp[10];
-    omega_b.z = state_temp[11];
+    //linear velocity of body
+    vel.x = (float)state_temp[6];
+    vel.y = (float)state_temp[7];
+    vel.z = (float)state_temp[8];
+
+    //angular velocity of body
+    omega_b.x = (float)state_temp[9];
+    omega_b.y = (float)state_temp[10];
+    omega_b.z = (float)state_temp[11];
 
     struct mat33 Twb;
     struct mat33 Rwb;
 
     //crate Rwb and Twb matrices
-    Rwb.m[0][0] = cos((double)eul_angles[1]) * cos((double)eul_angles[2]);
-    Rwb.m[0][1] = sin((double)eul_angles[0]) * sin((double)eul_angles[1]) * cos((double)eul_angles[2]) - sin((double)eul_angles[2])*cos((double)eul_angles[0]);
-    Rwb.m[0][2] = sin((double)eul_angles[1]) * cos((double)eul_angles[0]) * cos((double)eul_angles[2]) + sin((double)eul_angles[0])*sin((double)eul_angles[2]);
+    Rwb.m[0][0] = (float)(cos(eul_angles[1]) * cos(eul_angles[2]));
+    Rwb.m[0][1] =(float)(sin(eul_angles[0]) * sin(eul_angles[1]) * cos(eul_angles[2]) - sin(eul_angles[2])*cos(eul_angles[0]));
+    Rwb.m[0][2] =(float)(sin(eul_angles[1]) * cos(eul_angles[0]) * cos(eul_angles[2]) + sin(eul_angles[0])*sin(eul_angles[2]));
 
-    Rwb.m[1][0] = sin((double)eul_angles[2]) * cos((double)eul_angles[1]);
-    Rwb.m[1][1] = sin((double)eul_angles[0]) * sin((double)eul_angles[1]) * sin((double)eul_angles[2]) + cos((double)eul_angles[0]) * cos((double)eul_angles[2]);
-    Rwb.m[1][2] = sin((double)eul_angles[1]) * sin((double)eul_angles[2]) * cos((double)eul_angles[0]) - sin((double)eul_angles[0]) * cos((double)eul_angles[2]);
+    Rwb.m[1][0] = (float)(sin(eul_angles[2]) * cos(eul_angles[1]));
+    Rwb.m[1][1] = (float)(sin(eul_angles[0]) * sin(eul_angles[1]) * sin(eul_angles[2]) + cos(eul_angles[0]) * cos(eul_angles[2]));
+    Rwb.m[1][2] = (float)(sin(eul_angles[1]) * sin(eul_angles[2]) * cos(eul_angles[0]) - sin(eul_angles[0]) * cos(eul_angles[2]));
 
-    Rwb.m[2][0] = (float)(-1.0*sin((double)(eul_angles[1])));
-    Rwb.m[2][1] = sin((double)eul_angles[0]) * cos((double)eul_angles[1]);
-    Rwb.m[2][2] = cos((double)eul_angles[0]) * cos((double)eul_angles[1]);
+    Rwb.m[2][0] = (float)(-1.0*sin(eul_angles[1]));
+    Rwb.m[2][1] = (float)(sin(eul_angles[0]) * cos(eul_angles[1]));
+    Rwb.m[2][2] = (float)(cos(eul_angles[0]) * cos(eul_angles[1]));
 
 
-    float phi = eul_angles[0];
-    float theta = eul_angles[1];
+    //for (int j = 0; j < 3; j++){
+    //    for (int k=0; k <3; k++){
+    //        printf("matrix (Rwb) (%i, %i) : %f \n",j, k, Rwb.m[j][k] );
+    //    }
+    //}
 
-    Twb.m[0][0] = 1;
-    Twb.m[0][1] = sin((double)phi) * tan((double)theta);
-    Twb.m[0][2] = cos((double)phi) * tan((double)theta);
+    double phi = eul_angles[0];
+    double theta = eul_angles[1];
 
-    Twb.m[1][0] = 0;
-    Twb.m[1][1] = cos((double)phi);
-    Twb.m[1][2] = -1.0*sin((double)phi);
+    Twb.m[0][0] = 1.0;
+    Twb.m[0][1] = (float)(sin((double)phi) * tan((double)theta));
+    Twb.m[0][2] = (float)(cos((double)phi) * tan((double)theta));
+
+    Twb.m[1][0] = 0.0;
+    Twb.m[1][1] = (float)cos((double)phi);
+    Twb.m[1][2] = -1*(float)sin((double)phi);
 
     Twb.m[2][0] = 0;
-    Twb.m[2][1] = sin((double)phi) / cos((double)theta);
-    Twb.m[2][2] = cos((double)phi) / cos((double)theta);
+    Twb.m[2][1] = (float)(sin((double)phi) / cos((double)theta));
+    Twb.m[2][2] = (float)(cos((double)phi) / cos((double)theta));
 
     //set vel
-    state_d[0] = vel.x;
-    state_d[1] = vel.y;
-    state_d[2] = vel.z;
+    state_d[0] = state_temp[6];
+    state_d[1] = state_temp[7];
+    state_d[2] = state_temp[8];
 
     //set angles
     struct vec angles_update;
     angles_update = mvmul(Twb, omega_b);
-    state_d[3] = angles_update.x; //phi
-    state_d[4] = angles_update.y; //theta
-    state_d[5] = angles_update.z; //psi
+    state_d[3] = (double_t)angles_update.x; //phi
+    state_d[4] = (double_t)angles_update.y; //theta
+    state_d[5] = (double_t)angles_update.z; //psi
 
     //set linear acceleration
     struct vec z_w;
@@ -357,46 +381,51 @@ float* f(float * state, float * u){
     z_b.y = Rwb.m[1][2];
     z_b.z = Rwb.m[2][2];
 
-    struct vec acc = vdiv(vadd(vscl((float)(-m*g), z_w), vscl(input_temp[0], z_b)), (float)m);
+    struct vec acc = vdiv(vadd(vscl((float)(-1.0*m*g), z_w), vscl((float)input_temp[0], z_b)), (float)m);
 
-    state_d[6] = acc.x;
-    state_d[7] = acc.y;
-    state_d[8] = acc.z;
+    state_d[6] = (double_t)acc.x;
+    state_d[7] = (double_t)acc.y;
+    state_d[8] = (double_t)acc.z;
 
     //input moments
     struct vec moments;
-    moments.x = input_temp[1];
-    moments.y = input_temp[2];
-    moments.z = input_temp[3];
+    moments.x = (float)input_temp[1];
+    moments.y = (float)input_temp[2];
+    moments.z = (float)input_temp[3];
+
+    //printf("moment1 : %f \n ", moments.x);
+    //printf("moment2 : %f \n ", moments.y);
+    //printf("moment3 : %f \n ", moments.z);
 
 
     // Body Rate acceleration
-    struct vec angle_acc = vadd(mvmul(I_moment_inv, vcross(vscl(-1, omega_b), mvmul(I_moment, omega_b))), moments);
+    struct vec angle_acc = mvmul(I_moment_inv, vadd(vcross(vscl(-1, omega_b), mvmul(I_moment, omega_b)), moments));
 
-    state_d[9] = angle_acc.x;
-    state_d[10] = angle_acc.y;
-    state_d[11] = angle_acc.z;
+    state_d[9] =  (double_t)angle_acc.x;
+    state_d[10] = (double_t)angle_acc.y;
+    state_d[11] = (double_t)angle_acc.z;
+
     return state_d;
 }
 
-float* sam_simulation(float * state, float * input, float t_step){
+double_t * sam_simulation(double_t * state, double_t * input, double_t t_step){
     float t = 0;
     //float y_output[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     //construct temporary state in simulator
-    static float state_temp[12];
+    static double_t state_temp[12];
     for (int i=0; i < 12; i++){
         state_temp[i] = *(state + i);
     }
 
     //construct temp input for simulator
-    static float input_temp[4];
+    static double_t input_temp[4];
     for (int i=0;i < 4;i++){
         input_temp[i] = *(input + i);
     }
 
-    float state_d_vector[12];
-    float * state_d;
+    double_t state_d_vector[12];
+    double_t * state_d;
     //iterate
     while (t < horizon){
         state_d = f(state_temp, input_temp);
@@ -407,18 +436,18 @@ float* sam_simulation(float * state, float * input, float t_step){
         for (int i = 0; i < 12; i ++){
             state_temp[i] = state_temp[i] + state_d_vector[i]*t_step;
         }
-        t = t+t_step;
+        t = t+(float)t_step;
     }
     return state_temp;
 }
 
-float * yorai_h(float * s){
+double_t * yorai_h(double_t * s){
 
-    float state[12];
+    double_t state[12];
     for (int i =0; i < 12; i++){
        state[i] = *(s + i);
     }
-    static float h_state[4] = {0, 0, 0, 0};
+    static double_t h_state[4] = {0, 0, 0, 0};
     h_state[0] = state[0];
     h_state[1] = state[1];
     h_state[2] = state[2];
@@ -450,18 +479,19 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     }
 
     //intialize variable
-    float eps = 1e-5;
-    float dt = (1.0f/ATTITUDE_RATE);
+    double eps = 0.00001;
+    double_t dt = (1.0/ATTITUDE_RATE);
     float Jac[ROWS][COLUMNS];
 
     //gather current state
-    float state[12] = {state_cf->position.x, state_cf->position.y, state_cf->position.z,
-                       state_cf->attitude.roll, state_cf->attitude.pitch, state_cf->attitude.yaw,
-                       state_cf->velocity.x, state_cf->velocity.y, state_cf->velocity.z,
-                       radians(sensors->gyro.x), -radians(sensors->gyro.y), radians(sensors->gyro.z)};
+    double_t state[12] = {(double_t) state_cf->position.x, (double_t) state_cf->position.y,
+                          (double_t) state_cf->position.z,
+                          (double_t) state_cf->attitude.roll, (double_t) state_cf->attitude.pitch, (double_t) state_cf->attitude.yaw,
+                          (double_t) state_cf->velocity.x, (double_t) state_cf->velocity.y, (double_t) state_cf->velocity.z,
+                          (double_t) radians(sensors->gyro.x), (double_t) -radians(sensors->gyro.y), (double_t) radians(sensors->gyro.z)};
 
     //gather current input
-    init_input[0] = control->thrust;
+    init_input[0] = (double_t) control->thrust;
     init_input[1] = control->roll;
     init_input[2] = control->pitch;
     init_input[3] = control->yaw;
@@ -490,15 +520,15 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //calculate Jacobian
 
     //calculate center_g
-    float center_g[4] = {0, 0, 0, 0};
-    float * s_pointer;
+    double_t center_g[4] = {0, 0, 0, 0};
+    double_t * s_pointer;
 
     //DEBUG_PRINT("START CALCULATING JACOBIAN \n");
     
     s_pointer = sam_simulation(state, init_input, dt);
 
-    float * yorai_row_pointer;
-    static float sam_mod_state[12];
+    double_t * yorai_row_pointer;
+    static double_t sam_mod_state[12];
 
     for (int i=0; i < 12; i++){
         sam_mod_state[i] = *(s_pointer + i);
@@ -516,8 +546,8 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //DEBUG_PRINT("center G 4: %f \n", (double) center_g[3]);
 
     //input calculate
-    static float input_jac[4];
-    float element_add[4] = {eps, 0, 0, 0};
+    static double_t input_jac[4];
+    double_t element_add[4] = {eps, 0, 0, 0};
     for (int i =0; i < 4;i++){
         input_jac[i] = init_input[i] +  element_add[i];
     }
@@ -529,7 +559,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //DEBUG_PRINT("input 4: %f \n", (double) input_jac[3]);
 
     //calculate first row of Jacobian
-    float yorai_row[4];
+    double_t yorai_row[4];
     s_pointer = sam_simulation(state, input_jac, dt);
     for (int i=0; i < 12; i++){
         sam_mod_state[i] = *(s_pointer + i);
@@ -549,13 +579,13 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     }
 
     //calculate second row of Jacobian
-    static float input_jac_2[4];
-    float element_add_2[4] = {0, eps, 0, 0};
+    static double_t input_jac_2[4];
+    double_t element_add_2[4] = {0, eps, 0, 0};
     for (int i =0; i< 4;i++){
         input_jac_2[i] = init_input[i] +  element_add_2[i];
     }
 
-    float yorai_row_2[4];
+    double_t yorai_row_2[4];
     s_pointer = sam_simulation(state, input_jac_2, dt);
     for (int i=0; i < 12; i++){
         sam_mod_state[i] = *(s_pointer + i);
@@ -573,8 +603,8 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     }
 
     //calculate third row of Jacobian
-    static float input_jac_3[4];
-    float element_add_3[4] = {0, 0, eps, 0};
+    static double_t input_jac_3[4];
+    double_t element_add_3[4] = {0, 0, eps, 0};
     for (int i =0; i< 4;i++){
         input_jac_3[i] = init_input[i] +  element_add_3[i];
     }
@@ -586,7 +616,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     }
 
     yorai_row_pointer = yorai_h(sam_mod_state);
-    float yorai_row_3[4];
+    double_t yorai_row_3[4];
     for (int i=0; i < 4; i++){
         yorai_row_3[i] = *(yorai_row_pointer + i);
         //DEBUG_PRINT("row 3 yorai val: %f \n", (double) yorai_row_3[i]);
@@ -597,8 +627,8 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     }
 
     //calculate fourth row of Jacobian
-    static float input_jac_4[4];
-    float element_add_4[4] = {0, 0, 0, eps};
+    static double_t input_jac_4[4];
+    double_t element_add_4[4] = {0, 0, 0, eps};
     for (int i =0; i< 4;i++){
         input_jac_4[i] = init_input[i] +  element_add_4[i];
     }
@@ -609,7 +639,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     }
 
     yorai_row_pointer = yorai_h(sam_mod_state);
-    float yorai_row_4[4];
+    double_t yorai_row_4[4];
     for (int i=0; i < 4; i++){
         yorai_row_4[i] = *(yorai_row_pointer + i);
         //DEBUG_PRINT("row 4 yorai val: %f \n", (double) yorai_row_4[i]);
@@ -631,12 +661,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     }
 
     //predict state based on horizon and input
-    float prediction[4];
+    double_t prediction[4];
 
     //input array
     //DEBUG_PRINT("PREDICT STATE BASED ON HORIZON AND INPUT \n");
-    static float state_pred[12];
-    s_pointer = sam_simulation(state, init_input, dt);
+    static double_t state_pred[12];
+    s_pointer = sam_simulation(state, init_input, (double_t) dt);
     for (int i = 0; i < 12; i++){
         state_pred[i] = *(s_pointer +i);
     }
@@ -661,9 +691,9 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
 
     //calculate input derivative
-    float diff_ref_pred[4];
+    double_t diff_ref_pred[4];
     for (int i = 0; i < 4;i++){
-        diff_ref_pred[i] = ref_point[i] - prediction[i];
+        diff_ref_pred[i] = (double_t) ref_point[i] - prediction[i];
     }
 
     //calulcate inverse of 4x4 matrix
@@ -702,7 +732,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
     //return input
 
-    control->thrust = (float)u_new[0];
+    control->thrust = massThrust * (float)u_new[0];
     control->roll = (int16_t)(u_new[1]);
     control->pitch =(int16_t)(u_new[2]);
     control->yaw = (int16_t)(u_new[3]);
