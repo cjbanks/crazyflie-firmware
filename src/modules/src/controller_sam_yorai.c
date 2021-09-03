@@ -9,6 +9,8 @@
 #include "math3d.h"
 #include "controller_sam_yorai.h"
 #include "debug.h"
+#include "attitude_controller.h"
+
 
 #define ROWS 4
 #define COLUMNS 4
@@ -29,6 +31,8 @@ static float massThrust = 132000;
 
 static double_t time = 0;
 
+setpoint_t desired_wb;
+
 typedef struct {
     double m[4][4];
 } m_4d;
@@ -42,6 +46,7 @@ void controllerSamYoraiReset(void){
 
 void controllerSamYoraiInit(void){
     controllerSamYoraiReset();
+    attitudeControllerInit((float)1.0/ATTITUDE_RATE);
 }
 
 bool controllerSamYoraiTest(void)
@@ -279,22 +284,22 @@ m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
 double_t * f(double_t * state, double_t * u){
     //construct temporary state in dynamics
-    static double_t state_temp[12];
-    for (int i=0; i < 12; i++){
+    static double_t state_temp[9];
+    for (int i=0; i < 9; i++){
         state_temp[i] = *(state + i);
     }
     //construct temp input for dynamics
     static double_t input_temp[4];
-    for (int i=0;i < 4;i++){
+    for (int i=0;i < 4; i++){
         input_temp[i] = *(u + i);
     }
 
 
-    static double_t state_d[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    static double_t state_d[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     double_t eul_angles[3] = {state_temp[3], state_temp[4], state_temp[5]}; //phi, theta, psi
-    struct mat33 I_moment = mscl((float)(pow(10,-5)), mdiag((float)(2.3951), (float)(2.3951), (float)(3.2346)));
+    //struct mat33 I_moment = mscl((float)(pow(10,-5)), mdiag((float)(2.3951), (float)(2.3951), (float)(3.2346)));
 
-    struct mat33 I_moment_inv = matinv_3d(I_moment);
+    //struct mat33 I_moment_inv = matinv_3d(I_moment);
     //for (int i = 0; i < 3; i++){
     //    for (int j=0; j< 3; j++){
     //        printf("Moment (%d, %d): %f \n", i, j, I_moment.m[i][j]);
@@ -320,7 +325,7 @@ double_t * f(double_t * state, double_t * u){
     omega_b.y = (float)state_temp[10];
     omega_b.z = (float)state_temp[11];
 
-    struct mat33 Twb;
+    //struct mat33 Twb;
     struct mat33 Rwb;
 
     //crate Rwb and Twb matrices
@@ -343,32 +348,32 @@ double_t * f(double_t * state, double_t * u){
     //    }
     //}
 
-    double phi = eul_angles[0];
-    double theta = eul_angles[1];
+    //double phi = eul_angles[0];
+    //double theta = eul_angles[1];
 
-    Twb.m[0][0] = 1.0;
-    Twb.m[0][1] = (float)(sin((double)phi) * tan((double)theta));
-    Twb.m[0][2] = (float)(cos((double)phi) * tan((double)theta));
-
-    Twb.m[1][0] = 0.0;
-    Twb.m[1][1] = (float)cos((double)phi);
-    Twb.m[1][2] = -1*(float)sin((double)phi);
-
-    Twb.m[2][0] = 0;
-    Twb.m[2][1] = (float)(sin((double)phi) / cos((double)theta));
-    Twb.m[2][2] = (float)(cos((double)phi) / cos((double)theta));
+    //Twb.m[0][0] = 1.0;
+    //Twb.m[0][1] = (float)(sin((double)phi) * tan((double)theta));
+    //Twb.m[0][2] = (float)(cos((double)phi) * tan((double)theta));
+    //
+    //Twb.m[1][0] = 0.0;
+    //Twb.m[1][1] = (float)cos((double)phi);
+    //Twb.m[1][2] = -1*(float)sin((double)phi);
+    //
+    //Twb.m[2][0] = 0;
+    //Twb.m[2][1] = (float)(sin((double)phi) / cos((double)theta));
+    //Twb.m[2][2] = (float)(cos((double)phi) / cos((double)theta));
 
     //set vel
     state_d[0] = state_temp[6];
     state_d[1] = state_temp[7];
     state_d[2] = state_temp[8];
 
-    //set angles
-    struct vec angles_update;
-    angles_update = mvmul(Twb, omega_b);
-    state_d[3] = (double_t)angles_update.x; //phi
-    state_d[4] = (double_t)angles_update.y; //theta
-    state_d[5] = (double_t)angles_update.z; //psi
+    //set angle velocity
+    //struct vec angles_update;
+    //angles_update = mvmul(Twb, omega_b);
+    state_d[3] = input_temp[1]; //(double_t)angles_update.x; //phi
+    state_d[4] = input_temp[2]; //(double_t)angles_update.y; //theta
+    state_d[5] = input_temp[3]; //(double_t)angles_update.z; //psi
 
     //set linear acceleration
     struct vec z_w;
@@ -388,33 +393,33 @@ double_t * f(double_t * state, double_t * u){
     state_d[8] = (double_t)acc.z;
 
     //input moments
-    struct vec moments;
-    moments.x = (float)input_temp[1];
-    moments.y = (float)input_temp[2];
-    moments.z = (float)input_temp[3];
+    //struct vec moments;
+    //moments.x = (float)input_temp[1];
+    //moments.y = (float)input_temp[2];
+    //moments.z = (float)input_temp[3];
 
     //printf("moment1 : %f \n ", moments.x);
     //printf("moment2 : %f \n ", moments.y);
     //printf("moment3 : %f \n ", moments.z);
 
 
-    // Body Rate acceleration
-    struct vec angle_acc = mvmul(I_moment_inv, vadd(vcross(vscl(-1, omega_b), mvmul(I_moment, omega_b)), moments));
-
-    state_d[9] =  (double_t)angle_acc.x;
-    state_d[10] = (double_t)angle_acc.y;
-    state_d[11] = (double_t)angle_acc.z;
+    // set body rate acceleration
+    //struct vec angle_acc = mvmul(I_moment_inv, vadd(vcross(vscl(-1, omega_b), mvmul(I_moment, omega_b)), moments));
+    //
+    //state_d[9] =  (double_t)angle_acc.x;
+    //state_d[10] = (double_t)angle_acc.y;
+    //state_d[11] = (double_t)angle_acc.z;
 
     return state_d;
 }
 
 double_t * sam_simulation(double_t * state, double_t * input, double_t t_step){
     float t = 0;
-    //float y_output[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    //float y_output[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     //construct temporary state in simulator
-    static double_t state_temp[12];
-    for (int i=0; i < 12; i++){
+    static double_t state_temp[9];
+    for (int i=0; i < 9; i++){
         state_temp[i] = *(state + i);
     }
 
@@ -424,16 +429,16 @@ double_t * sam_simulation(double_t * state, double_t * input, double_t t_step){
         input_temp[i] = *(input + i);
     }
 
-    double_t state_d_vector[12];
+    double_t state_d_vector[9];
     double_t * state_d;
     //iterate
     while (t < horizon){
         state_d = f(state_temp, input_temp);
-        for (int i=0; i < 12; i++){
+        for (int i=0; i < 9; i++){
             state_d_vector[i] = *(state_d + i);
         }
 
-        for (int i = 0; i < 12; i ++){
+        for (int i = 0; i < 9; i ++){
             state_temp[i] = state_temp[i] + state_d_vector[i]*t_step;
         }
         t = t+(float)t_step;
@@ -443,8 +448,8 @@ double_t * sam_simulation(double_t * state, double_t * input, double_t t_step){
 
 double_t * yorai_h(double_t * s){
 
-    double_t state[12];
-    for (int i =0; i < 12; i++){
+    double_t state[9];
+    for (int i =0; i < 9; i++){
        state[i] = *(s + i);
     }
     static double_t h_state[4] = {0, 0, 0, 0};
@@ -474,268 +479,304 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
                         const uint32_t tick){
 
     //controller runs at 500 Hz
-    if (!RATE_DO_EXECUTE(ATTITUDE_RATE, tick)){
-        return;
+    if (RATE_DO_EXECUTE(ATTITUDE_RATE, tick)){
+        //returns actual control inputs (thrust, m_x, m_y, m_z)
+
+        //get thrust from previously calculated value
+
+
+        //use pid to calculate desired moments based on error between desired angular velocity and actual angular velocity
+        attitudeControllerCorrectRatePID(sensors->gyro.x, -sensors->gyro.y, sensors->gyro.z,
+                                         degrees(desired_wb.attitudeRate.roll), degrees(desired_wb.attitudeRate.pitch),
+                                         degrees(desired_wb.attitudeRate.yaw));
+
+
+
+        control->thrust = massThrust * desired_wb.thrust;
+
+        attitudeControllerGetActuatorOutput(&control->roll, &control->pitch, &control->yaw);
+
+        control->yaw = -control->yaw;
+
+
+          if (control->thrust == 0)
+          {
+            control->thrust = 0;
+            control->roll = 0;
+            control->pitch = 0;
+            control->yaw = 0;
+
+            attitudeControllerResetAllPID();
+
+          }
     }
 
-    //intialize variable
-    double eps = 0.00001;
-    double_t dt = (1.0/ATTITUDE_RATE);
-    float Jac[ROWS][COLUMNS];
 
-    //gather current state
-    double_t state[12] = {(double_t) state_cf->position.x, (double_t) state_cf->position.y,
-                          (double_t) state_cf->position.z,
-                          (double_t) state_cf->attitude.roll, (double_t) state_cf->attitude.pitch, (double_t) state_cf->attitude.yaw,
-                          (double_t) state_cf->velocity.x, (double_t) state_cf->velocity.y, (double_t) state_cf->velocity.z,
-                          (double_t) radians(sensors->gyro.x), (double_t) -radians(sensors->gyro.y), (double_t) radians(sensors->gyro.z)};
-
-    //gather current input
-    init_input[0] = (double_t) control->thrust;
-    init_input[1] = control->roll;
-    init_input[2] = control->pitch;
-    init_input[3] = control->yaw;
-
-    //DEBUG_PRINT("Gathered CURRENT INPUT (YORAI-SAM) \n");
-
-    //DEBUG_PRINT("INIT THRUST: %f\n", (double) init_input[0]);
-    //DEBUG_PRINT("INIT M1: %f\n", (double) init_input[1]);
-    //DEBUG_PRINT("INIT M2: %f \n", (double) init_input[2]);
-    //DEBUG_PRINT("INIT M3: %f \n", (double) init_input[3]);
-    //
-    //
-    //DEBUG_PRINT("POSITION X: %f \n", (double)  state_cf->position.x);
-    //DEBUG_PRINT("POSITION Y: %f \n", (double)  state_cf->position.y);
-    //DEBUG_PRINT("POSITION Z: %f \n", (double)  state_cf->position.z);
-    //
-    //DEBUG_PRINT("VELOCITY X: %f \n", (double)  state_cf->velocity.x);
-    //DEBUG_PRINT("VELOCITY y: %f \n", (double)  state_cf->velocity.y);
-    //DEBUG_PRINT("VELOCITY z: %f \n", (double)  state_cf->velocity.z);
-    //
-    //DEBUG_PRINT("GYRO X: %f \n", (double)  sensors->gyro.x);
-    //DEBUG_PRINT("GYRO y: %f \n", (double)  sensors->gyro.y);
-    //DEBUG_PRINT("GYRO z: %f \n", (double)  sensors->gyro.z);
+    //code runs at 100 Hz
+    if (RATE_DO_EXECUTE(POSITION_RATE, tick)){
+        //this runs yorai's controller for calculating forward simulation of model
 
 
-    //calculate Jacobian
+        //intialize variable
+        double eps = 0.00001;
+        double_t dt = (1.0/ATTITUDE_RATE);
+        float Jac[ROWS][COLUMNS];
 
-    //calculate center_g
-    double_t center_g[4] = {0, 0, 0, 0};
-    double_t * s_pointer;
+        //gather current state
+        double_t state[9] = {(double_t) state_cf->position.x, (double_t) state_cf->position.y, (double_t) state_cf->position.z,
+                              (double_t) state_cf->attitude.roll, (double_t) state_cf->attitude.pitch, (double_t) state_cf->attitude.yaw,
+                              (double_t) state_cf->velocity.x, (double_t) state_cf->velocity.y, (double_t) state_cf->velocity.z};
+                              //(double_t) radians(sensors->gyro.x), (double_t) -radians(sensors->gyro.y), (double_t) radians(sensors->gyro.z)};
 
-    //DEBUG_PRINT("START CALCULATING JACOBIAN \n");
+        //gather current input  (thrust, roll rate, pitch rate, yaw rate)
+        init_input[0] = (double_t) desired_wb.thrust;
+        init_input[1] = (double_t) desired_wb.attitudeRate.roll;
+        init_input[2] = (double_t) desired_wb.attitudeRate.pitch;
+        init_input[3] = (double_t) desired_wb.attitudeRate.yaw;
+
+        //DEBUG_PRINT("Gathered CURRENT INPUT (YORAI-SAM) \n");
+
+        //DEBUG_PRINT("INIT THRUST: %f\n", (double) init_input[0]);
+        //DEBUG_PRINT("INIT M1: %f\n", (double) init_input[1]);
+        //DEBUG_PRINT("INIT M2: %f \n", (double) init_input[2]);
+        //DEBUG_PRINT("INIT M3: %f \n", (double) init_input[3]);
+        //
+        //
+        //DEBUG_PRINT("POSITION X: %f \n", (double)  state_cf->position.x);
+        //DEBUG_PRINT("POSITION Y: %f \n", (double)  state_cf->position.y);
+        //DEBUG_PRINT("POSITION Z: %f \n", (double)  state_cf->position.z);
+        //
+        //DEBUG_PRINT("VELOCITY X: %f \n", (double)  state_cf->velocity.x);
+        //DEBUG_PRINT("VELOCITY y: %f \n", (double)  state_cf->velocity.y);
+        //DEBUG_PRINT("VELOCITY z: %f \n", (double)  state_cf->velocity.z);
+        //
+        //DEBUG_PRINT("GYRO X: %f \n", (double)  sensors->gyro.x);
+        //DEBUG_PRINT("GYRO y: %f \n", (double)  sensors->gyro.y);
+        //DEBUG_PRINT("GYRO z: %f \n", (double)  sensors->gyro.z);
+
+
+        //calculate Jacobian
+
+        //calculate center_g
+        double_t center_g[4] = {0, 0, 0, 0};
+        double_t * s_pointer;
+
+        //DEBUG_PRINT("START CALCULATING JACOBIAN \n");
     
-    s_pointer = sam_simulation(state, init_input, dt);
+        s_pointer = sam_simulation(state, init_input, dt);
 
-    double_t * yorai_row_pointer;
-    static double_t sam_mod_state[12];
+        double_t * yorai_row_pointer;
+        static double_t sam_mod_state[9];
 
-    for (int i=0; i < 12; i++){
-        sam_mod_state[i] = *(s_pointer + i);
-    }
-
-
-    yorai_row_pointer = yorai_h(sam_mod_state);
-    for (int i=0; i < 4; i++){
-        center_g[i] = *(yorai_row_pointer + i);
-    }
-
-    //DEBUG_PRINT("center G 1: %f \n", (double) center_g[0]);
-    //DEBUG_PRINT("center G 2: %f \n", (double) center_g[1]);
-    //DEBUG_PRINT("center G 3: %f \n", (double) center_g[2]);
-    //DEBUG_PRINT("center G 4: %f \n", (double) center_g[3]);
-
-    //input calculate
-    static double_t input_jac[4];
-    double_t element_add[4] = {eps, 0, 0, 0};
-    for (int i =0; i < 4;i++){
-        input_jac[i] = init_input[i] +  element_add[i];
-    }
-
-
-    //DEBUG_PRINT("input 1: %f\n", (double) input_jac[0]);
-    //DEBUG_PRINT("input 2: %f\n", (double) input_jac[1]);
-    //DEBUG_PRINT("input 3: %f \n", (double) input_jac[2]);
-    //DEBUG_PRINT("input 4: %f \n", (double) input_jac[3]);
-
-    //calculate first row of Jacobian
-    double_t yorai_row[4];
-    s_pointer = sam_simulation(state, input_jac, dt);
-    for (int i=0; i < 12; i++){
-        sam_mod_state[i] = *(s_pointer + i);
-    }
-
-
-    yorai_row_pointer = yorai_h(sam_mod_state);
-    for (int i=0; i < 4; i++){
-        yorai_row[i] = *(yorai_row_pointer + i);
-        //DEBUG_PRINT("row 1 yorai val: %f \n", (double) yorai_row[i]);
-    }
-
-
-
-    for (int i=0; i < 4; i++){
-        Jac[i][0] = (float)(((double)(yorai_row[i] - center_g[i]))*(1.0/(double)(eps)));
-    }
-
-    //calculate second row of Jacobian
-    static double_t input_jac_2[4];
-    double_t element_add_2[4] = {0, eps, 0, 0};
-    for (int i =0; i< 4;i++){
-        input_jac_2[i] = init_input[i] +  element_add_2[i];
-    }
-
-    double_t yorai_row_2[4];
-    s_pointer = sam_simulation(state, input_jac_2, dt);
-    for (int i=0; i < 12; i++){
-        sam_mod_state[i] = *(s_pointer + i);
-    }
-
-
-    yorai_row_pointer = yorai_h(sam_mod_state);
-    for (int i=0; i < 4; i++){
-        yorai_row_2[i] = *(yorai_row_pointer + i);
-        //DEBUG_PRINT("row 2 yorai val: %f \n", (double) yorai_row_2[i]);
-    }
-
-    for (int i=0; i < 4; i++){
-        Jac[i][1] = (float)(((double)(yorai_row_2[i] - center_g[i]))*(1.0/(double)(eps)));
-    }
-
-    //calculate third row of Jacobian
-    static double_t input_jac_3[4];
-    double_t element_add_3[4] = {0, 0, eps, 0};
-    for (int i =0; i< 4;i++){
-        input_jac_3[i] = init_input[i] +  element_add_3[i];
-    }
-
-
-    s_pointer = sam_simulation(state, input_jac_3, dt);
-    for (int i=0; i < 12; i++){
-        sam_mod_state[i] = *(s_pointer + i);
-    }
-
-    yorai_row_pointer = yorai_h(sam_mod_state);
-    double_t yorai_row_3[4];
-    for (int i=0; i < 4; i++){
-        yorai_row_3[i] = *(yorai_row_pointer + i);
-        //DEBUG_PRINT("row 3 yorai val: %f \n", (double) yorai_row_3[i]);
-    }
-
-    for (int i=0; i < 4; i++){
-        Jac[i][2] = (float)(((double)(yorai_row_3[i] - center_g[i]))*(1.0/(double)(eps)));
-    }
-
-    //calculate fourth row of Jacobian
-    static double_t input_jac_4[4];
-    double_t element_add_4[4] = {0, 0, 0, eps};
-    for (int i =0; i< 4;i++){
-        input_jac_4[i] = init_input[i] +  element_add_4[i];
-    }
-
-    s_pointer = sam_simulation(state, input_jac_4, dt);
-    for (int i=0; i < 12; i++){
-        sam_mod_state[i] = *(s_pointer + i);
-    }
-
-    yorai_row_pointer = yorai_h(sam_mod_state);
-    double_t yorai_row_4[4];
-    for (int i=0; i < 4; i++){
-        yorai_row_4[i] = *(yorai_row_pointer + i);
-        //DEBUG_PRINT("row 4 yorai val: %f \n", (double) yorai_row_4[i]);
-    }
-
-    for (int i=0; i < 4; i++){
-        Jac[i][3] = (float)(((double)(yorai_row_4[i] - center_g[i]))*(1.0/(double)(eps)));
-    }
-
-
-    //get reference point from setpoint
-    //DEBUG_PRINT("GET REFERENCE FROM SETPOINT \n");
-    float ref_point[4];
-    float * ref_ptr;
-    ref_ptr = ref_traj((double) (time + horizon));
-
-    for (int i =0; i < 4; i++){
-        ref_point[i] = *(ref_ptr + i);
-    }
-
-    //predict state based on horizon and input
-    double_t prediction[4];
-
-    //input array
-    //DEBUG_PRINT("PREDICT STATE BASED ON HORIZON AND INPUT \n");
-    static double_t state_pred[12];
-    s_pointer = sam_simulation(state, init_input, (double_t) dt);
-    for (int i = 0; i < 12; i++){
-        state_pred[i] = *(s_pointer +i);
-    }
-
-    yorai_row_pointer = yorai_h(state_pred);
-    for (int i =0; i < 4; i++){
-        prediction[i] = *(yorai_row_pointer + i);
-    }
-
-    DEBUG_PRINT("predicted point (x): %f \n", (double)prediction[0]);
-    DEBUG_PRINT("predicted point (y): %f \n", (double)prediction[1]);
-    DEBUG_PRINT("predicted point (z): %f \n", (double)prediction[2]);
-    DEBUG_PRINT("predicted point (t): %f \n", (double)prediction[3]);
-    //
-    DEBUG_PRINT("ref point x: %f: \n", (double) ref_point[0]);
-    DEBUG_PRINT("ref point y: %f: \n", (double) ref_point[1]);
-    DEBUG_PRINT("ref point z: %f: \n", (double) ref_point[2]);
-    DEBUG_PRINT("ref point t: %f: \n", (double) ref_point[3]);
-
-    //DEBUG_PRINT("alpha: %f \n ", (double ) alpha[1][2]);
-    //DEBUG_PRINT("FIRST ROW OF JAC: %f \n", (double)Jac[0][0]);
-
-
-    //calculate input derivative
-    double_t diff_ref_pred[4];
-    for (int i = 0; i < 4;i++){
-        diff_ref_pred[i] = (double_t) ref_point[i] - prediction[i];
-    }
-
-    //calulcate inverse of 4x4 matrix
-    m_4d Jac_inv;
-
-    //DEBUG_PRINT("INVERT MATRIX \n");
-    //DEBUG_PRINT("INVERT MATRIX \n");
-    Jac_inv = matinv_4d(Jac);
-
-    //DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv.m[0][0]);
-    //DEBUG_PRINT("SEC ROW OF JAC INV: %f \n", (double)Jac_inv.m[1][1]);
-    //DEBUG_PRINT("THIRD ROW OF JAC INV: %f \n", (double)Jac_inv.m[2][2]);
-    //DEBUG_PRINT("FOURTH ROW OF JAC INV: %f \n", (double)Jac_inv.m[3][3]);
-
-    double u_d[4] = {0, 0, 0, 0};
-
-    //matrix multiplication
-    for (int i= 0; i < 4; i++){
-        for(int j=0; j< 4;j++){
-            u_d[i] += (double) alpha[i][j] * Jac_inv.m[j][i];
-
+        for (int i=0; i < 9; i++){
+            sam_mod_state[i] = *(s_pointer + i);
         }
-        u_d[i] *= (double) diff_ref_pred[i];
+
+
+        yorai_row_pointer = yorai_h(sam_mod_state);
+        for (int i=0; i < 4; i++){
+            center_g[i] = *(yorai_row_pointer + i);
+        }
+
+        //DEBUG_PRINT("center G 1: %f \n", (double) center_g[0]);
+        //DEBUG_PRINT("center G 2: %f \n", (double) center_g[1]);
+        //DEBUG_PRINT("center G 3: %f \n", (double) center_g[2]);
+        //DEBUG_PRINT("center G 4: %f \n", (double) center_g[3]);
+
+        //input calculate
+        static double_t input_jac[4];
+        double_t element_add[4] = {eps, 0, 0, 0};
+        for (int i =0; i < 4;i++){
+            input_jac[i] = init_input[i] +  element_add[i];
+        }
+
+
+        //DEBUG_PRINT("input 1: %f\n", (double) input_jac[0]);
+        //DEBUG_PRINT("input 2: %f\n", (double) input_jac[1]);
+        //DEBUG_PRINT("input 3: %f \n", (double) input_jac[2]);
+        //DEBUG_PRINT("input 4: %f \n", (double) input_jac[3]);
+
+        //calculate first row of Jacobian
+        double_t yorai_row[4];
+        s_pointer = sam_simulation(state, input_jac, dt);
+        for (int i=0; i < 9; i++){
+            sam_mod_state[i] = *(s_pointer + i);
+        }
+
+
+        yorai_row_pointer = yorai_h(sam_mod_state);
+        for (int i=0; i < 4; i++){
+            yorai_row[i] = *(yorai_row_pointer + i);
+            //DEBUG_PRINT("row 1 yorai val: %f \n", (double) yorai_row[i]);
+        }
+
+
+
+        for (int i=0; i < 4; i++){
+            Jac[i][0] = (float)(((double)(yorai_row[i] - center_g[i]))*(1.0/(double)(eps)));
+        }
+
+        //calculate second row of Jacobian
+        static double_t input_jac_2[4];
+        double_t element_add_2[4] = {0, eps, 0, 0};
+        for (int i =0; i< 4;i++){
+            input_jac_2[i] = init_input[i] +  element_add_2[i];
+        }
+
+        double_t yorai_row_2[4];
+        s_pointer = sam_simulation(state, input_jac_2, dt);
+        for (int i=0; i < 9; i++){
+            sam_mod_state[i] = *(s_pointer + i);
+        }
+
+
+        yorai_row_pointer = yorai_h(sam_mod_state);
+        for (int i=0; i < 4; i++){
+            yorai_row_2[i] = *(yorai_row_pointer + i);
+            //DEBUG_PRINT("row 2 yorai val: %f \n", (double) yorai_row_2[i]);
+        }
+
+        for (int i=0; i < 4; i++){
+            Jac[i][1] = (float)(((double)(yorai_row_2[i] - center_g[i]))*(1.0/(double)(eps)));
+        }
+
+        //calculate third row of Jacobian
+        static double_t input_jac_3[4];
+        double_t element_add_3[4] = {0, 0, eps, 0};
+        for (int i =0; i< 4;i++){
+            input_jac_3[i] = init_input[i] +  element_add_3[i];
+        }
+
+
+        s_pointer = sam_simulation(state, input_jac_3, dt);
+        for (int i=0; i < 9; i++){
+            sam_mod_state[i] = *(s_pointer + i);
+        }
+
+        yorai_row_pointer = yorai_h(sam_mod_state);
+        double_t yorai_row_3[4];
+        for (int i=0; i < 4; i++){
+            yorai_row_3[i] = *(yorai_row_pointer + i);
+            //DEBUG_PRINT("row 3 yorai val: %f \n", (double) yorai_row_3[i]);
+        }
+
+        for (int i=0; i < 4; i++){
+            Jac[i][2] = (float)(((double)(yorai_row_3[i] - center_g[i]))*(1.0/(double)(eps)));
+        }
+
+        //calculate fourth row of Jacobian
+        static double_t input_jac_4[4];
+        double_t element_add_4[4] = {0, 0, 0, eps};
+        for (int i =0; i< 4;i++){
+            input_jac_4[i] = init_input[i] +  element_add_4[i];
+        }
+
+        s_pointer = sam_simulation(state, input_jac_4, dt);
+        for (int i=0; i < 9; i++){
+            sam_mod_state[i] = *(s_pointer + i);
+        }
+
+        yorai_row_pointer = yorai_h(sam_mod_state);
+        double_t yorai_row_4[4];
+        for (int i=0; i < 4; i++){
+            yorai_row_4[i] = *(yorai_row_pointer + i);
+            //DEBUG_PRINT("row 4 yorai val: %f \n", (double) yorai_row_4[i]);
+        }
+
+        for (int i=0; i < 4; i++){
+            Jac[i][3] = (float)(((double)(yorai_row_4[i] - center_g[i]))*(1.0/(double)(eps)));
+        }
+
+
+        //get reference point from setpoint
+        //DEBUG_PRINT("GET REFERENCE FROM SETPOINT \n");
+        float ref_point[4];
+        float * ref_ptr;
+        ref_ptr = ref_traj((double) (time + horizon));
+
+        for (int i =0; i < 4; i++){
+            ref_point[i] = *(ref_ptr + i);
+        }
+
+        //predict state based on horizon and input
+        double_t prediction[4];
+
+        //input array
+        //DEBUG_PRINT("PREDICT STATE BASED ON HORIZON AND INPUT \n");
+        static double_t state_pred[9];
+        s_pointer = sam_simulation(state, init_input, (double_t) dt);
+        for (int i = 0; i < 9; i++){
+            state_pred[i] = *(s_pointer +i);
+        }
+
+        yorai_row_pointer = yorai_h(state_pred);
+        for (int i =0; i < 4; i++){
+            prediction[i] = *(yorai_row_pointer + i);
+        }
+
+        DEBUG_PRINT("predicted point (x): %f \n", (double)prediction[0]);
+        DEBUG_PRINT("predicted point (y): %f \n", (double)prediction[1]);
+        DEBUG_PRINT("predicted point (z): %f \n", (double)prediction[2]);
+        DEBUG_PRINT("predicted point (t): %f \n", (double)prediction[3]);
+        //
+        DEBUG_PRINT("ref point x: %f: \n", (double) ref_point[0]);
+        DEBUG_PRINT("ref point y: %f: \n", (double) ref_point[1]);
+        DEBUG_PRINT("ref point z: %f: \n", (double) ref_point[2]);
+        DEBUG_PRINT("ref point t: %f: \n", (double) ref_point[3]);
+
+        //DEBUG_PRINT("alpha: %f \n ", (double ) alpha[1][2]);
+        //DEBUG_PRINT("FIRST ROW OF JAC: %f \n", (double)Jac[0][0]);
+
+
+        //calculate input derivative
+        double_t diff_ref_pred[4];
+        for (int i = 0; i < 4;i++){
+            diff_ref_pred[i] = (double_t) ref_point[i] - prediction[i];
+        }
+
+        //calulcate inverse of 4x4 matrix
+        m_4d Jac_inv;
+
+        //DEBUG_PRINT("INVERT MATRIX \n");
+        //DEBUG_PRINT("INVERT MATRIX \n");
+        Jac_inv = matinv_4d(Jac);
+
+        //DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv.m[0][0]);
+        //DEBUG_PRINT("SEC ROW OF JAC INV: %f \n", (double)Jac_inv.m[1][1]);
+        //DEBUG_PRINT("THIRD ROW OF JAC INV: %f \n", (double)Jac_inv.m[2][2]);
+        //DEBUG_PRINT("FOURTH ROW OF JAC INV: %f \n", (double)Jac_inv.m[3][3]);
+
+        double u_d[4] = {0, 0, 0, 0};
+
+        //matrix multiplication
+        for (int i= 0; i < 4; i++){
+            for(int j=0; j< 4;j++){
+                u_d[i] += (double) alpha[i][j] * Jac_inv.m[j][i];
+
+            }
+            u_d[i] *= (double) diff_ref_pred[i];
+        }
+
+
+        //set inputs
+        double u_new[4] = {0, 0, 0, 0};
+        for (int i = 0; i < 4; i++) {
+            u_new[i] = (double) init_input[i] + u_d[i] * (double) dt;
+        }
+
+        //increase time
+        time = time + dt;
+        DEBUG_PRINT("Time: %f \n", (double)time);
+
+        //return input
+        desired_wb.thrust = (float)u_new[0];
+        desired_wb.attitudeRate.roll = (float)(u_new[1]);
+        desired_wb.attitudeRate.pitch = (float)(u_new[2]);
+        desired_wb.attitudeRate.yaw = (float)(u_new[3]);
+
+
+
     }
-
-
-    //set inputs
-    double u_new[4] = {0, 0, 0, 0};
-    for (int i = 0; i < 4; i++) {
-        u_new[i] = (double) init_input[i] + u_d[i] * (double) dt;
-    }
-
-    //increase time
-    time = time + dt;
-    DEBUG_PRINT("Time: %f \n", (double)time);
-
-    //return input
-
-    control->thrust = massThrust * (float)u_new[0];
-    control->roll = (int16_t)(u_new[1]);
-    control->pitch =(int16_t)(u_new[2]);
-    control->yaw = (int16_t)(u_new[3]);
 
 
     //DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
