@@ -10,6 +10,10 @@
 #include "controller_sam_yorai.h"
 #include "debug.h"
 #include "attitude_controller.h"
+<<<<<<< HEAD
+=======
+
+>>>>>>> Model is now a 9 state model with inputs of omegab
 
 #define ROWS 4
 #define COLUMNS 4
@@ -448,12 +452,17 @@ double_t * sam_simulation(double_t * state, double_t * input, double_t t_step){
 double_t * yorai_h(double_t * s){
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     double_t state[9];
     for (int i =0; i < 9; i++){
 =======
     double_t state[12];
     for (int i =0; i < 12; i++){
 >>>>>>> Updated derivative function to accurately update
+=======
+    double_t state[9];
+    for (int i =0; i < 9; i++){
+>>>>>>> Model is now a 9 state model with inputs of omegab
        state[i] = *(s + i);
     }
     static double_t h_state[4] = {0, 0, 0, 0};
@@ -516,6 +525,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     //intialize variable
     double eps = 0.00001;
@@ -524,6 +534,9 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 >>>>>>> Updated derivative function to accurately update
 
 <<<<<<< HEAD
+=======
+
+>>>>>>> Model is now a 9 state model with inputs of omegab
     //code runs at 100 Hz
     if (RATE_DO_EXECUTE(POSITION_RATE, tick)){
         //this runs yorai's controller for calculating forward simulation of model
@@ -533,6 +546,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         double eps = 0.00001;
         double_t dt = (1.0/ATTITUDE_RATE);
         float Jac[ROWS][COLUMNS];
+<<<<<<< HEAD
 =======
     //gather current state
 <<<<<<< HEAD
@@ -541,6 +555,8 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
                        state_cf->velocity.x, state_cf->velocity.y, state_cf->velocity.z,
                        radians(sensors->gyro.x), -radians(sensors->gyro.y), radians(sensors->gyro.z)};
 >>>>>>> updated time step updates to start when controller starts
+=======
+>>>>>>> Model is now a 9 state model with inputs of omegab
 
         //gather current state
         double_t state[9] = {(double_t) state_cf->position.x, (double_t) state_cf->position.y, (double_t) state_cf->position.z,
@@ -554,6 +570,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         init_input[2] = (double_t) desired_wb.attitudeRate.pitch;
         init_input[3] = (double_t) desired_wb.attitudeRate.yaw;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         //DEBUG_PRINT("Gathered CURRENT INPUT (YORAI-SAM) \n");
 =======
@@ -611,6 +628,28 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         //DEBUG_PRINT("GYRO y: %f \n", (double)  sensors->gyro.y);
         //DEBUG_PRINT("GYRO z: %f \n", (double)  sensors->gyro.z);
 
+=======
+        //DEBUG_PRINT("Gathered CURRENT INPUT (YORAI-SAM) \n");
+
+        //DEBUG_PRINT("INIT THRUST: %f\n", (double) init_input[0]);
+        //DEBUG_PRINT("INIT M1: %f\n", (double) init_input[1]);
+        //DEBUG_PRINT("INIT M2: %f \n", (double) init_input[2]);
+        //DEBUG_PRINT("INIT M3: %f \n", (double) init_input[3]);
+        //
+        //
+        //DEBUG_PRINT("POSITION X: %f \n", (double)  state_cf->position.x);
+        //DEBUG_PRINT("POSITION Y: %f \n", (double)  state_cf->position.y);
+        //DEBUG_PRINT("POSITION Z: %f \n", (double)  state_cf->position.z);
+        //
+        //DEBUG_PRINT("VELOCITY X: %f \n", (double)  state_cf->velocity.x);
+        //DEBUG_PRINT("VELOCITY y: %f \n", (double)  state_cf->velocity.y);
+        //DEBUG_PRINT("VELOCITY z: %f \n", (double)  state_cf->velocity.z);
+        //
+        //DEBUG_PRINT("GYRO X: %f \n", (double)  sensors->gyro.x);
+        //DEBUG_PRINT("GYRO y: %f \n", (double)  sensors->gyro.y);
+        //DEBUG_PRINT("GYRO z: %f \n", (double)  sensors->gyro.z);
+
+>>>>>>> Model is now a 9 state model with inputs of omegab
 
         //calculate Jacobian
 
@@ -623,12 +662,17 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         s_pointer = sam_simulation(state, init_input, dt);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         double_t * yorai_row_pointer;
         static double_t sam_mod_state[9];
 =======
     double_t * yorai_row_pointer;
     static double_t sam_mod_state[12];
 >>>>>>> Updated derivative function to accurately update
+=======
+        double_t * yorai_row_pointer;
+        static double_t sam_mod_state[9];
+>>>>>>> Model is now a 9 state model with inputs of omegab
 
         for (int i=0; i < 9; i++){
             sam_mod_state[i] = *(s_pointer + i);
@@ -640,18 +684,22 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
             center_g[i] = *(yorai_row_pointer + i);
         }
 
-    //DEBUG_PRINT("center G 1: %f \n", (double) center_g[0]);
-    //DEBUG_PRINT("center G 2: %f \n", (double) center_g[1]);
-    //DEBUG_PRINT("center G 3: %f \n", (double) center_g[2]);
-    //DEBUG_PRINT("center G 4: %f \n", (double) center_g[3]);
+        //DEBUG_PRINT("center G 1: %f \n", (double) center_g[0]);
+        //DEBUG_PRINT("center G 2: %f \n", (double) center_g[1]);
+        //DEBUG_PRINT("center G 3: %f \n", (double) center_g[2]);
+        //DEBUG_PRINT("center G 4: %f \n", (double) center_g[3]);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Model is now a 9 state model with inputs of omegab
         //input calculate
         static double_t input_jac[4];
         double_t element_add[4] = {eps, 0, 0, 0};
         for (int i =0; i < 4;i++){
             input_jac[i] = init_input[i] +  element_add[i];
         }
+<<<<<<< HEAD
 =======
     //input calculate
     static double_t input_jac[4];
@@ -660,20 +708,26 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         input_jac[i] = init_input[i] +  element_add[i];
     }
 >>>>>>> Updated derivative function to accurately update
+=======
+>>>>>>> Model is now a 9 state model with inputs of omegab
 
 
-    //DEBUG_PRINT("input 1: %f\n", (double) input_jac[0]);
-    //DEBUG_PRINT("input 2: %f\n", (double) input_jac[1]);
-    //DEBUG_PRINT("input 3: %f \n", (double) input_jac[2]);
-    //DEBUG_PRINT("input 4: %f \n", (double) input_jac[3]);
+        //DEBUG_PRINT("input 1: %f\n", (double) input_jac[0]);
+        //DEBUG_PRINT("input 2: %f\n", (double) input_jac[1]);
+        //DEBUG_PRINT("input 3: %f \n", (double) input_jac[2]);
+        //DEBUG_PRINT("input 4: %f \n", (double) input_jac[3]);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Model is now a 9 state model with inputs of omegab
         //calculate first row of Jacobian
         double_t yorai_row[4];
         s_pointer = sam_simulation(state, input_jac, dt);
         for (int i=0; i < 9; i++){
             sam_mod_state[i] = *(s_pointer + i);
         }
+<<<<<<< HEAD
 =======
     //calculate first row of Jacobian
     double_t yorai_row[4];
@@ -682,13 +736,15 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         sam_mod_state[i] = *(s_pointer + i);
     }
 >>>>>>> Updated derivative function to accurately update
+=======
+>>>>>>> Model is now a 9 state model with inputs of omegab
 
 
-    yorai_row_pointer = yorai_h(sam_mod_state);
-    for (int i=0; i < 4; i++){
-        yorai_row[i] = *(yorai_row_pointer + i);
-        //DEBUG_PRINT("row 1 yorai val: %f \n", (double) yorai_row[i]);
-    }
+        yorai_row_pointer = yorai_h(sam_mod_state);
+        for (int i=0; i < 4; i++){
+            yorai_row[i] = *(yorai_row_pointer + i);
+            //DEBUG_PRINT("row 1 yorai val: %f \n", (double) yorai_row[i]);
+        }
 
 
 
@@ -697,12 +753,16 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Model is now a 9 state model with inputs of omegab
         //calculate second row of Jacobian
         static double_t input_jac_2[4];
         double_t element_add_2[4] = {0, eps, 0, 0};
         for (int i =0; i< 4;i++){
             input_jac_2[i] = init_input[i] +  element_add_2[i];
         }
+<<<<<<< HEAD
 
         double_t yorai_row_2[4];
         s_pointer = sam_simulation(state, input_jac_2, dt);
@@ -723,25 +783,37 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         sam_mod_state[i] = *(s_pointer + i);
     }
 >>>>>>> Updated derivative function to accurately update
+=======
+
+        double_t yorai_row_2[4];
+        s_pointer = sam_simulation(state, input_jac_2, dt);
+        for (int i=0; i < 9; i++){
+            sam_mod_state[i] = *(s_pointer + i);
+        }
+>>>>>>> Model is now a 9 state model with inputs of omegab
 
 
-    yorai_row_pointer = yorai_h(sam_mod_state);
-    for (int i=0; i < 4; i++){
-        yorai_row_2[i] = *(yorai_row_pointer + i);
-        //DEBUG_PRINT("row 2 yorai val: %f \n", (double) yorai_row_2[i]);
-    }
+        yorai_row_pointer = yorai_h(sam_mod_state);
+        for (int i=0; i < 4; i++){
+            yorai_row_2[i] = *(yorai_row_pointer + i);
+            //DEBUG_PRINT("row 2 yorai val: %f \n", (double) yorai_row_2[i]);
+        }
 
         for (int i=0; i < 4; i++){
             Jac[i][1] = (float)(((double)(yorai_row_2[i] - center_g[i]))*(1.0/(double)(eps)));
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Model is now a 9 state model with inputs of omegab
         //calculate third row of Jacobian
         static double_t input_jac_3[4];
         double_t element_add_3[4] = {0, 0, eps, 0};
         for (int i =0; i< 4;i++){
             input_jac_3[i] = init_input[i] +  element_add_3[i];
         }
+<<<<<<< HEAD
 =======
     //calculate third row of Jacobian
     static double_t input_jac_3[4];
@@ -750,6 +822,8 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         input_jac_3[i] = init_input[i] +  element_add_3[i];
     }
 >>>>>>> Updated derivative function to accurately update
+=======
+>>>>>>> Model is now a 9 state model with inputs of omegab
 
 
         s_pointer = sam_simulation(state, input_jac_3, dt);
@@ -758,12 +832,16 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Model is now a 9 state model with inputs of omegab
         yorai_row_pointer = yorai_h(sam_mod_state);
         double_t yorai_row_3[4];
         for (int i=0; i < 4; i++){
             yorai_row_3[i] = *(yorai_row_pointer + i);
             //DEBUG_PRINT("row 3 yorai val: %f \n", (double) yorai_row_3[i]);
         }
+<<<<<<< HEAD
 =======
     yorai_row_pointer = yorai_h(sam_mod_state);
     double_t yorai_row_3[4];
@@ -772,18 +850,24 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         //DEBUG_PRINT("row 3 yorai val: %f \n", (double) yorai_row_3[i]);
     }
 >>>>>>> Updated derivative function to accurately update
+=======
+>>>>>>> Model is now a 9 state model with inputs of omegab
 
         for (int i=0; i < 4; i++){
             Jac[i][2] = (float)(((double)(yorai_row_3[i] - center_g[i]))*(1.0/(double)(eps)));
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Model is now a 9 state model with inputs of omegab
         //calculate fourth row of Jacobian
         static double_t input_jac_4[4];
         double_t element_add_4[4] = {0, 0, 0, eps};
         for (int i =0; i< 4;i++){
             input_jac_4[i] = init_input[i] +  element_add_4[i];
         }
+<<<<<<< HEAD
 =======
     //calculate fourth row of Jacobian
     static double_t input_jac_4[4];
@@ -792,6 +876,8 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         input_jac_4[i] = init_input[i] +  element_add_4[i];
     }
 >>>>>>> Updated derivative function to accurately update
+=======
+>>>>>>> Model is now a 9 state model with inputs of omegab
 
         s_pointer = sam_simulation(state, input_jac_4, dt);
         for (int i=0; i < 9; i++){
@@ -799,12 +885,16 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Model is now a 9 state model with inputs of omegab
         yorai_row_pointer = yorai_h(sam_mod_state);
         double_t yorai_row_4[4];
         for (int i=0; i < 4; i++){
             yorai_row_4[i] = *(yorai_row_pointer + i);
             //DEBUG_PRINT("row 4 yorai val: %f \n", (double) yorai_row_4[i]);
         }
+<<<<<<< HEAD
 =======
     yorai_row_pointer = yorai_h(sam_mod_state);
     double_t yorai_row_4[4];
@@ -813,6 +903,8 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         //DEBUG_PRINT("row 4 yorai val: %f \n", (double) yorai_row_4[i]);
     }
 >>>>>>> Updated derivative function to accurately update
+=======
+>>>>>>> Model is now a 9 state model with inputs of omegab
 
         for (int i=0; i < 4; i++){
             Jac[i][3] = (float)(((double)(yorai_row_4[i] - center_g[i]))*(1.0/(double)(eps)));
@@ -820,11 +912,15 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Model is now a 9 state model with inputs of omegab
         //get reference point from setpoint
         //DEBUG_PRINT("GET REFERENCE FROM SETPOINT \n");
         float ref_point[4];
         float * ref_ptr;
         ref_ptr = ref_traj((double) (time + horizon));
+<<<<<<< HEAD
 =======
     //get reference point from setpoint
     //DEBUG_PRINT("GET REFERENCE FROM SETPOINT \n");
@@ -832,11 +928,14 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     float * ref_ptr;
     ref_ptr = ref_traj((double) (time + horizon));
 >>>>>>> updated time step updates to start when controller starts
+=======
+>>>>>>> Model is now a 9 state model with inputs of omegab
 
         for (int i =0; i < 4; i++){
             ref_point[i] = *(ref_ptr + i);
         }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         //predict state based on horizon and input
         double_t prediction[4];
@@ -846,6 +945,11 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 >>>>>>> Updated derivative function to accurately update
 
 <<<<<<< HEAD
+=======
+        //predict state based on horizon and input
+        double_t prediction[4];
+
+>>>>>>> Model is now a 9 state model with inputs of omegab
         //input array
         //DEBUG_PRINT("PREDICT STATE BASED ON HORIZON AND INPUT \n");
         static double_t state_pred[9];
@@ -853,6 +957,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         for (int i = 0; i < 9; i++){
             state_pred[i] = *(s_pointer +i);
         }
+<<<<<<< HEAD
 =======
     //input array
     //DEBUG_PRINT("PREDICT STATE BASED ON HORIZON AND INPUT \n");
@@ -862,11 +967,29 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         state_pred[i] = *(s_pointer +i);
     }
 >>>>>>> updated time step updates to start when controller starts
+=======
+>>>>>>> Model is now a 9 state model with inputs of omegab
 
         yorai_row_pointer = yorai_h(state_pred);
         for (int i =0; i < 4; i++){
             prediction[i] = *(yorai_row_pointer + i);
         }
+<<<<<<< HEAD
+=======
+
+        DEBUG_PRINT("predicted point (x): %f \n", (double)prediction[0]);
+        DEBUG_PRINT("predicted point (y): %f \n", (double)prediction[1]);
+        DEBUG_PRINT("predicted point (z): %f \n", (double)prediction[2]);
+        DEBUG_PRINT("predicted point (t): %f \n", (double)prediction[3]);
+        //
+        DEBUG_PRINT("ref point x: %f: \n", (double) ref_point[0]);
+        DEBUG_PRINT("ref point y: %f: \n", (double) ref_point[1]);
+        DEBUG_PRINT("ref point z: %f: \n", (double) ref_point[2]);
+        DEBUG_PRINT("ref point t: %f: \n", (double) ref_point[3]);
+
+        //DEBUG_PRINT("alpha: %f \n ", (double ) alpha[1][2]);
+        //DEBUG_PRINT("FIRST ROW OF JAC: %f \n", (double)Jac[0][0]);
+>>>>>>> Model is now a 9 state model with inputs of omegab
 
         DEBUG_PRINT("predicted point (x): %f \n", (double)prediction[0]);
         DEBUG_PRINT("predicted point (y): %f \n", (double)prediction[1]);
@@ -889,6 +1012,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
             diff_ref_pred[i] = (double_t) ref_point[i] - prediction[i];
         }
 
+<<<<<<< HEAD
         //calulcate inverse of 4x4 matrix
         m_4d Jac_inv;
 =======
@@ -898,14 +1022,28 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         diff_ref_pred[i] = (double_t) ref_point[i] - prediction[i];
     }
 >>>>>>> Updated derivative function to accurately update
+=======
+        //calculate input derivative
+        double_t diff_ref_pred[4];
+        for (int i = 0; i < 4;i++){
+            diff_ref_pred[i] = (double_t) ref_point[i] - prediction[i];
+        }
+>>>>>>> Model is now a 9 state model with inputs of omegab
 
-    //calulcate inverse of 4x4 matrix
-    m_4d Jac_inv;
+        //calulcate inverse of 4x4 matrix
+        m_4d Jac_inv;
 
-    //DEBUG_PRINT("INVERT MATRIX \n");
-    //DEBUG_PRINT("INVERT MATRIX \n");
-    Jac_inv = matinv_4d(Jac);
+        //DEBUG_PRINT("INVERT MATRIX \n");
+        //DEBUG_PRINT("INVERT MATRIX \n");
+        Jac_inv = matinv_4d(Jac);
 
+<<<<<<< HEAD
+=======
+        //DEBUG_PRINT("FIRST ROW OF JAC INV: %f \n", (double)Jac_inv.m[0][0]);
+        //DEBUG_PRINT("SEC ROW OF JAC INV: %f \n", (double)Jac_inv.m[1][1]);
+        //DEBUG_PRINT("THIRD ROW OF JAC INV: %f \n", (double)Jac_inv.m[2][2]);
+        //DEBUG_PRINT("FOURTH ROW OF JAC INV: %f \n", (double)Jac_inv.m[3][3]);
+>>>>>>> Model is now a 9 state model with inputs of omegab
 
         double u_d[4] = {0, 0, 0, 0};
 
@@ -924,6 +1062,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         for (int i = 0; i < 4; i++) {
             u_new[i] = (double) init_input[i] + u_d[i] * (double) dt;
         }
+<<<<<<< HEAD
         u_d[i] *= (double) diff_ref_pred[i];
     }
 
@@ -933,6 +1072,22 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //control->roll = (int16_t)(u_new[1]);
     //control->pitch =(int16_t)(u_new[2]);
     //control->yaw = (int16_t)(u_new[3]);
+=======
+
+        //increase time
+        time = time + dt;
+        DEBUG_PRINT("Time: %f \n", (double)time);
+
+        //return input
+        desired_wb.thrust = (float)u_new[0];
+        desired_wb.attitudeRate.roll = (float)(u_new[1]);
+        desired_wb.attitudeRate.pitch = (float)(u_new[2]);
+        desired_wb.attitudeRate.yaw = (float)(u_new[3]);
+
+
+
+    }
+>>>>>>> Model is now a 9 state model with inputs of omegab
 
 
     //DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
