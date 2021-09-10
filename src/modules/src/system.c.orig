@@ -66,11 +66,13 @@
 #include "deck.h"
 #include "extrx.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include "app.h"
 #include "static_mem.h"
 #include "peer_localization.h"
 #include "cfassert.h"
 
+#include "sam_yorai_task.h"
 #ifndef START_DISARMED
 #define ARM_INIT true
 #else
@@ -78,7 +80,10 @@
 #endif
 =======
 #include "sam_yorai_task.h"
->>>>>>> created new subsystem task for forward model
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
+=======
+#include "sam_yorai_task.h"
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
 /* Private variable */
 static bool selftestPassed;
@@ -140,6 +145,8 @@ void systemInit(void)
   pmInit();
   buzzerInit();
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
   peerLocalizationInit();
 
 #ifdef APP_ENABLED
@@ -148,6 +155,12 @@ void systemInit(void)
 =======
   samYoraiTaskInit();
 >>>>>>> created new subsystem task for forward model
+=======
+  samYoraiTaskInit();
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
+=======
+  samYoraiTaskInit();
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
   isInit = true;
 }
@@ -217,11 +230,14 @@ void systemTask(void *arg)
   pass &= memTest();
   pass &= watchdogNormalStartTest();
 <<<<<<< HEAD
+<<<<<<< HEAD
   pass &= cfAssertNormalStartTest();
   pass &= peerLocalizationTest();
 =======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
+=======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
   pass &= samYoraiTaskTest();
->>>>>>> created new subsystem task for forward model
 
   //Start the firmware
   if(pass)
