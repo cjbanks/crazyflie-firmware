@@ -103,6 +103,8 @@
 #define AI_DECK_TASK_PRI        3
 #define UART2_TASK_PRI          3
 
+#define SAM_YORAI_TASK_PRI      2
+
 // Not compiled
 #if 0
   #define INFO_TASK_PRI           2
@@ -150,6 +152,7 @@
 #define AI_DECK_GAP_TASK_NAME   "AI-DECK-GAP"
 #define AI_DECK_NINA_TASK_NAME  "AI-DECK-NINA"
 #define UART2_TASK_NAME         "UART2"
+#define SAM_YORAI_TASK_NAME     "NEWTON-RAPHSON"
 
 //Task stack sizes
 #define SYSTEM_TASK_STACKSIZE         (2* configMINIMAL_STACK_SIZE)
@@ -163,7 +166,7 @@
 #define MEM_TASK_STACKSIZE            (2 * configMINIMAL_STACK_SIZE)
 #define PARAM_TASK_STACKSIZE          configMINIMAL_STACK_SIZE
 #define SENSORS_TASK_STACKSIZE        (2 * configMINIMAL_STACK_SIZE)
-#define STABILIZER_TASK_STACKSIZE     (5 * configMINIMAL_STACK_SIZE)
+#define STABILIZER_TASK_STACKSIZE     (3 * configMINIMAL_STACK_SIZE)
 #define NRF24LINK_TASK_STACKSIZE      configMINIMAL_STACK_SIZE
 #define ESKYLINK_TASK_STACKSIZE       configMINIMAL_STACK_SIZE
 #define SYSLINK_TASK_STACKSIZE        (2 * configMINIMAL_STACK_SIZE)
@@ -182,6 +185,7 @@
 #define ACTIVEMARKER_TASK_STACKSIZE   configMINIMAL_STACK_SIZE
 #define AI_DECK_TASK_STACKSIZE        configMINIMAL_STACK_SIZE
 #define UART2_TASK_STACKSIZE          configMINIMAL_STACK_SIZE
+#define SAM_YORAI_TASK_STACKSIZE      (4 * configMINIMAL_STACK_SIZE)
 
 //The radio channel. From 0 to 125
 #define RADIO_CHANNEL 80

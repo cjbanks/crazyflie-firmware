@@ -70,6 +70,7 @@
 #include "peer_localization.h"
 #include "cfassert.h"
 
+#include "sam_yorai_task.h"
 #ifndef START_DISARMED
 #define ARM_INIT true
 #else
@@ -135,11 +136,15 @@ void systemInit(void)
   ledseqInit();
   pmInit();
   buzzerInit();
+<<<<<<< HEAD
   peerLocalizationInit();
 
 #ifdef APP_ENABLED
   appInit();
 #endif
+=======
+  samYoraiTaskInit();
+>>>>>>> created new subsystem task for forward model
 
   isInit = true;
 }
@@ -210,6 +215,7 @@ void systemTask(void *arg)
   pass &= watchdogNormalStartTest();
   pass &= cfAssertNormalStartTest();
   pass &= peerLocalizationTest();
+  pass &= samYoraiTaskTest();
 
   //Start the firmware
   if(pass)
