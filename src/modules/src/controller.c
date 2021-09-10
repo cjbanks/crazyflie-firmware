@@ -5,7 +5,10 @@
 #include "controller.h"
 #include "controller_pid.h"
 #include "controller_mellinger.h"
+<<<<<<< HEAD
 #include "controller_indi.h"
+=======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 #include "controller_sam_yorai.h"
 
 #define DEFAULT_CONTROLLER ControllerTypeMellinger
@@ -24,7 +27,10 @@ static ControllerFcns controllerFunctions[] = {
   {.init = 0, .test = 0, .update = 0, .name = "None"}, // Any
   {.init = controllerPidInit, .test = controllerPidTest, .update = controllerPid, .name = "PID"},
   {.init = controllerMellingerInit, .test = controllerMellingerTest, .update = controllerMellinger, .name = "Mellinger"},
+<<<<<<< HEAD
   {.init = controllerINDIInit, .test = controllerINDITest, .update = controllerINDI, .name = "INDI"},
+=======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
   {.init = controllerSamYoraiInit, .test = controllerSamYoraiTest, .update = controllerSamYorai, .name="SamYorai"},
 };
 

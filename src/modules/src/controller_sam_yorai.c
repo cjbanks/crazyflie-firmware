@@ -16,7 +16,11 @@
 #define COLUMNS 4
 
 
+<<<<<<< HEAD
 static double_t horizon = 0.15;   //was 0.7
+=======
+static double_t horizon = 0.2;   //was 0.7
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 static float alpha[4][4] = {
                         {20, 0,  0, 0},
                         {0, 50, 0, 0},
@@ -51,6 +55,7 @@ void controllerSamYoraiInit(void){
 
 bool controllerSamYoraiTest(void)
 {
+<<<<<<< HEAD
     return true;
 }
 
@@ -101,10 +106,67 @@ static struct mat33 matinv_3d(struct mat33 mat) {
 
 
 m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
+=======
+    bool pass = true;
+
+    pass &= attitudeControllerTest();
+
+    return pass;
+}
+
+
+//static struct mat33 matinv_3d(struct mat33 mat) {
+//    float a = mat.m[0][0];
+//    float b = mat.m[0][1];
+//    float c = mat.m[0][2];
+//    float d = mat.m[1][0];
+//    float e = mat.m[1][1];
+//    float f = mat.m[1][2];
+//    float gg = mat.m[2][0];
+//    float h = mat.m[2][1];
+//    float i = mat.m[2][2];
+//
+//    float A = (e*i-f*h);
+//    float B = -1*(d*i- f * gg);
+//    float C = (d*h- e * gg);
+//    float D = -1*(b*i-c*h);
+//    float E = (a*i- c * gg);
+//    float F = -1*(a*h- b * gg);
+//    float G = (b*f-c*e);
+//    float H = -1*(a*f-c*d);
+//    float I = (a*e-b*d);
+//
+//    float A_det = a*A + b*B + c*C;
+//
+//    /*float m_adj[3][3] = {{A, D, G},
+//                         {B, E, H},
+//                         {C, F, I}};
+//        */
+//
+//    struct mat33 m_inv;
+//    m_inv.m[0][0] = (1/A_det)*A;
+//    m_inv.m[0][1] =  (1/A_det)*D;
+//    m_inv.m[0][2] = (1/A_det)*G;
+//
+//    m_inv.m[1][0] = (1/A_det)*B;
+//    m_inv.m[1][1] =  (1/A_det)*E;
+//    m_inv.m[1][2] = (1/A_det)*H;
+//
+//    m_inv.m[2][0] = (1/A_det)*C;
+//    m_inv.m[2][1] =  (1/A_det)*F;
+//    m_inv.m[2][2] = (1/A_det)*I;
+//
+//    return m_inv;
+//}
+
+
+m_4d matinv_4d(double_t matrix_in[ROWS][COLUMNS]){
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
     //create mat_inv array of pointers
     m_4d mat_inv;
 
+<<<<<<< HEAD
     float a = matrix_in[0][0];
     float b = matrix_in[0][1];
     float c = matrix_in[0][2];
@@ -124,11 +186,33 @@ m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
     float n = matrix_in[3][1];
     float o = matrix_in[3][2];
     float p = matrix_in[3][3];
+=======
+    double_t a = matrix_in[0][0];
+    double_t b = matrix_in[0][1];
+    double_t c = matrix_in[0][2];
+    double_t d = matrix_in[0][3];
+
+    double_t e = matrix_in[1][0];
+    double_t f = matrix_in[1][1];
+    double_t gg = matrix_in[1][2];
+    double_t h = matrix_in[1][3];
+
+    double_t i = matrix_in[2][0];
+    double_t j = matrix_in[2][1];
+    double_t k = matrix_in[2][2];
+    double_t l = matrix_in[2][3];
+
+    double_t mm = matrix_in[3][0];
+    double_t n = matrix_in[3][1];
+    double_t o = matrix_in[3][2];
+    double_t p = matrix_in[3][3];
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
 
     //cofactors
 
     //2x2 cofactors A
+<<<<<<< HEAD
     float A1 = (float)pow(-1,1+1)*(k*p-l*o);
     float A2 = (float)pow(-1, 1+2)*(j*p - l*n);
     float A3 = (float)pow(-1, 1+3)*(o*j - n*k);
@@ -245,6 +329,124 @@ m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
     //determinant
     float A_det = a*A + b*B + c*C + d*D;
+=======
+    double_t A1 = pow(-1,1+1)*(k*p-l*o);
+    double_t A2 = pow(-1, 1+2)*(j*p - l*n);
+    double_t A3 = pow(-1, 1+3)*(o*j - n*k);
+
+    double_t A = pow(-1, 1+1) * (f*(A1) + gg*(A2) + h * (A3));
+
+    //2x2 cofactors B
+    double_t B1 = pow(-1, 1+1) * (k*p - l*o);
+    double_t B2 = pow(-1, 1+2) * (i*p - mm*l);
+    double_t B3 = pow(-1, 1+3) * (i*o - mm*k);
+
+    double_t B = pow(-1, 1+2) * (e*(B1) + gg*(B2) + h*(B3));
+
+    //2x2 cofactors C
+    double_t C1 = pow(-1, 1+1) * (o*j - l*n);
+    double_t C2 = pow(-1, 1+2) * (i*o - mm*l);
+    double_t C3 = pow(-1, 1+3) * (i*n - j*mm);
+
+    double_t C = pow(-1, 1+3) * (e*(C1) + f*(C2) + h*(C3));
+
+    //2x2 cofactors D
+    double_t D1 = pow(-1, 1+1) * (j*o - n*k);
+    double_t D2 = pow(-1, 1+2) * (i*o - mm*k);
+    double_t D3 = pow(-1, 1+3) * (i*n - j*mm);
+
+    double_t D = pow(-1, 1+4) * (e*(D1) + f*(D2) + gg*(D3));
+
+
+    //2x2 cofactors E
+    double_t E1 = pow(-1, 1+1) * (k*p - l*o);
+    double_t E2 = pow(-1, 1+2) * (j*p - n*l);
+    double_t E3 = pow(-1, 1+3) * (j*o - n*k);
+
+    double_t E = pow(-1, 2+1) * (b*(E1) + c*(E2) + d*(E3));
+
+    //2x2 cofactors F
+    double_t F1 = pow(-1, 1+1) * (k*p - l*o);
+    double_t F2 = pow(-1, 1+2) * (i*p - mm*l);
+    double_t F3 = pow(-1, 1+3) * (i*o - mm*k);
+
+    double_t F =  pow(-1, 2+2) * (a*(F1) + c*(F2) + d*(F3));
+
+    //2x2 cofactors G
+    double_t G1 = pow(-1, 1+1) * (j*p - l*n);
+    double_t G2 = pow(-1, 1+2) * (i*p - mm*l);
+    double_t G3 = pow(-1, 1+3) * (i*n - mm*j);
+
+    double_t G =  pow(-1, 2+3) * (a*(G1) + b*(G2) + d*(G3));
+
+    //2x2 cofactors H
+    double_t H1 = pow(-1, 1+1) * (o*j - n*k);
+    double_t H2 = pow(-1, 1+2) * (i*o - mm*k);
+    double_t H3 = pow(-1, 1+3) * (i*n - mm*j);
+
+    double_t H =  pow(-1, 2+4) * (a*(H1) + b*(H2) + c*(H3));
+
+    //2x2 cofactors I
+    double_t I1 = pow(-1, 1+1) * (gg*p - o*h);
+    double_t I2 = pow(-1, 1+2) * (f*p - n*h);
+    double_t I3 = pow(-1, 1+3) * (f*o - n*gg);
+
+    double_t I =  pow(-1, 3+1) * (b*(I1) + c*(I2) + d*(I3));
+
+    //2x2 cofactors J
+    double_t J1 = pow(-1, 1+1) * (gg*p - o*h);
+    double_t J2 = pow(-1, 1+2) * (e*p - mm*h);
+    double_t J3 = pow(-1, 1+3) * (e*o - mm*gg);
+
+    double_t J =  pow(-1, 3+2) * (a*(J1) + c*(J2) + d*(J3));
+
+    //2x2 cofactors K
+    double_t K1 = pow(-1, 1+1) * (f*p - n*h);
+    double_t K2 = pow(-1, 1+2) * (e*p - mm*h);
+    double_t K3 = pow(-1, 1+3) * (e*n - mm*f);
+
+    double_t K =  pow(-1, 3+3) * (a*(K1) + b*(K2) + d*(K3));
+
+    //2x2 cofactors L
+    double_t L1 = pow(-1, 1+1) * (f*o - n*gg);
+    double_t L2 = pow(-1, 1+2) * (e*o - mm*gg);
+    double_t L3 = pow(-1, 1+3) * (e*n - mm*f);
+
+    double_t L =  pow(-1, 3+4) * (a*(L1) + b*(L2) + c*(L3));
+
+
+    //2x2 cofactors M
+    double_t M1 = pow(-1, 1+1) * (gg*l - k*h);
+    double_t M2 = pow(-1, 1+2) * (f*l - j*h);
+    double_t M3 = pow(-1, 1+3) * (f*k - j*gg);
+
+    double_t M = pow(-1, 4+1) * (b*(M1) + c*(M2) + d*(M3));
+
+    //2x2 cofactors N
+    double_t N1 = pow(-1, 1+1) * (gg*l - k*h);
+    double_t N2 = pow(-1, 1+2) * (e*l - i*h);
+    double_t N3 = pow(-1, 1+3) * (e*k -i*gg);
+
+    double_t N =  pow(-1, 4+2) * (a*(N1) + c*(N2) + d*(N3));
+
+    //2x2 cofactors O
+    double_t O1 = pow(-1, 1+1) * (f*l - j*h);
+    double_t O2 = pow(-1, 1+2) * (e*l - i*h);
+    double_t O3 = pow(-1, 1+3) * (e*j - i*f);
+
+    double_t O =  pow(-1, 4+3) * (a*(O1) + b*(O2) + d*(O3));
+
+    //2x2 cofactors P
+    double_t P1 = pow(-1, 1+1) * (f*k - gg*j);
+    double_t P2 = pow(-1, 1+2) * (e*k - i*gg);
+    double_t P3 = pow(-1, 1+3) * (e*j - i*f);
+
+    double_t P = pow(-1, 4+4) * (a*(P1) + b*(P2) + c*(P3));
+
+
+    //determinant
+    double_t A_det = a*A + b*B + c*C + d*D;
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
     //DEBUG_PRINT("determinant: %f\n", (double) A_det);
 
     if (A_det == 0)  {
@@ -265,7 +467,11 @@ m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
         return last_mat;
     }
     //adjugate matrix
+<<<<<<< HEAD
     float Adj[4][4] = {{A, E, I, M},
+=======
+    double_t Adj[4][4] = {{A, E, I, M},
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
                        {B, F, J, N},
                        {C, G, K, O},
                        {D, H, L, P}};
@@ -311,6 +517,7 @@ double_t * f(double_t * state, double_t * u){
     //        printf("Moment inv (%d, %d): %f \n", i, j, I_moment_inv.m[i][j]);
     //    }
     //}
+<<<<<<< HEAD
     struct vec vel;
     struct vec omega_b;
 
@@ -324,6 +531,21 @@ double_t * f(double_t * state, double_t * u){
     omega_b.x = (float)state_temp[9];
     omega_b.y = (float)state_temp[10];
     omega_b.z = (float)state_temp[11];
+=======
+    //struct vec vel;
+    //struct vec omega_b;
+
+
+    //linear velocity of body
+    //vel.x = (float)state_temp[6];
+    //vel.y = (float)state_temp[7];
+    //vel.z = (float)state_temp[8];
+
+    //angular velocity of body
+    //omega_b.x = (float)state_temp[9];
+    //omega_b.y = (float)state_temp[10];
+    //omega_b.z = (float)state_temp[11];
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
     //struct mat33 Twb;
     struct mat33 Rwb;
@@ -432,7 +654,11 @@ double_t * sam_simulation(double_t * state, double_t * input, double_t t_step){
     double_t state_d_vector[9];
     double_t * state_d;
     //iterate
+<<<<<<< HEAD
     while (t < horizon){
+=======
+    while ((double) t < horizon){
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
         state_d = f(state_temp, input_temp);
         for (int i=0; i < 9; i++){
             state_d_vector[i] = *(state_d + i);
@@ -479,6 +705,10 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
                         const uint32_t tick){
 
     //controller runs at 500 Hz
+<<<<<<< HEAD
+=======
+    // desired_wb.thrust = 0.5;
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
     if (RATE_DO_EXECUTE(ATTITUDE_RATE, tick)){
         //returns actual control inputs (thrust, m_x, m_y, m_z)
 
@@ -490,15 +720,19 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
                                          degrees(desired_wb.attitudeRate.roll), degrees(desired_wb.attitudeRate.pitch),
                                          degrees(desired_wb.attitudeRate.yaw));
 
+<<<<<<< HEAD
 
 
         control->thrust = massThrust * desired_wb.thrust;
 
+=======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
         attitudeControllerGetActuatorOutput(&control->roll, &control->pitch, &control->yaw);
 
         control->yaw = -control->yaw;
 
 
+<<<<<<< HEAD
           if (control->thrust == 0)
           {
             control->thrust = 0;
@@ -509,6 +743,24 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
             attitudeControllerResetAllPID();
 
           }
+=======
+        DEBUG_PRINT("THRUST: %f \n", (double) control->thrust);
+        DEBUG_PRINT("ROLL: %d \n ", control->roll);
+        DEBUG_PRINT("PITCH: %d \n", control->pitch);
+        DEBUG_PRINT("YAW: %d \n", -control->yaw);
+
+
+          //if (control->thrust == 0)
+          //{
+          //  control->thrust = 0;
+          //  control->roll = 0;
+          //  control->pitch = 0;
+          //  control->yaw = 0;
+          //
+          //  attitudeControllerResetAllPID();
+          //
+          //}
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
     }
 
 
@@ -520,7 +772,11 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         //intialize variable
         double eps = 0.00001;
         double_t dt = (1.0/ATTITUDE_RATE);
+<<<<<<< HEAD
         float Jac[ROWS][COLUMNS];
+=======
+        double_t Jac[ROWS][COLUMNS];
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
         //gather current state
         double_t state[9] = {(double_t) state_cf->position.x, (double_t) state_cf->position.y, (double_t) state_cf->position.z,
@@ -613,7 +869,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
 
         for (int i=0; i < 4; i++){
+<<<<<<< HEAD
             Jac[i][0] = (float)(((double)(yorai_row[i] - center_g[i]))*(1.0/(double)(eps)));
+=======
+            Jac[i][0] = (yorai_row[i] - center_g[i]) / ((double)(eps));
+            DEBUG_PRINT("JACK row 1: %f \n", Jac[i][0]);
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
         }
 
         //calculate second row of Jacobian
@@ -637,7 +898,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         }
 
         for (int i=0; i < 4; i++){
+<<<<<<< HEAD
             Jac[i][1] = (float)(((double)(yorai_row_2[i] - center_g[i]))*(1.0/(double)(eps)));
+=======
+            Jac[i][1] =(yorai_row_2[i] - center_g[i]) / ((double)(eps));
+            DEBUG_PRINT("JACK row 2: %f \n",Jac[i][1]);
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
         }
 
         //calculate third row of Jacobian
@@ -661,7 +927,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         }
 
         for (int i=0; i < 4; i++){
+<<<<<<< HEAD
             Jac[i][2] = (float)(((double)(yorai_row_3[i] - center_g[i]))*(1.0/(double)(eps)));
+=======
+            Jac[i][2] = (yorai_row_3[i] - center_g[i]) / ((double)(eps));
+            DEBUG_PRINT("JACK row 3: %f \n", (double) Jac[i][2]);
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
         }
 
         //calculate fourth row of Jacobian
@@ -684,7 +955,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         }
 
         for (int i=0; i < 4; i++){
+<<<<<<< HEAD
             Jac[i][3] = (float)(((double)(yorai_row_4[i] - center_g[i]))*(1.0/(double)(eps)));
+=======
+            Jac[i][3] =(yorai_row_4[i] - center_g[i]) / ((double)(eps));
+            DEBUG_PRINT("JACK row 4: %f \n", (double) Jac[i][3]);
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
         }
 
 
@@ -714,6 +990,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
             prediction[i] = *(yorai_row_pointer + i);
         }
 
+<<<<<<< HEAD
         DEBUG_PRINT("predicted point (x): %f \n", (double)prediction[0]);
         DEBUG_PRINT("predicted point (y): %f \n", (double)prediction[1]);
         DEBUG_PRINT("predicted point (z): %f \n", (double)prediction[2]);
@@ -723,6 +1000,17 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         DEBUG_PRINT("ref point y: %f: \n", (double) ref_point[1]);
         DEBUG_PRINT("ref point z: %f: \n", (double) ref_point[2]);
         DEBUG_PRINT("ref point t: %f: \n", (double) ref_point[3]);
+=======
+        //DEBUG_PRINT("predicted point (x): %f \n", (double)prediction[0]);
+        //DEBUG_PRINT("predicted point (y): %f \n", (double)prediction[1]);
+        //DEBUG_PRINT("predicted point (z): %f \n", (double)prediction[2]);
+        //DEBUG_PRINT("predicted point (t): %f \n", (double)prediction[3]);
+        //
+        //DEBUG_PRINT("ref point x: %f: \n", (double) ref_point[0]);
+        //DEBUG_PRINT("ref point y: %f: \n", (double) ref_point[1]);
+        //DEBUG_PRINT("ref point z: %f: \n", (double) ref_point[2]);
+        //DEBUG_PRINT("ref point t: %f: \n", (double) ref_point[3]);
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
         //DEBUG_PRINT("alpha: %f \n ", (double ) alpha[1][2]);
         //DEBUG_PRINT("FIRST ROW OF JAC: %f \n", (double)Jac[0][0]);
@@ -766,7 +1054,17 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
         //increase time
         time = time + dt;
+<<<<<<< HEAD
         DEBUG_PRINT("Time: %f \n", (double)time);
+=======
+        //DEBUG_PRINT("Time: %f \n", (double)time);
+
+        DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
+        DEBUG_PRINT("UPDATED ROLL RATE: %f\n", (double) u_new[1]);
+        DEBUG_PRINT("UPDATED PITCH RATE: %f \n", (double) u_new[2]);
+        DEBUG_PRINT("UPDATED YAW RATE: %f \n", (double) u_new[3]);
+
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
         //return input
         desired_wb.thrust = (float)u_new[0];
@@ -775,6 +1073,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         desired_wb.attitudeRate.yaw = (float)(u_new[3]);
 
 
+<<<<<<< HEAD
 
     }
 
@@ -784,5 +1083,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //DEBUG_PRINT("UPDATED PITCH: %f \n", (double) u_new[2]);
     //DEBUG_PRINT("UPDATED YAW: %f \n", (double) u_new[3]);
 
+=======
+    }
+
+
+    //set thrust
+    control->thrust = massThrust * desired_wb.thrust;         
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
 }

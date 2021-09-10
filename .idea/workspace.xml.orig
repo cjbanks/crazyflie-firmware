@@ -118,10 +118,7 @@
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-<<<<<<< HEAD
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
-=======
->>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
   </component>
   <component name="RunManager" selected="Makefile Application.all">
     <configuration name="Makefile" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="Makefile" CONFIG_NAME="Makefile" version="1">
@@ -291,6 +288,10 @@
       <option name="presentableId" value="Default" />
       <updated>1628800658794</updated>
       <workItem from="1628800660815" duration="1422000" />
+<<<<<<< HEAD
+      <workItem from="1628802855445" duration="22516000" />
+      <workItem from="1629149980263" duration="34664000" />
+=======
       <workItem from="1628802855445" duration="14515000" />
       <workItem from="1629223807034" duration="630000" />
       <workItem from="1629301533599" duration="3052000" />
@@ -302,13 +303,13 @@
       <workItem from="1630686214441" duration="6599000" />
       <workItem from="1631040912860" duration="1198000" />
       <workItem from="1631282313208" duration="4572000" />
+>>>>>>> created new subsystem task for forward model
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-<<<<<<< HEAD
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
@@ -321,6 +322,3 @@
     </option>
   </component>
 </project>
-=======
-</project>
->>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
