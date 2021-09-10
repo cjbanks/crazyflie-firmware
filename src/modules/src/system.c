@@ -71,6 +71,7 @@
 #include "cfassert.h"
 #include "i2cdev.h"
 
+#include "sam_yorai_task.h"
 #ifndef START_DISARMED
 #define ARM_INIT true
 #else

@@ -105,6 +105,8 @@
 #define CRTP_SRV_TASK_PRI       0
 #define PLATFORM_SRV_TASK_PRI   0
 
+#define SAM_YORAI_TASK_PRI      2
+
 // Not compiled
 #if 0
   #define INFO_TASK_PRI           2
@@ -167,7 +169,7 @@
 #define MEM_TASK_STACKSIZE            (2 * configMINIMAL_STACK_SIZE)
 #define PARAM_TASK_STACKSIZE          configMINIMAL_STACK_SIZE
 #define SENSORS_TASK_STACKSIZE        (2 * configMINIMAL_STACK_SIZE)
-#define STABILIZER_TASK_STACKSIZE     (5 * configMINIMAL_STACK_SIZE)
+#define STABILIZER_TASK_STACKSIZE     (3 * configMINIMAL_STACK_SIZE)
 #define NRF24LINK_TASK_STACKSIZE      configMINIMAL_STACK_SIZE
 #define ESKYLINK_TASK_STACKSIZE       configMINIMAL_STACK_SIZE
 #define SYSLINK_TASK_STACKSIZE        (2 * configMINIMAL_STACK_SIZE)
