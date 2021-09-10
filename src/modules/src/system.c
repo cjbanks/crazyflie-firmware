@@ -65,7 +65,6 @@
 #include "estimator_kalman.h"
 #include "deck.h"
 #include "extrx.h"
-<<<<<<< HEAD
 #include "app.h"
 #include "static_mem.h"
 #include "peer_localization.h"
@@ -77,9 +76,7 @@
 #else
 #define ARM_INIT false
 #endif
-=======
 #include "sam_yorai_task.h"
->>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
 /* Private variable */
 static bool selftestPassed;
@@ -140,19 +137,12 @@ void systemInit(void)
   ledseqInit();
   pmInit();
   buzzerInit();
-<<<<<<< HEAD
-<<<<<<< HEAD
   peerLocalizationInit();
 
 #ifdef APP_ENABLED
   appInit();
 #endif
-=======
   samYoraiTaskInit();
->>>>>>> created new subsystem task for forward model
-=======
-  samYoraiTaskInit();
->>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
   isInit = true;
 }
@@ -221,11 +211,8 @@ void systemTask(void *arg)
   pass &= soundTest();
   pass &= memTest();
   pass &= watchdogNormalStartTest();
-<<<<<<< HEAD
   pass &= cfAssertNormalStartTest();
   pass &= peerLocalizationTest();
-=======
->>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
   pass &= samYoraiTaskTest();
 
   //Start the firmware

@@ -17,7 +17,11 @@
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static double_t horizon = 0.15;   //was 0.7
+=======
+static double_t horizon = 0.2;   //was 0.7
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 =======
 static double_t horizon = 0.2;   //was 0.7
 >>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
@@ -55,6 +59,7 @@ void controllerSamYoraiInit(void){
 
 bool controllerSamYoraiTest(void)
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
     return true;
 }
@@ -107,6 +112,8 @@ static struct mat33 matinv_3d(struct mat33 mat) {
 
 m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
 =======
+=======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
     bool pass = true;
 
     pass &= attitudeControllerTest();
@@ -161,11 +168,15 @@ m_4d matinv_4d(float matrix_in[ROWS][COLUMNS]){
 
 
 m_4d matinv_4d(double_t matrix_in[ROWS][COLUMNS]){
+<<<<<<< HEAD
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
+=======
 >>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
     //create mat_inv array of pointers
     m_4d mat_inv;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     float a = matrix_in[0][0];
     float b = matrix_in[0][1];
@@ -187,6 +198,8 @@ m_4d matinv_4d(double_t matrix_in[ROWS][COLUMNS]){
     float o = matrix_in[3][2];
     float p = matrix_in[3][3];
 =======
+=======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
     double_t a = matrix_in[0][0];
     double_t b = matrix_in[0][1];
     double_t c = matrix_in[0][2];
@@ -206,12 +219,16 @@ m_4d matinv_4d(double_t matrix_in[ROWS][COLUMNS]){
     double_t n = matrix_in[3][1];
     double_t o = matrix_in[3][2];
     double_t p = matrix_in[3][3];
+<<<<<<< HEAD
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
+=======
 >>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
 
     //cofactors
 
     //2x2 cofactors A
+<<<<<<< HEAD
 <<<<<<< HEAD
     float A1 = (float)pow(-1,1+1)*(k*p-l*o);
     float A2 = (float)pow(-1, 1+2)*(j*p - l*n);
@@ -330,6 +347,8 @@ m_4d matinv_4d(double_t matrix_in[ROWS][COLUMNS]){
     //determinant
     float A_det = a*A + b*B + c*C + d*D;
 =======
+=======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
     double_t A1 = pow(-1,1+1)*(k*p-l*o);
     double_t A2 = pow(-1, 1+2)*(j*p - l*n);
     double_t A3 = pow(-1, 1+3)*(o*j - n*k);
@@ -446,6 +465,9 @@ m_4d matinv_4d(double_t matrix_in[ROWS][COLUMNS]){
 
     //determinant
     double_t A_det = a*A + b*B + c*C + d*D;
+<<<<<<< HEAD
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
+=======
 >>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
     //DEBUG_PRINT("determinant: %f\n", (double) A_det);
 
@@ -468,7 +490,11 @@ m_4d matinv_4d(double_t matrix_in[ROWS][COLUMNS]){
     }
     //adjugate matrix
 <<<<<<< HEAD
+<<<<<<< HEAD
     float Adj[4][4] = {{A, E, I, M},
+=======
+    double_t Adj[4][4] = {{A, E, I, M},
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 =======
     double_t Adj[4][4] = {{A, E, I, M},
 >>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
@@ -518,6 +544,7 @@ double_t * f(double_t * state, double_t * u){
     //    }
     //}
 <<<<<<< HEAD
+<<<<<<< HEAD
     struct vec vel;
     struct vec omega_b;
 
@@ -532,6 +559,8 @@ double_t * f(double_t * state, double_t * u){
     omega_b.y = (float)state_temp[10];
     omega_b.z = (float)state_temp[11];
 =======
+=======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
     //struct vec vel;
     //struct vec omega_b;
 
@@ -545,6 +574,9 @@ double_t * f(double_t * state, double_t * u){
     //omega_b.x = (float)state_temp[9];
     //omega_b.y = (float)state_temp[10];
     //omega_b.z = (float)state_temp[11];
+<<<<<<< HEAD
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
+=======
 >>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
     //struct mat33 Twb;
@@ -655,7 +687,11 @@ double_t * sam_simulation(double_t * state, double_t * input, double_t t_step){
     double_t * state_d;
     //iterate
 <<<<<<< HEAD
+<<<<<<< HEAD
     while (t < horizon){
+=======
+    while ((double) t < horizon){
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 =======
     while ((double) t < horizon){
 >>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
@@ -706,6 +742,10 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
     //controller runs at 500 Hz
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    // desired_wb.thrust = 0.5;
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 =======
     // desired_wb.thrust = 0.5;
 >>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
@@ -721,10 +761,13 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
                                          degrees(desired_wb.attitudeRate.yaw));
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
         control->thrust = massThrust * desired_wb.thrust;
 
+=======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 =======
 >>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
         attitudeControllerGetActuatorOutput(&control->roll, &control->pitch, &control->yaw);
@@ -732,6 +775,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         control->yaw = -control->yaw;
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
           if (control->thrust == 0)
           {
@@ -744,6 +788,8 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
           }
 =======
+=======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
         DEBUG_PRINT("THRUST: %f \n", (double) control->thrust);
         DEBUG_PRINT("ROLL: %d \n ", control->roll);
         DEBUG_PRINT("PITCH: %d \n", control->pitch);
@@ -760,6 +806,9 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
           //  attitudeControllerResetAllPID();
           //
           //}
+<<<<<<< HEAD
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
+=======
 >>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
     }
 
@@ -773,7 +822,11 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         double eps = 0.00001;
         double_t dt = (1.0/ATTITUDE_RATE);
 <<<<<<< HEAD
+<<<<<<< HEAD
         float Jac[ROWS][COLUMNS];
+=======
+        double_t Jac[ROWS][COLUMNS];
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 =======
         double_t Jac[ROWS][COLUMNS];
 >>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
@@ -870,7 +923,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
         for (int i=0; i < 4; i++){
 <<<<<<< HEAD
+<<<<<<< HEAD
             Jac[i][0] = (float)(((double)(yorai_row[i] - center_g[i]))*(1.0/(double)(eps)));
+=======
+            Jac[i][0] = (yorai_row[i] - center_g[i]) / ((double)(eps));
+            DEBUG_PRINT("JACK row 1: %f \n", Jac[i][0]);
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 =======
             Jac[i][0] = (yorai_row[i] - center_g[i]) / ((double)(eps));
             DEBUG_PRINT("JACK row 1: %f \n", Jac[i][0]);
@@ -899,7 +957,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
         for (int i=0; i < 4; i++){
 <<<<<<< HEAD
+<<<<<<< HEAD
             Jac[i][1] = (float)(((double)(yorai_row_2[i] - center_g[i]))*(1.0/(double)(eps)));
+=======
+            Jac[i][1] =(yorai_row_2[i] - center_g[i]) / ((double)(eps));
+            DEBUG_PRINT("JACK row 2: %f \n",Jac[i][1]);
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 =======
             Jac[i][1] =(yorai_row_2[i] - center_g[i]) / ((double)(eps));
             DEBUG_PRINT("JACK row 2: %f \n",Jac[i][1]);
@@ -928,7 +991,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
         for (int i=0; i < 4; i++){
 <<<<<<< HEAD
+<<<<<<< HEAD
             Jac[i][2] = (float)(((double)(yorai_row_3[i] - center_g[i]))*(1.0/(double)(eps)));
+=======
+            Jac[i][2] = (yorai_row_3[i] - center_g[i]) / ((double)(eps));
+            DEBUG_PRINT("JACK row 3: %f \n", (double) Jac[i][2]);
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 =======
             Jac[i][2] = (yorai_row_3[i] - center_g[i]) / ((double)(eps));
             DEBUG_PRINT("JACK row 3: %f \n", (double) Jac[i][2]);
@@ -956,7 +1024,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
         for (int i=0; i < 4; i++){
 <<<<<<< HEAD
+<<<<<<< HEAD
             Jac[i][3] = (float)(((double)(yorai_row_4[i] - center_g[i]))*(1.0/(double)(eps)));
+=======
+            Jac[i][3] =(yorai_row_4[i] - center_g[i]) / ((double)(eps));
+            DEBUG_PRINT("JACK row 4: %f \n", (double) Jac[i][3]);
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 =======
             Jac[i][3] =(yorai_row_4[i] - center_g[i]) / ((double)(eps));
             DEBUG_PRINT("JACK row 4: %f \n", (double) Jac[i][3]);
@@ -991,6 +1064,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         DEBUG_PRINT("predicted point (x): %f \n", (double)prediction[0]);
         DEBUG_PRINT("predicted point (y): %f \n", (double)prediction[1]);
         DEBUG_PRINT("predicted point (z): %f \n", (double)prediction[2]);
@@ -1001,6 +1075,8 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         DEBUG_PRINT("ref point z: %f: \n", (double) ref_point[2]);
         DEBUG_PRINT("ref point t: %f: \n", (double) ref_point[3]);
 =======
+=======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
         //DEBUG_PRINT("predicted point (x): %f \n", (double)prediction[0]);
         //DEBUG_PRINT("predicted point (y): %f \n", (double)prediction[1]);
         //DEBUG_PRINT("predicted point (z): %f \n", (double)prediction[2]);
@@ -1010,6 +1086,9 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         //DEBUG_PRINT("ref point y: %f: \n", (double) ref_point[1]);
         //DEBUG_PRINT("ref point z: %f: \n", (double) ref_point[2]);
         //DEBUG_PRINT("ref point t: %f: \n", (double) ref_point[3]);
+<<<<<<< HEAD
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
+=======
 >>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
         //DEBUG_PRINT("alpha: %f \n ", (double ) alpha[1][2]);
@@ -1055,8 +1134,11 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         //increase time
         time = time + dt;
 <<<<<<< HEAD
+<<<<<<< HEAD
         DEBUG_PRINT("Time: %f \n", (double)time);
 =======
+=======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
         //DEBUG_PRINT("Time: %f \n", (double)time);
 
         DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
@@ -1064,6 +1146,9 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         DEBUG_PRINT("UPDATED PITCH RATE: %f \n", (double) u_new[2]);
         DEBUG_PRINT("UPDATED YAW RATE: %f \n", (double) u_new[3]);
 
+<<<<<<< HEAD
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
+=======
 >>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
         //return input
@@ -1073,6 +1158,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         desired_wb.attitudeRate.yaw = (float)(u_new[3]);
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     }
@@ -1084,11 +1170,16 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //DEBUG_PRINT("UPDATED YAW: %f \n", (double) u_new[3]);
 
 =======
+=======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
     }
 
 
     //set thrust
     control->thrust = massThrust * desired_wb.thrust;         
+<<<<<<< HEAD
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
+=======
 >>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
 }

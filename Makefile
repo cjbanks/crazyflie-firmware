@@ -43,12 +43,10 @@ POWER_DISTRIBUTION ?= stock
 
 #OpenOCD conf
 RTOS_DEBUG        ?= 1
-<<<<<<< HEAD
 
 LIB = $(CRAZYFLIE_BASE)/src/lib
 FREERTOS = $(CRAZYFLIE_BASE)/vendor/FreeRTOS
 CFLAGS += -DBLOBS_LOC='"$(CRAZYFLIE_BASE)/blobs/"'
-=======
 >>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 
 # Communication Link
@@ -170,24 +168,18 @@ PROJ_OBJ += vl53l1_register_funcs.o vl53l1_wait.o vl53l1_core_support.o
 # Modules
 PROJ_OBJ += system.o comm.o console.o pid.o crtpservice.o param.o
 PROJ_OBJ += log.o worker.o trigger.o sitaw.o queuemonitor.o msp.o
-<<<<<<< HEAD
 PROJ_OBJ += platformservice.o sound_cf2.o extrx.o sysload.o mem.o
 PROJ_OBJ += range.o app_handler.o static_mem.o
-=======
 PROJ_OBJ += platformservice.o sound_cf2.o extrx.o sysload.o mem_cf2.o
 PROJ_OBJ += range.o
->>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 PROJ_OBJ += sam_yorai_task.o
 
 # Stabilizer modules
 PROJ_OBJ += commander.o crtp_commander.o crtp_commander_rpyt.o
-<<<<<<< HEAD
 
 PROJ_OBJ += crtp_commander_generic.o crtp_localization_service.o peer_localization.o
 PROJ_OBJ += position_estimator_altitude.o position_controller_pid.o position_controller_indi.o
-=======
 PROJ_OBJ += crtp_commander_generic.o crtp_localization_service.o
->>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 PROJ_OBJ += attitude_pid_controller.o sensfusion6.o stabilizer.o check_distance_to_setpoint.o
 PROJ_OBJ += position_estimator_altitude.o position_controller_pid.o
 PROJ_OBJ += estimator.o estimator_complementary.o

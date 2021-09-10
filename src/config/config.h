@@ -107,6 +107,8 @@
 
 #define SAM_YORAI_TASK_PRI      2
 
+#define SAM_YORAI_TASK_PRI      2
+
 // Not compiled
 #if 0
   #define INFO_TASK_PRI           2
@@ -142,7 +144,6 @@
 #define PCA9685_TASK_NAME       "PCA9685"
 #define CMD_HIGH_LEVEL_TASK_NAME "CMDHL"
 #define MULTIRANGER_TASK_NAME   "MR"
-<<<<<<< HEAD
 #define BQ_OSD_TASK_NAME        "BQ_OSDTASK"
 #define GTGPS_DECK_TASK_NAME    "GTGPS"
 #define LIGHTHOUSE_TASK_NAME    "LH"
@@ -155,8 +156,6 @@
 #define AI_DECK_GAP_TASK_NAME   "AI-DECK-GAP"
 #define AI_DECK_NINA_TASK_NAME  "AI-DECK-NINA"
 #define UART2_TASK_NAME         "UART2"
-=======
->>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 #define SAM_YORAI_TASK_NAME     "NEWTON-RAPHSON"
 
 //Task stack sizes
@@ -187,12 +186,9 @@
 #define PCA9685_TASK_STACKSIZE        (2 * configMINIMAL_STACK_SIZE)
 #define CMD_HIGH_LEVEL_TASK_STACKSIZE (2 * configMINIMAL_STACK_SIZE)
 #define MULTIRANGER_TASK_STACKSIZE    (2 * configMINIMAL_STACK_SIZE)
-<<<<<<< HEAD
 #define ACTIVEMARKER_TASK_STACKSIZE   configMINIMAL_STACK_SIZE
 #define AI_DECK_TASK_STACKSIZE        configMINIMAL_STACK_SIZE
 #define UART2_TASK_STACKSIZE          configMINIMAL_STACK_SIZE
-=======
->>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 #define SAM_YORAI_TASK_STACKSIZE      (4 * configMINIMAL_STACK_SIZE)
 
 //The radio channel. From 0 to 125

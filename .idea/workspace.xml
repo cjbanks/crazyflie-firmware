@@ -119,7 +119,10 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
 <<<<<<< HEAD
+<<<<<<< HEAD
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
+=======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 =======
 >>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
   </component>
@@ -308,7 +311,6 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-<<<<<<< HEAD
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
@@ -318,9 +320,4 @@
           </value>
         </entry>
       </map>
-    </option>
-  </component>
 </project>
-=======
-</project>
->>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
