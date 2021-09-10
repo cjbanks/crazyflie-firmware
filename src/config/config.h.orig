@@ -109,6 +109,10 @@
 
 #define SAM_YORAI_TASK_PRI      2
 
+#define SAM_YORAI_TASK_PRI      2
+
+#define SAM_YORAI_TASK_PRI      2
+
 // Not compiled
 #if 0
   #define INFO_TASK_PRI           2
@@ -145,6 +149,7 @@
 #define CMD_HIGH_LEVEL_TASK_NAME "CMDHL"
 #define MULTIRANGER_TASK_NAME   "MR"
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define BQ_OSD_TASK_NAME        "BQ_OSDTASK"
 #define GTGPS_DECK_TASK_NAME    "GTGPS"
 #define LIGHTHOUSE_TASK_NAME    "LH"
@@ -160,8 +165,10 @@
 #define CRTP_SRV_TASK_NAME      "CRTP-SRV"
 #define PLATFORM_SRV_TASK_NAME  "PLATFORM-SRV"
 =======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
+=======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 #define SAM_YORAI_TASK_NAME     "NEWTON-RAPHSON"
->>>>>>> created new subsystem task for forward model
 
 //Task stack sizes
 #define SYSTEM_TASK_STACKSIZE         (2* configMINIMAL_STACK_SIZE)
@@ -192,14 +199,17 @@
 #define CMD_HIGH_LEVEL_TASK_STACKSIZE (2 * configMINIMAL_STACK_SIZE)
 #define MULTIRANGER_TASK_STACKSIZE    (2 * configMINIMAL_STACK_SIZE)
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define ACTIVEMARKER_TASK_STACKSIZE   configMINIMAL_STACK_SIZE
 #define AI_DECK_TASK_STACKSIZE        configMINIMAL_STACK_SIZE
 #define UART2_TASK_STACKSIZE          configMINIMAL_STACK_SIZE
 #define CRTP_SRV_TASK_STACKSIZE       configMINIMAL_STACK_SIZE
 #define PLATFORM_SRV_TASK_STACKSIZE   configMINIMAL_STACK_SIZE
 =======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
+=======
+>>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
 #define SAM_YORAI_TASK_STACKSIZE      (4 * configMINIMAL_STACK_SIZE)
->>>>>>> created new subsystem task for forward model
 
 //The radio channel. From 0 to 125
 #define RADIO_CHANNEL 80

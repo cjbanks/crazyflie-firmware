@@ -16,6 +16,7 @@
 #define COLUMNS 4
 
 
+
 static double_t horizon = 0.2;   //was 0.7
 static float alpha[4][4] = {
                         {20, 0,  0, 0},
@@ -51,12 +52,61 @@ void controllerSamYoraiInit(void){
 
 bool controllerSamYoraiTest(void)
 {
-    bool pass = true;
+    return true;
+}
 
     pass &= attitudeControllerTest();
 
     return pass;
 }
+
+
+static struct mat33 matinv_3d(struct mat33 mat) {
+    float a = mat.m[0][0];
+    float b = mat.m[0][1];
+    float c = mat.m[0][2];
+    float d = mat.m[1][0];
+    float e = mat.m[1][1];
+    float f = mat.m[1][2];
+    float gg = mat.m[2][0];
+    float h = mat.m[2][1];
+    float i = mat.m[2][2];
+
+    float A = (e*i-f*h);
+    float B = -1*(d*i- f * gg);
+    float C = (d*h- e * gg);
+    float D = -1*(b*i-c*h);
+    float E = (a*i- c * gg);
+    float F = -1*(a*h- b * gg);
+    float G = (b*f-c*e);
+    float H = -1*(a*f-c*d);
+    float I = (a*e-b*d);
+
+    float A_det = a*A + b*B + c*C;
+
+    /*float m_adj[3][3] = {{A, D, G},
+                         {B, E, H},
+                         {C, F, I}};
+        */
+
+    struct mat33 m_inv;
+    m_inv.m[0][0] = (1/A_det)*A;
+    m_inv.m[0][1] =  (1/A_det)*D;
+    m_inv.m[0][2] = (1/A_det)*G;
+
+    m_inv.m[1][0] = (1/A_det)*B;
+    m_inv.m[1][1] =  (1/A_det)*E;
+    m_inv.m[1][2] = (1/A_det)*H;
+
+    m_inv.m[2][0] = (1/A_det)*C;
+    m_inv.m[2][1] =  (1/A_det)*F;
+    m_inv.m[2][2] = (1/A_det)*I;
+
+    return m_inv;
+}
+
+
+>>>>>>> removed merge conflicts from controller
 
 
 //static struct mat33 matinv_3d(struct mat33 mat) {
@@ -531,9 +581,9 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
         //gather current state
         double_t state[9] = {(double_t) state_cf->position.x, (double_t) state_cf->position.y, (double_t) state_cf->position.z,
-                              (double_t) state_cf->attitude.roll, (double_t) state_cf->attitude.pitch, (double_t) state_cf->attitude.yaw,
-                              (double_t) state_cf->velocity.x, (double_t) state_cf->velocity.y, (double_t) state_cf->velocity.z};
-                              //(double_t) radians(sensors->gyro.x), (double_t) -radians(sensors->gyro.y), (double_t) radians(sensors->gyro.z)};
+                             (double_t) state_cf->attitude.roll, (double_t) state_cf->attitude.pitch, (double_t) state_cf->attitude.yaw,
+                             (double_t) state_cf->velocity.x, (double_t) state_cf->velocity.y, (double_t) state_cf->velocity.z};
+        //(double_t) radians(sensors->gyro.x), (double_t) -radians(sensors->gyro.y), (double_t) radians(sensors->gyro.z)};
 
         //gather current input  (thrust, roll rate, pitch rate, yaw rate)
         init_input[0] = (double_t) desired_wb.thrust;
@@ -777,12 +827,6 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
         //increase time
         time = time + dt;
-        //DEBUG_PRINT("Time: %f \n", (double)time);
-
-        DEBUG_PRINT("UPDATED THRUST: %f\n", (double) u_new[0]);
-        DEBUG_PRINT("UPDATED ROLL RATE: %f\n", (double) u_new[1]);
-        DEBUG_PRINT("UPDATED PITCH RATE: %f \n", (double) u_new[2]);
-        DEBUG_PRINT("UPDATED YAW RATE: %f \n", (double) u_new[3]);
 
 
         //return input
@@ -790,8 +834,6 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         desired_wb.attitudeRate.roll = (float)(u_new[1]);
         desired_wb.attitudeRate.pitch = (float)(u_new[2]);
         desired_wb.attitudeRate.yaw = (float)(u_new[3]);
-
-
     }
 
 
