@@ -39,10 +39,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fb4d471f-7704-4f92-a0da-9127499b03a6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/crazyflie-firmware.iml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/src/sam_yorai_task.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/src/sam_yorai_task.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/modules/src/controller_sam_yorai.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/src/controller_sam_yorai.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/FreeRTOS" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/FreeRTOS" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config/config.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/config.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modules/src/system.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/src/system.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,6 +200,7 @@
     </configuration>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     <configuration name="clean_o" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="clean_o" CONFIG_NAME="clean_o" version="1" RUN_PATH="$PROJECT_DIR$/cf2.bin">
 =======
     <configuration name="clean_o" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware-custom" TARGET_NAME="clean_o" CONFIG_NAME="clean_o" version="1">
@@ -205,6 +208,9 @@
 =======
     <configuration name="clean_o" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="clean_o" CONFIG_NAME="clean_o" version="1">
 >>>>>>> Updated derivative function to accurately update
+=======
+    <configuration name="clean_o" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="clean_o" CONFIG_NAME="clean_o" version="1" RUN_PATH="$PROJECT_DIR$/cf2.bin">
+>>>>>>> created new subsystem task for forward model
       <method v="2">
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
@@ -507,16 +513,22 @@
       <workItem from="1629827660973" duration="3938000" />
       <workItem from="1629981585660" duration="599000" />
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> created new subsystem task for forward model
       <workItem from="1629989956787" duration="5342000" />
       <workItem from="1630092630397" duration="2774000" />
       <workItem from="1630686214441" duration="6599000" />
       <workItem from="1631040912860" duration="1198000" />
       <workItem from="1631282313208" duration="4572000" />
+<<<<<<< HEAD
 =======
 >>>>>>> pass array by reference to functions in SamYorai Controller. Set controller as default to run on CF
 =======
       <workItem from="1629989956787" duration="1575000" />
 >>>>>>> Updated derivative function to accurately update
+=======
+>>>>>>> created new subsystem task for forward model
     </task>
     <servers />
   </component>
