@@ -63,6 +63,7 @@
 #include "sysload.h"
 #include "deck.h"
 #include "extrx.h"
+#include "sam_yorai_task.h"
 
 /* Private variable */
 static bool selftestPassed;
@@ -120,6 +121,7 @@ void systemInit(void)
   ledseqInit();
   pmInit();
   buzzerInit();
+  samYoraiTaskInit();
 
   isInit = true;
 }
@@ -185,6 +187,7 @@ void systemTask(void *arg)
   pass &= soundTest();
   pass &= memTest();
   pass &= watchdogNormalStartTest();
+  pass &= samYoraiTaskTest();
 
   //Start the firmware
   if(pass)
