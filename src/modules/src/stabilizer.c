@@ -276,10 +276,15 @@ static void stabilizerTask(void* param)
         estimatorType = getStateEstimator();
       }
       // allow to update controller dynamically
+      if (setpoint.thrust > 0 && controllerType == ControllerTypeMellinger){
+            DEBUG_PRINT("Switch to Sam-Yorai Controller.\n");
+            controllerType = ControllerTypeSamYorai;
+        }
+
       if (getControllerType() != controllerType) {
-        controllerInit(controllerType);
-        controllerType = getControllerType();
-      }
+            controllerInit(controllerType);
+            controllerType = getControllerType();
+        }
 
       stateEstimator(&state, &sensorData, &control, tick);
       compressState();
