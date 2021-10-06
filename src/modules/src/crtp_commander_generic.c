@@ -71,6 +71,7 @@ enum packet_type {
   hoverType         = 5,
   fullStateType     = 6,
   positionType      = 7,
+  nineStateType = 8,
 };
 
 /* ---===== 2 - Decoding functions =====--- */
@@ -339,6 +340,33 @@ static void fullStateDecoder(setpoint_t *setpoint, uint8_t type, const void *dat
   setpoint->mode.pitch = modeDisable;
   setpoint->mode.yaw = modeDisable;
 }
+/* NineStateDecoder */
+struct nineStatePacket_s {
+    int16_t rateRoll;  // angular velocity - milliradians / sec
+    int16_t ratePitch; //  (NOTE: limits to about 5 full circles per sec.
+    int16_t rateYaw;   //   may not be enough for extremely aggressive flight.)
+    int16_t thrust;
+} __attribute__((packed));
+
+static void nineStateDecoder(setpoint_t *setpoint, uint8_t type, const void *data, size_t datalen)
+{
+    const struct nineStatePacket_s *values = data;
+
+    ASSERT(datalen == sizeof(struct nineStatePacket_s));
+
+    float const millirad2deg = 180.0f / ((float)M_PI * 1000.0f);
+    setpoint->attitudeRate.roll = millirad2deg * values->rateRoll;
+    setpoint->attitudeRate.pitch = millirad2deg * values->ratePitch;
+    setpoint->attitudeRate.yaw = millirad2deg * values->rateYaw;
+    setpoint->thrust = ((float)1.0/1000.0f) * values->thrust;
+
+    setpoint->mode.quat = modeAbs;
+    setpoint->mode.roll = modeDisable;
+    setpoint->mode.pitch = modeDisable;
+    setpoint->mode.yaw = modeDisable;
+}
+
+
 
 /* positionDecoder
  * Set the absolute postition and orientation
@@ -377,7 +405,8 @@ const static packetDecoder_t packetDecoders[] = {
   [hoverType]         = hoverDecoder,
   [fullStateType]     = fullStateDecoder,
   [positionType]      = positionDecoder,
-};
+  [nineStateType]     = nineStateDecoder,
+ };
 
 /* Decoder switch */
 void crtpCommanderGenericDecodeSetpoint(setpoint_t *setpoint, CRTPPacket *pk)

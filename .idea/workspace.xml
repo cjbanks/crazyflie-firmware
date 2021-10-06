@@ -39,12 +39,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fb4d471f-7704-4f92-a0da-9127499b03a6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/modules/src/sam_yorai_task.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/modules/src/sam_yorai_task.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config/config.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/config.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/modules/src/system.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/src/system.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modules/interface/controller.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/interface/controller.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modules/src/controller.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/src/controller.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modules/src/crtp_commander_generic.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/src/crtp_commander_generic.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modules/src/stabilizer.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/src/stabilizer.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +69,10 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/src/modules/src/controller_sam_yorai.c" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/modules/src/crtp_commander_generic.c" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/tools/make/config.mk" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Makefile" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/modules/src/stabilizer.c" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MakefileLocalSettings">
     <option name="availableProjects">
@@ -114,17 +115,11 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
     <property name="cidr.known.project.marker" value="true" />
+    <property name="last_opened_file_path" value="$USER_HOME$/modules" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
-=======
->>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
-=======
->>>>>>> 1cbf950d8ce41908d4595a2b29cc90c7cea459df
   </component>
   <component name="RunManager" selected="Makefile Application.all">
     <configuration name="Makefile" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="Makefile" CONFIG_NAME="Makefile" version="1">
@@ -157,7 +152,7 @@
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration name="clean_o" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="clean_o" CONFIG_NAME="clean_o" version="1" RUN_PATH="$PROJECT_DIR$/cf2.bin">
+    <configuration name="clean_o" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crazyflie-firmware" TARGET_NAME="clean_o" CONFIG_NAME="clean_o" version="1">
       <method v="2">
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
@@ -252,6 +247,11 @@
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -300,11 +300,10 @@
       <workItem from="1629728053100" duration="3770000" />
       <workItem from="1629827660973" duration="3938000" />
       <workItem from="1629981585660" duration="599000" />
-      <workItem from="1629989956787" duration="5342000" />
-      <workItem from="1630092630397" duration="2774000" />
-      <workItem from="1630686214441" duration="6599000" />
-      <workItem from="1631040912860" duration="1198000" />
-      <workItem from="1631282313208" duration="4572000" />
+      <workItem from="1629989956787" duration="1575000" />
+      <workItem from="1631739236864" duration="907000" />
+      <workItem from="1632499975763" duration="3038000" />
+      <workItem from="1632867215672" duration="4466000" />
     </task>
     <servers />
   </component>
@@ -312,12 +311,6 @@
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
 </project>

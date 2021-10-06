@@ -32,8 +32,9 @@ typedef enum {
   ControllerTypeAny,
   ControllerTypePID,
   ControllerTypeMellinger,
+  ControllerTypeINDI,
+  ControllerType_COUNT,
   ControllerTypeSamYorai,
-  ControllerType_COUNT,DEFAULT_CONTROLLER
 } ControllerType;
 
 void controllerInit(ControllerType controller);
