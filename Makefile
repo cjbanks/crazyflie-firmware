@@ -166,31 +166,21 @@ PROJ_OBJ += vl53l1_register_funcs.o vl53l1_wait.o vl53l1_core_support.o
 
 # Modules
 PROJ_OBJ += system.o comm.o console.o pid.o crtpservice.o param.o
-<<<<<<< HEAD
 PROJ_OBJ += log.o worker.o queuemonitor.o msp.o
 PROJ_OBJ += platformservice.o sound_cf2.o extrx.o sysload.o mem.o
 PROJ_OBJ += range.o app_handler.o static_mem.o app_channel.o
 PROJ_OBJ += eventtrigger.o supervisor.o
-=======
-PROJ_OBJ += log.o worker.o trigger.o sitaw.o queuemonitor.o msp.o
-PROJ_OBJ += platformservice.o sound_cf2.o extrx.o sysload.o mem_cf2.o
-PROJ_OBJ += range.o
-PROJ_OBJ += sam_yorai_task.o
->>>>>>> created new subsystem task for forward model
 
 # Stabilizer modules
 PROJ_OBJ += commander.o crtp_commander.o crtp_commander_rpyt.o
-<<<<<<< HEAD
 
 PROJ_OBJ += crtp_commander_generic.o crtp_localization_service.o peer_localization.o
 PROJ_OBJ += position_estimator_altitude.o position_controller_pid.o position_controller_indi.o
-=======
 PROJ_OBJ += crtp_commander_generic.o crtp_localization_service.o
->>>>>>> updated time step updates to start when controller starts
-PROJ_OBJ += attitude_pid_controller.o sensfusion6.o stabilizer.o check_distance_to_setpoint.o
+PROJ_OBJ += attitude_pid_controller.o sensfusion6.o stabilizer.o
 PROJ_OBJ += position_estimator_altitude.o position_controller_pid.o
 PROJ_OBJ += estimator.o estimator_complementary.o
-PROJ_OBJ += controller.o controller_pid.o controller_mellinger.o controller_sam_yorai.o
+PROJ_OBJ += controller.o controller_pid.o controller_mellinger.o
 PROJ_OBJ += power_distribution_$(POWER_DISTRIBUTION).o
 PROJ_OBJ += collision_avoidance.o health.o
 

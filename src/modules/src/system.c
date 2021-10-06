@@ -77,6 +77,7 @@
 #else
 #define ARM_INIT false
 #endif
+#include "sam_yorai_task.h"
 
 /* Private variable */
 static bool selftestPassed;
@@ -141,6 +142,7 @@ void systemInit(void)
 #ifdef APP_ENABLED
   appInit();
 #endif
+  samYoraiTaskInit();
 
   isInit = true;
 }

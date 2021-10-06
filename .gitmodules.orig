@@ -1,0 +1,28 @@
+[submodule "vendor/CMSIS"]
+	path = vendor/CMSIS
+	url = https://github.com/ARM-software/CMSIS_5.git
+[submodule "vendor/FreeRTOS"]
+	path = vendor/FreeRTOS
+	url = https://github.com/FreeRTOS/FreeRTOS-Kernel.git
+[submodule "vendor/cmock"]
+	path = vendor/cmock
+	url = https://github.com/throwtheswitch/cmock.git
+[submodule "vendor/libdw1000"]
+	path = vendor/libdw1000
+	url = https://github.com/bitcraze/libdw1000.git
+[submodule "vendor/unity"]
+	path = vendor/unity
+	url = https://github.com/throwtheswitch/unity.git
+<<<<<<< HEAD
+=======
+[submodule "vendor/cmock"]
+	path = vendor/cmock
+	url = https://github.com/throwtheswitch/cmock.git
+[submodule "vendor/CMSIS"]
+	path = vendor/CMSIS
+	url = https://github.com/ARM-software/CMSIS
+[submodule "vendor/FreeRTOS"]
+	path = vendor/FreeRTOS
+	url = https://github.com/FreeRTOS/FreeRTOS
+	branch = V10.2.1-convergence-FreeRTOS-Source
+>>>>>>> 2edecebf1434859a9a3e604bb4974b157309a343

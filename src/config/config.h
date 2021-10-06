@@ -109,6 +109,12 @@
 
 #define SAM_YORAI_TASK_PRI      2
 
+#define SAM_YORAI_TASK_PRI      2
+
+#define SAM_YORAI_TASK_PRI      2
+
+#define SAM_YORAI_TASK_PRI      2
+
 // Not compiled
 #if 0
   #define INFO_TASK_PRI           2

@@ -55,10 +55,7 @@ bool controllerSamYoraiTest(void)
     return true;
 }
 
-    pass &= attitudeControllerTest();
 
-    return pass;
-}
 
 
 static struct mat33 matinv_3d(struct mat33 mat) {
@@ -106,7 +103,6 @@ static struct mat33 matinv_3d(struct mat33 mat) {
 }
 
 
->>>>>>> removed merge conflicts from controller
 
 
 //static struct mat33 matinv_3d(struct mat33 mat) {
@@ -178,9 +174,6 @@ m_4d matinv_4d(double_t matrix_in[ROWS][COLUMNS]){
     double_t n = matrix_in[3][1];
     double_t o = matrix_in[3][2];
     double_t p = matrix_in[3][3];
-
-
-    //cofactors
 
     //2x2 cofactors A
     double_t A1 = pow(-1,1+1)*(k*p-l*o);
