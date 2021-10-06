@@ -26,4 +26,4 @@ current_platform.mk
 docs/.jekyll-cache
 docs/api
 
-craflie-clients-python/*
+crazyflie-clients-python/*
