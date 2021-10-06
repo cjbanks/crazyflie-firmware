@@ -27,3 +27,4 @@ docs/.jekyll-cache
 docs/api
 
 crazyflie-clients-python/
+.idea/
