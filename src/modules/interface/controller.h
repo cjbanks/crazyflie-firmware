@@ -29,19 +29,20 @@
 #include "stabilizer_types.h"
 
 typedef enum {
-  ControllerTypeAny,
-  ControllerTypePID,
-  ControllerTypeMellinger,
-  ControllerTypeSamYorai,
-  ControllerType_COUNT,DEFAULT_CONTROLLER
+    ControllerTypeAny,
+    ControllerTypePID,
+    ControllerTypeMellinger,
+    ControllerTypeINDI,
+    ControllerType_COUNT,
+    ControllerTypeSamYorai,
 } ControllerType;
 
 void controllerInit(ControllerType controller);
 bool controllerTest(void);
 void controller(control_t *control, setpoint_t *setpoint,
-                                         const sensorData_t *sensors,
-                                         const state_t *state,
-                                         const uint32_t tick);
+                const sensorData_t *sensors,
+                const state_t *state,
+                const uint32_t tick);
 ControllerType getControllerType(void);
 const char* controllerGetName();
 
