@@ -43,6 +43,8 @@ We added the following:
 #include "position_controller.h"
 #include "controller_mellinger.h"
 #include "physicalConstants.h"
+#include "debug.h"
+
 
 static float g_vehicleMass = CF_MASS;
 static float massThrust = 132000;
@@ -298,6 +300,11 @@ void controllerMellinger(control_t *control, setpoint_t *setpoint,
   r_pitch = -radians(sensors->gyro.y);
   r_yaw = radians(sensors->gyro.z);
   accelz = sensors->acc.z;
+
+  //DEBUG_PRINT("thrust [%f] \n", (double)control->thrust);
+  DEBUG_PRINT("roll [%f] \n", (double)M.x);
+  DEBUG_PRINT("pitch [%f] \n", (double)M.y);
+  DEBUG_PRINT("yaw [%f] \n", (double)M.z);
 
   if (control->thrust > 0) {
     control->roll = clamp(M.x, -32000, 32000);

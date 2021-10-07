@@ -537,10 +537,14 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
         //use pid to calculate desired moments based on error between desired angular velocity and actual angular velocity
         attitudeControllerCorrectRatePID(sensors->gyro.x, -sensors->gyro.y, sensors->gyro.z,
-                                         setpoint->attitudeRate.roll, setpoint->attitudeRate.pitch,
+                                         setpoint->attitudeRate.roll, -setpoint->attitudeRate.pitch,
                                          setpoint->attitudeRate.yaw);
 
 
+        //DEBUG_PRINT("input thrust %f: \n", (double)setpoint->thrust);
+        //DEBUG_PRINT("input rollrate %f \n", (double)setpoint->attitudeRate.roll);
+        //DEBUG_PRINT("input pitchrate %f \n", (double)setpoint->attitudeRate.pitch);
+        //DEBUG_PRINT("input yawrate %f \n", (double)setpoint->attitudeRate.yaw);
 
         control->thrust = massThrust * setpoint->thrust;
         attitudeControllerGetActuatorOutput(&control->roll, &control->pitch, &control->yaw);
