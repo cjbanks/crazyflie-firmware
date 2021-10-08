@@ -28,7 +28,7 @@ static double_t horizon = 0.2;   //was 0.7
 static double g = 9.81;
 static double m = 35.89 / 1000;
 
-static float massThrust = 132000;
+static float massThrust = 4800; //132000;
 
 
 //static double_t time = 0;
@@ -515,7 +515,7 @@ float* ref_traj(double t){
 
     static float traj[4] = {0, 0, 0, 0};
     traj[0] = (float)(.6*cos(t));
-    traj[1] = (float)(.6*sin(t));
+    traj[1] = (float)(.6*   sin(t));
     traj[2] = (float)(1.0 + .6*sin(t));
     traj[3] = (float)(t);
 
@@ -537,7 +537,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
         //use pid to calculate desired moments based on error between desired angular velocity and actual angular velocity
         attitudeControllerCorrectRatePID(sensors->gyro.x, -sensors->gyro.y, sensors->gyro.z,
-                                         setpoint->attitudeRate.roll, -setpoint->attitudeRate.pitch,
+                                         setpoint->attitudeRate.roll, setpoint->attitudeRate.pitch,
                                          setpoint->attitudeRate.yaw);
 
 
@@ -545,11 +545,26 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         //DEBUG_PRINT("input rollrate %f \n", (double)setpoint->attitudeRate.roll);
         //DEBUG_PRINT("input pitchrate %f \n", (double)setpoint->attitudeRate.pitch);
         //DEBUG_PRINT("input yawrate %f \n", (double)setpoint->attitudeRate.yaw);
+        //DEBUG_PRINT("acc z: %f \n", (double)sensors->acc.z);
+        float new_thrust = setpoint->thrust/((float)m);
+        //DEBUG_PRINT("new thrust: %f \n", (double) new_thrust);
 
-        control->thrust = massThrust * setpoint->thrust;
-        attitudeControllerGetActuatorOutput(&control->roll, &control->pitch, &control->yaw);
+        float error_acc_z = (new_thrust - sensors->acc.z);
 
-        control->yaw = -control->yaw;
+        DEBUG_PRINT("error z: %f \n", (double) error_acc_z);
+        control->thrust = massThrust * error_acc_z;
+        if (setpoint->thrust > 0) {
+            attitudeControllerGetActuatorOutput(&control->roll, &control->pitch, &control->yaw);
+            control->yaw = -control->yaw;
+
+        } else {
+            control->roll = 0;
+            control->pitch = 0;
+            control->yaw = 0;
+
+        }
+
+
 
 
         DEBUG_PRINT("THRUST: %f \n", (double) control->thrust);

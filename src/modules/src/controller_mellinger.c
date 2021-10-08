@@ -302,9 +302,9 @@ void controllerMellinger(control_t *control, setpoint_t *setpoint,
   accelz = sensors->acc.z;
 
   //DEBUG_PRINT("thrust [%f] \n", (double)control->thrust);
-  DEBUG_PRINT("roll [%f] \n", (double)M.x);
-  DEBUG_PRINT("pitch [%f] \n", (double)M.y);
-  DEBUG_PRINT("yaw [%f] \n", (double)M.z);
+  //DEBUG_PRINT("roll [%f] \n", (double)M.x);
+  //DEBUG_PRINT("pitch [%f] \n", (double)M.y);
+  //DEBUG_PRINT("yaw [%f] \n", (double)M.z);
 
   if (control->thrust > 0) {
     control->roll = clamp(M.x, -32000, 32000);
