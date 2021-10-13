@@ -17,6 +17,7 @@
 
 
 
+
 static double_t horizon = 0.2;   //was 0.7
 
 //static float alpha[4][4] = {
@@ -28,7 +29,7 @@ static double_t horizon = 0.2;   //was 0.7
 static double g = 9.81;
 static double m = 35.89 / 1000;
 
-static float massThrust = 4800; //132000;
+static float massThrust = 118000; //4800; //good enough?
 
 
 //static double_t time = 0;
@@ -528,6 +529,10 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
                         const uint32_t tick){
 
     //controller runs at 500 Hz
+    struct vec z_axis;
+    float current_thrust;
+
+
     // desired_wb.thrust = 0.5;
     if (RATE_DO_EXECUTE(ATTITUDE_RATE, tick)){
         //returns actual control inputs (thrust, m_x, m_y, m_z)
@@ -549,10 +554,30 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         float new_thrust = setpoint->thrust/((float)m);
         //DEBUG_PRINT("new thrust: %f \n", (double) new_thrust);
 
-        float error_acc_z = (new_thrust - sensors->acc.z);
+        float error_acc_z = (new_thrust - (float)g*state_cf->acc.z);
 
-        DEBUG_PRINT("error z: %f \n", (double) error_acc_z);
-        control->thrust = massThrust * error_acc_z;
+        //DEBUG_PRINT("error z: %f \n", (double) error_acc_z);
+        //control->thrust = massThrust * error_acc_z;
+
+
+        //thrust calc
+        // Z-Axis [zB]
+        struct quat q = mkquat(state_cf->attitudeQuaternion.x, state_cf->attitudeQuaternion.y, state_cf->attitudeQuaternion.z, state_cf->attitudeQuaternion.w);
+        struct mat33 R = quat2rotmat(q);
+        z_axis = mcolumn(R, 2);
+        struct vec target_thrust;
+        target_thrust.x = 0;
+        target_thrust.y = 0;
+        target_thrust.z = error_acc_z*(float)m;
+
+        // Current thrust [F]
+        current_thrust = vdot(target_thrust, z_axis);
+
+        control->thrust = massThrust * current_thrust;
+
+
+
+
         if (setpoint->thrust > 0) {
             attitudeControllerGetActuatorOutput(&control->roll, &control->pitch, &control->yaw);
             control->yaw = -control->yaw;

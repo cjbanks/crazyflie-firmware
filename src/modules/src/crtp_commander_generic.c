@@ -312,6 +312,7 @@ struct fullStatePacket_s {
     int16_t ratePitch; //  (NOTE: limits to about 5 full circles per sec.
     int16_t rateYaw;   //   may not be enough for extremely aggressive flight.)
 } __attribute__((packed));
+
 static void fullStateDecoder(setpoint_t *setpoint, uint8_t type, const void *data, size_t datalen)
 {
     const struct fullStatePacket_s *values = data;
