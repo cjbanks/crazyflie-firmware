@@ -592,8 +592,8 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
 
 
-        DEBUG_PRINT("THRUST: %f \n", (double) control->thrust);
-        DEBUG_PRINT("ROLL: %d \n ", control->roll);
+        //DEBUG_PRINT("THRUST: %f \n", (double) control->thrust);
+        //DEBUG_PRINT("ROLL: %d \n ", control->roll);
         DEBUG_PRINT("PITCH: %d \n", control->pitch);
         DEBUG_PRINT("YAW: %d \n", -control->yaw);
 
