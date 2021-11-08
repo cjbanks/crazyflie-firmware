@@ -29,7 +29,7 @@ static double_t horizon = 0.2;   //was 0.7
 static double g = 9.81;
 static double m = 35.89 / 1000;
 
-static float massThrust = 118000; //4800; //good enough?
+static float massThrust = 120000; //118000; //4800; //good enough?
 
 
 //static double_t time = 0;
@@ -542,14 +542,14 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
         //use pid to calculate desired moments based on error between desired angular velocity and actual angular velocity
         attitudeControllerCorrectRatePID(sensors->gyro.x, -sensors->gyro.y, sensors->gyro.z,
-                                         setpoint->attitudeRate.roll, setpoint->attitudeRate.pitch,
+                                         setpoint->attitudeRate.roll, -setpoint->attitudeRate.pitch,
                                          setpoint->attitudeRate.yaw);
 
 
         //DEBUG_PRINT("input thrust %f: \n", (double)setpoint->thrust);
-        //DEBUG_PRINT("input rollrate %f \n", (double)setpoint->attitudeRate.roll);
-        //DEBUG_PRINT("input pitchrate %f \n", (double)setpoint->attitudeRate.pitch);
-        //DEBUG_PRINT("input yawrate %f \n", (double)setpoint->attitudeRate.yaw);
+        DEBUG_PRINT("input rollrate %f \n", (double)setpoint->attitudeRate.roll);
+        DEBUG_PRINT("input pitchrate %f \n", (double)setpoint->attitudeRate.pitch);
+        DEBUG_PRINT("input yawrate %f \n", (double)setpoint->attitudeRate.yaw);
         //DEBUG_PRINT("acc z: %f \n", (double)sensors->acc.z);
         float new_thrust = setpoint->thrust/((float)m);
         //DEBUG_PRINT("new thrust: %f \n", (double) new_thrust);
@@ -580,9 +580,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
         if (setpoint->thrust > 0) {
             attitudeControllerGetActuatorOutput(&control->roll, &control->pitch, &control->yaw);
-            control->yaw = -control->yaw;
+            control->roll = clamp(control->roll, -32000, 32000);
+            control->pitch = clamp(control->pitch, -32000, 32000);
+            control->yaw = clamp(-control->yaw, -32000, 32000);
 
         } else {
+            attitudeControllerResetAllPID();
             control->roll = 0;
             control->pitch = 0;
             control->yaw = 0;
@@ -594,8 +597,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
         //DEBUG_PRINT("THRUST: %f \n", (double) control->thrust);
         //DEBUG_PRINT("ROLL: %d \n ", control->roll);
-        DEBUG_PRINT("PITCH: %d \n", control->pitch);
-        DEBUG_PRINT("YAW: %d \n", -control->yaw);
+
+
+        //DEBUG_PRINT("PITCH: %d \n", control->pitch);
+
+
+
 
 
         //if (control->thrust == 0)
@@ -610,7 +617,12 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
         //}
     }
 
+    //DEBUG_PRINT("YAW: %d \n", -control->yaw);
+    DEBUG_PRINT("THRUST: %f \n", (double) control->thrust);    
+    DEBUG_PRINT("ROLL: %d \n ", control->roll);
 
+
+    DEBUG_PRINT("PITCH: %d \n", control->pitch);
     //code runs at 100 Hz
     //if (RATE_DO_EXECUTE(POSITION_RATE, tick)){
     //    //this runs yorai's controller for calculating forward simulation of model
