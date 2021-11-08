@@ -343,10 +343,13 @@ static void fullStateDecoder(setpoint_t *setpoint, uint8_t type, const void *dat
 }
 /* NineStateDecoder */
 struct nineStatePacket_s {
-    int16_t rateRoll;  // angular velocity - milliradians / sec
-    int16_t ratePitch; //  (NOTE: limits to about 5 full circles per sec.
-    int16_t rateYaw;   //   may not be enough for extremely aggressive flight.)
-    int16_t thrust;
+    int16_t x;         // position - mm
+    int16_t y;
+    int16_t z;
+    int16_t vx;        // velocity - mm / sec
+    int16_t vy;
+    int16_t vz;
+    int32_t quat;      // compressed quaternion, see quatcompress.h
 } __attribute__((packed));
 
 static void nineStateDecoder(setpoint_t *setpoint, uint8_t type, const void *data, size_t datalen)
@@ -355,16 +358,20 @@ static void nineStateDecoder(setpoint_t *setpoint, uint8_t type, const void *dat
 
     ASSERT(datalen == sizeof(struct nineStatePacket_s));
 
-    float const millirad2deg = 180.0f / ((float)M_PI * 1000.0f);
-    setpoint->attitudeRate.roll = millirad2deg * values->rateRoll;
-    setpoint->attitudeRate.pitch = millirad2deg * values->ratePitch;
-    setpoint->attitudeRate.yaw = millirad2deg * values->rateYaw;
-    setpoint->thrust = ((float)1.0/1000.0f) * values->thrust;
+    //float const millirad2deg = 180.0f / ((float)M_PI * 1000.0f);
+    setpoint->position.x = values->x;
+    setpoint->position.y = values->y;
+    setpoint->position.z = values->z;
 
+    setpoint->velocity.x = values->vx;
+    setpoint->velocity.y = values->vy;
+    setpoint->velocity.z = values->vz;
+
+    quatdecompress(values->quat, (float *)&setpoint->attitudeQuaternion.q0);
     setpoint->mode.quat = modeAbs;
-    setpoint->mode.roll = modeDisable;
-    setpoint->mode.pitch = modeDisable;
-    setpoint->mode.yaw = modeDisable;
+    setpoint->mode.roll = modeAbs;
+    setpoint->mode.pitch = modeAbs;
+    setpoint->mode.yaw = modeAbs;
 }
 
 

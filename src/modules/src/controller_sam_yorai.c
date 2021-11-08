@@ -10,6 +10,7 @@
 #include "controller_sam_yorai.h"
 #include "debug.h"
 #include "attitude_controller.h"
+#include "position_controller.h"
 
 
 #define ROWS 4
@@ -29,7 +30,7 @@ static double_t horizon = 0.2;   //was 0.7
 static double g = 9.81;
 static double m = 35.89 / 1000;
 
-static float massThrust = 120000; //118000; //4800; //good enough?
+//static float massThrust = 120000; //118000; //4800; //good enough?
 
 
 //static double_t time = 0;
@@ -42,6 +43,11 @@ typedef struct {
 
 m_4d past_mat;
 
+static float actuatorThrust;
+static attitude_t attitudeDesired;
+static attitude_t rateDesired;
+
+
 
 void controllerSamYoraiReset(void){
     //static bool REACHED_SETPOINT = false;
@@ -49,6 +55,7 @@ void controllerSamYoraiReset(void){
 
 void controllerSamYoraiInit(void){
     controllerSamYoraiReset();
+    positionControllerInit();
     attitudeControllerInit((float)1.0/ATTITUDE_RATE);
 }
 
@@ -523,38 +530,57 @@ float* ref_traj(double t){
     return traj;
 }
 
+static float capAngle(float angle) {
+    float result = angle;
+
+    while (result > 180.0f) {
+        result -= 360.0f;
+    }
+
+    while (result < -180.0f) {
+        result += 360.0f;
+    }
+
+    return result;
+}
 
 void controllerSamYorai(control_t* control, setpoint_t* setpoint,
                         const sensorData_t* sensors, const state_t* state_cf,
                         const uint32_t tick){
 
     //controller runs at 500 Hz
-    struct vec z_axis;
-    float current_thrust;
+    //struct vec z_axis;
+    //float current_thrust;
+
+    struct quat setpoint_quat = mkquat(setpoint->attitudeQuaternion.x, setpoint->attitudeQuaternion.y, setpoint->attitudeQuaternion.z, setpoint->attitudeQuaternion.w);
+    struct vec rpy = quat2rpy(setpoint_quat);
+
+    if (RATE_DO_EXECUTE(POSITION_RATE, tick)){
+        positionController(&actuatorThrust, &attitudeDesired, setpoint, state_cf);
+    }
+
+    if (RATE_DO_EXECUTE(ATTITUDE_RATE, tick)) {
+        attitudeDesired.yaw = capAngle(degrees(rpy.z));
+    }
 
 
-    // desired_wb.thrust = 0.5;
     if (RATE_DO_EXECUTE(ATTITUDE_RATE, tick)){
         //returns actual control inputs (thrust, m_x, m_y, m_z)
 
-        //get thrust from previously calculated value
+        attitudeDesired.roll = degrees(rpy.x);
+        attitudeDesired.pitch = degrees(rpy.y);
 
 
         //use pid to calculate desired moments based on error between desired angular velocity and actual angular velocity
-        attitudeControllerCorrectRatePID(sensors->gyro.x, -sensors->gyro.y, sensors->gyro.z,
-                                         setpoint->attitudeRate.roll, -setpoint->attitudeRate.pitch,
-                                         setpoint->attitudeRate.yaw);
+        attitudeControllerCorrectAttitudePID(state_cf->attitude.roll, state_cf->attitude.pitch, state_cf->attitude.yaw,
+                                         attitudeDesired.roll, attitudeDesired.pitch, attitudeDesired.yaw,
+                                         &rateDesired.roll, &rateDesired.pitch, &rateDesired.yaw);
 
 
-        //DEBUG_PRINT("input thrust %f: \n", (double)setpoint->thrust);
-        DEBUG_PRINT("input rollrate %f \n", (double)setpoint->attitudeRate.roll);
-        DEBUG_PRINT("input pitchrate %f \n", (double)setpoint->attitudeRate.pitch);
-        DEBUG_PRINT("input yawrate %f \n", (double)setpoint->attitudeRate.yaw);
-        //DEBUG_PRINT("acc z: %f \n", (double)sensors->acc.z);
-        float new_thrust = setpoint->thrust/((float)m);
+        //\float new_thrust = setpoint->thrust/((float)m);
         //DEBUG_PRINT("new thrust: %f \n", (double) new_thrust);
 
-        float error_acc_z = (new_thrust - (float)g*state_cf->acc.z);
+        //float error_acc_z = (new_thrust - (float)g*state_cf->acc.z);
 
         //DEBUG_PRINT("error z: %f \n", (double) error_acc_z);
         //control->thrust = massThrust * error_acc_z;
@@ -562,68 +588,50 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
 
         //thrust calc
         // Z-Axis [zB]
-        struct quat q = mkquat(state_cf->attitudeQuaternion.x, state_cf->attitudeQuaternion.y, state_cf->attitudeQuaternion.z, state_cf->attitudeQuaternion.w);
-        struct mat33 R = quat2rotmat(q);
-        z_axis = mcolumn(R, 2);
-        struct vec target_thrust;
-        target_thrust.x = 0;
-        target_thrust.y = 0;
-        target_thrust.z = error_acc_z*(float)m;
+        //struct quat q = mkquat(state_cf->attitudeQuaternion.x, state_cf->attitudeQuaternion.y, state_cf->attitudeQuaternion.z, state_cf->attitudeQuaternion.w);
+        //struct mat33 R = quat2rotmat(q);
+        //z_axis = mcolumn(R, 2);
+        //struct vec target_thrust;
+        //target_thrust.x = 0;
+        //target_thrust.y = 0;
+        //target_thrust.z = error_acc_z*(float)m;
 
         // Current thrust [F]
-        current_thrust = vdot(target_thrust, z_axis);
+        //current_thrust = vdot(target_thrust, z_axis);
 
-        control->thrust = massThrust * current_thrust;
+        //control->thrust = massThrust * current_thrust;
 
+        attitudeControllerCorrectRatePID(sensors->gyro.x, -sensors->gyro.y, sensors->gyro.z,
+                                 rateDesired.roll, rateDesired.pitch, rateDesired.yaw);
 
+        attitudeControllerGetActuatorOutput(&control->roll,
+                                            &control->pitch,
+                                            &control->yaw);
+
+        control->yaw = -control->yaw;
+        control->thrust = actuatorThrust;
 
 
         if (setpoint->thrust > 0) {
             attitudeControllerGetActuatorOutput(&control->roll, &control->pitch, &control->yaw);
             control->roll = clamp(control->roll, -32000, 32000);
             control->pitch = clamp(control->pitch, -32000, 32000);
-            control->yaw = clamp(-control->yaw, -32000, 32000);
+            control->yaw = clamp(control->yaw, -32000, 32000);
 
         } else {
             attitudeControllerResetAllPID();
             control->roll = 0;
             control->pitch = 0;
             control->yaw = 0;
+            positionControllerResetAllPID();
 
+            // Reset the calculated YAW angle for rate control
+            attitudeDesired.yaw = state_cf->attitude.yaw;
         }
 
-
-
-
-        //DEBUG_PRINT("THRUST: %f \n", (double) control->thrust);
-        //DEBUG_PRINT("ROLL: %d \n ", control->roll);
-
-
-        //DEBUG_PRINT("PITCH: %d \n", control->pitch);
-
-
-
-
-
-        //if (control->thrust == 0)
-        //{
-        //  control->thrust = 0;
-        //  control->roll = 0;
-        //  control->pitch = 0;
-        //  control->yaw = 0;
-        //
-        //  attitudeControllerResetAllPID();
-        //
-        //}
     }
 
     //DEBUG_PRINT("YAW: %d \n", -control->yaw);
-    DEBUG_PRINT("THRUST: %f \n", (double) control->thrust);    
-    DEBUG_PRINT("ROLL: %d \n ", control->roll);
-
-
-    DEBUG_PRINT("PITCH: %d \n", control->pitch);
-    //code runs at 100 Hz
     //if (RATE_DO_EXECUTE(POSITION_RATE, tick)){
     //    //this runs yorai's controller for calculating forward simulation of model
     //
@@ -636,7 +644,7 @@ void controllerSamYorai(control_t* control, setpoint_t* setpoint,
     //
     //
     //    //gather current state
-    //    double_t state[9] = {(double_t) state_cf->position.x, (double_t) state_cf->position.y, (double_t) state_cf->position.z,
+    //    double_t state[9] = {(double_t) state_cf->position.x, (double_t) state    _cf->position.y, (double_t) state_cf->position.z,
     //                         (double_t) state_cf->attitude.roll, (double_t) state_cf->attitude.pitch, (double_t) state_cf->attitude.yaw,
     //                         (double_t) state_cf->velocity.x, (double_t) state_cf->velocity.y, (double_t) state_cf->velocity.z};
     //    //(double_t) radians(sensors->gyro.x), (double_t) -radians(sensors->gyro.y), (double_t) radians(sensors->gyro.z)};
